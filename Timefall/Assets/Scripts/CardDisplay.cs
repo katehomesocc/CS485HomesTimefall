@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class DisplayCardObj : MonoBehaviour
+public class CardDisplay : MonoBehaviour
 {
-    public CardObj displayCard;
+    public Card displayCard;
 
     public TMP_Text nameText;
     public TMP_Text descText;
