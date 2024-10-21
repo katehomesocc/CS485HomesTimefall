@@ -2,17 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventCard : MonoBehaviour
+[CreateAssetMenu(fileName = "New Event Card", menuName = "EventCard")]
+public class EventCard : Card
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int[] victoryPoints = new int[4]; //0: Stewards, 1: Seekers, 2: Sovereigns, 3: Weavers
+    
 }
