@@ -30,16 +30,13 @@ public class Hand : MonoBehaviour
     }
 
     void DrawFromDeck(){
-		Debug.Log ("Attempt to draw!");
         Card card = targetDeck.Draw();
 
         if(card == null){ return;}
 
-        Debug.Log ("Got card");
-
         CardType cardType = card.cardType;
 
-        Debug.Log ("Card type: " + cardType);
+        Debug.Log (card.ToString());
 
         GameObject obj = null;
 
@@ -61,6 +58,15 @@ public class Hand : MonoBehaviour
                 break;
             case CardType.ESSENCE:
                 obj = Instantiate(essenceCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
+                EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
+
+                if(essenceDC == null)
+                {
+                    Debug.Log ("No Essence display :(");
+                    return;
+                } 
+                Debug.Log ("Setting Essence display :)");
+                essenceDC.SetCard(card);
                 break;
             case CardType.EVENT:
                 obj = Instantiate(eventCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
@@ -87,6 +93,7 @@ public class Hand : MonoBehaviour
 
     void ShuffleDeck(){
 		Debug.Log ("Attempt to shuffle!");
+        targetDeck.Shuffle();
 	}
 
 }

@@ -28,7 +28,7 @@ public class Deck : MonoBehaviour
     }
 
     // Fisher-Yates shuffle: http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
-    void Shuffle()
+    public void Shuffle()
     {
         if(cardList.Count < 1) { return;}
         for (int i = cardList.Count - 1; i >= 0; --i)
@@ -44,7 +44,6 @@ public class Deck : MonoBehaviour
     public Card Draw()
     {
         if(cardList.Count < 1) { return null;}
-        Debug.Log ("Drawing from deck!");
         Card drawnCard = cardList[0];
         cardList.RemoveAt(0);
         UpdateCountText();

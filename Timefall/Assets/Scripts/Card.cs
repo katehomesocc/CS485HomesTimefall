@@ -19,4 +19,9 @@ public class Card : ScriptableObject
 
     public CardType cardType;
 
+    public override string ToString()
+    {
+        return string.Format("id:{0}, cardName:{1}, desc:{2}, faction:{3}, cardType:{4}", id, cardName, description, faction, cardType);
+    }
+
 }

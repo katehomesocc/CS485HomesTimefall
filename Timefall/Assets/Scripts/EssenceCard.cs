@@ -5,5 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Essence Card", menuName = "EssenceCard")]
 public class EssenceCard : Card
 {
-    public CardType cardType = CardType.ESSENCE;
+
+    public void Awake()
+    {
+        cardType = CardType.ESSENCE;
+    }
 }

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 530243fb3128ae040a6f358de3e4c42d, type: 3}
+  m_Name: Essence_6_Shield
+  m_EditorClassIdentifier: 
+  id: 6
+  cardName: Shield
+  description: Protect an Agent from damage until your next turn.
+  image: {fileID: 2800000, guid: 46bfe47676429a34fa5e06d0a01b1cc4, type: 3}
+  faction: 4
+  isPlaced: 0
+  cardType: 1
