@@ -9,4 +9,6 @@ public class AgentCard : Card
     public string diceType;
     public int diceCost;
 
+    public CardType cardType = CardType.AGENT;
+
 }

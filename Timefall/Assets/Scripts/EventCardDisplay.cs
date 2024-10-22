@@ -6,7 +6,6 @@ using TMPro;
 
 public class EventCardDisplay : CardDisplay
 {
-    public List<Card> eventDB;
     public int pos = 0;
     public Image borderImage;
 
@@ -23,9 +22,7 @@ public class EventCardDisplay : CardDisplay
     // Start is called before the first frame update
     void Start()
     {
-        eventDB = GameObject.FindGameObjectWithTag("EventDB").GetComponent<CardDatabase>().cardList;
-        displayCard = eventDB[pos];
-        ResetDisplay((EventCard) displayCard);
+        //ResetDisplay((EventCard) displayCard);
     }
 
     void ResetDisplay(EventCard eventCard) 
@@ -46,9 +43,17 @@ public class EventCardDisplay : CardDisplay
 
     void SetCard(EventCard eventCard)
     {
+        Debug.Log("Setting event card");
         displayCard = eventCard;
         ResetDisplay(eventCard);
     }
+
+    public void SetCard(Card eventCard)
+    {
+        Debug.Log("Setting card as event");
+        SetCard((EventCard) eventCard);
+    }
+
 
     void SetFactionColors(Color color)
     {
@@ -91,21 +96,6 @@ public class EventCardDisplay : CardDisplay
             vpTMP.text = vpText;
             vpImage.enabled = true;
         }
-    }
-
-    public void ShowNextCard()
-    {
-        if(pos < eventDB.Count-1)
-        {
-            pos++;
-        } 
-        else
-        {
-            pos = 0;
-        }
-
-        SetCard((EventCard) eventDB[pos]);
-
     }
 
 }

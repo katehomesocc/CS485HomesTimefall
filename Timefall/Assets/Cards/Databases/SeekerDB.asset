@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9adde2373a6d1994985dc0d58e1fdece, type: 3}
+  m_Name: SeekerDB
+  m_EditorClassIdentifier: 
+  cardList:
+  - {fileID: 11400000, guid: 9336c4f2f16278043a2c513c16d61824, type: 2}
+  - {fileID: 11400000, guid: 094cb06ac45112c48879e512e96fee3e, type: 2}
+  - {fileID: 11400000, guid: 3a51da935947423468433de436ba809b, type: 2}
+  - {fileID: 11400000, guid: 2b16a801c80b0344d8bfa7763d3db542, type: 2}
+  - {fileID: 11400000, guid: 5650cd4440e79ad4980fb89c00b66f77, type: 2}
+  - {fileID: 11400000, guid: 6cadcbd52ac695b43872e64b207535c9, type: 2}
+  - {fileID: 11400000, guid: 71cde57677714a94f94961b3b3968f27, type: 2}
+  - {fileID: 11400000, guid: 6b8b2978346e24a46b685e8ecfc4c82f, type: 2}

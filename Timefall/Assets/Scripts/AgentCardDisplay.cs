@@ -10,7 +10,6 @@ public class AgentCardDisplay : CardDisplay
     public TMP_Text diceTypeText;
     public TMP_Text diceCostText;
 
-    public List<Card> agentDB;
     public int pos = 0;
 
     public Image diceImage;
@@ -19,9 +18,7 @@ public class AgentCardDisplay : CardDisplay
     // Start is called before the first frame update
     void Start()
     {
-        agentDB = GameObject.FindGameObjectWithTag("AgentDB").GetComponent<CardDatabase>().cardList;
-        displayCard = agentDB[pos];
-        ResetDisplay((AgentCard) displayCard);
+        //ResetDisplay((AgentCard) displayCard);
     }
 
     void ResetDisplay(AgentCard agentCard) 
@@ -44,8 +41,15 @@ public class AgentCardDisplay : CardDisplay
 
     void SetCard(AgentCard agentCard)
     {
+        Debug.Log("Setting agent card");
         displayCard = agentCard;
         ResetDisplay(agentCard);
+    }
+
+    public void SetCard(Card agentCard)
+    {
+        Debug.Log("Setting card as agent");
+        SetCard((AgentCard) agentCard);
     }
 
     void SetFactionText(Faction faction)
@@ -75,21 +79,6 @@ public class AgentCardDisplay : CardDisplay
         diceImage.color = color;
         borderImage.color = color;
         factionText.color = color;
-    }
-
-    public void ShowNextCard()
-    {
-        if(pos < agentDB.Count-1)
-        {
-            pos++;
-        } 
-        else
-        {
-            pos = 0;
-        }
-
-        SetCard((AgentCard) agentDB[pos]);
-
     }
 
 }

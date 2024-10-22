@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardDatabase : MonoBehaviour
+[CreateAssetMenu(fileName = "New Card DB", menuName = "CardDB")]
+public class CardDatabase : ScriptableObject
 {
    
     public List<Card> cardList = new List<Card>();

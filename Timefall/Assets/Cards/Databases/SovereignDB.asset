@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9adde2373a6d1994985dc0d58e1fdece, type: 3}
+  m_Name: SovereignDB
+  m_EditorClassIdentifier: 
+  cardList:
+  - {fileID: 11400000, guid: 52938c51450ec414098ae0b7a9ec26e6, type: 2}
+  - {fileID: 11400000, guid: 97025578c21865a49b4829ec54be13cb, type: 2}
+  - {fileID: 11400000, guid: d5a76ca98f61c0642b06164768a7933b, type: 2}
+  - {fileID: 11400000, guid: 045482b7a9142a644a872637d23d2a7a, type: 2}
+  - {fileID: 11400000, guid: bcd998c1e517ec140992b902e86ecfb7, type: 2}
+  - {fileID: 11400000, guid: 5563fe6d7aa5e11418b1f520fbc9e888, type: 2}
+  - {fileID: 11400000, guid: 963d4ae2a686276458a66443fb629bb6, type: 2}
+  - {fileID: 11400000, guid: cdac69b47ad9da2429514fcf4cd37299, type: 2}

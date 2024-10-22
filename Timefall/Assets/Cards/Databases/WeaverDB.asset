@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9adde2373a6d1994985dc0d58e1fdece, type: 3}
+  m_Name: WeaverDB
+  m_EditorClassIdentifier: 
+  cardList:
+  - {fileID: 11400000, guid: ce826891e6d8a9f4cb53a1570b6be9de, type: 2}
+  - {fileID: 11400000, guid: 32c3a7e0624cadf4a8b2f38204df690f, type: 2}
+  - {fileID: 11400000, guid: 47a1940b5d97a0442b5312ef69091485, type: 2}
+  - {fileID: 11400000, guid: 4e1892d0dcddbdd4abd3c421e1ca5b92, type: 2}
+  - {fileID: 11400000, guid: 7771441672777964e905bb92338f57e1, type: 2}
+  - {fileID: 11400000, guid: 67e84495fed8f2f4189134913e83678c, type: 2}
+  - {fileID: 11400000, guid: ee830ede6d33a9a4d85685556b64b124, type: 2}
+  - {fileID: 11400000, guid: a931654f9548f7e46ba1b10377db0abc, type: 2}

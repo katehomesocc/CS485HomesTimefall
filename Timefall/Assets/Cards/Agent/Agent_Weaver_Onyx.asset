@@ -17,5 +17,8 @@ MonoBehaviour:
   description: Choose an Event on the Timeline. Send it to the Timeline Discard Pile.
   image: {fileID: 0}
   faction: 0
+  isPlaced: 0
+  cardType: 0
   diceType: D8
   diceCost: 4
+  cardType: 0

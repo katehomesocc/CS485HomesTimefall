@@ -6,5 +6,7 @@ using UnityEngine;
 public class EventCard : Card
 {
     public int[] victoryPoints = new int[4]; //0: Stewards, 1: Seekers, 2: Sovereigns, 3: Weavers
+
+    public CardType cardType = CardType.EVENT;
     
 }

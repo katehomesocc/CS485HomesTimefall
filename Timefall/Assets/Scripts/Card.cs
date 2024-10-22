@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "New Card", menuName = "Card")]
+[System.Serializable]
 public class Card : ScriptableObject
 {
     
@@ -15,5 +16,7 @@ public class Card : ScriptableObject
     public Faction faction;
 
     public bool isPlaced = false;
+
+    public CardType cardType;
 
 }

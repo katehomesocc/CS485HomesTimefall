@@ -17,4 +17,7 @@ MonoBehaviour:
   description: E68_Description_text
   image: {fileID: 0}
   faction: 0
+  isPlaced: 0
+  cardType: 2
   victoryPoints: 00000000000000000000000019000000
+  cardType: 2
