@@ -41,14 +41,12 @@ public class AgentCardDisplay : CardDisplay
 
     void SetCard(AgentCard agentCard)
     {
-        Debug.Log("Setting agent card");
         displayCard = agentCard;
         ResetDisplay(agentCard);
     }
 
     public void SetCard(Card agentCard)
     {
-        Debug.Log("Setting card as agent");
         SetCard((AgentCard) agentCard);
     }
 

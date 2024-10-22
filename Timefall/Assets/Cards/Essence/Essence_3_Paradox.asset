@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   cardName: Paradox
-  description: ParadoxDesc
-  image: {fileID: 2800000, guid: 2e51b67273a188e42bfa72d38d22f27a, type: 3}
+  description: Choose and Event on the Timeline. Send it to the Timeline Discard
+    Pile.
+  image: {fileID: 2800000, guid: ef5e6eade042aff41b57761e581e4551, type: 3}
   faction: 4
   isPlaced: 0
   cardType: 1

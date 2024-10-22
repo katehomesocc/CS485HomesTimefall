@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class BoardManager : MonoBehaviour, IDropHandler
 {
+    public static string LOCATION = "BOARD";
     // Start is called before the first frame update
     void Start()
     {
@@ -25,12 +26,14 @@ public class BoardManager : MonoBehaviour, IDropHandler
 
         if (display == null) {return;}
 
+        if (display.onBoard) {return;}
+
         PlaceCard(display);
     }
 
     void PlaceCard(CardDisplay cardDisplay) 
     {
-        cardDisplay.Place(this.transform);
+        cardDisplay.Place(this.transform, LOCATION);
 
         //TODO: physically place card UI
     }

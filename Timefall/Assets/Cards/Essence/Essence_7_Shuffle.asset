@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 7
   cardName: Shuffle
   description: Shuffle the timeline deck and reveal the top card.
-  image: {fileID: 2800000, guid: 4d57e62fecc824c4dbdb3b7559bd9b68, type: 3}
+  image: {fileID: 2800000, guid: bdbcb8c7726a3e14a8551e2f9f5d415e, type: 3}
   faction: 4
   isPlaced: 0
   cardType: 1

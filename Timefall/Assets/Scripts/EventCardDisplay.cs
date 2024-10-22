@@ -43,14 +43,12 @@ public class EventCardDisplay : CardDisplay
 
     void SetCard(EventCard eventCard)
     {
-        Debug.Log("Setting event card");
         displayCard = eventCard;
         ResetDisplay(eventCard);
     }
 
     public void SetCard(Card eventCard)
     {
-        Debug.Log("Setting card as event");
         SetCard((EventCard) eventCard);
     }
 

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 530243fb3128ae040a6f358de3e4c42d, type: 3}
   m_Name: Essence_9_Overtake
   m_EditorClassIdentifier: 
-  id: 8
-  cardName: Swap
-  description: Swap the position of two event cards on the timeline
-  image: {fileID: 2800000, guid: 6d2091c2a269b0443aa7f5d46e84edd4, type: 3}
+  id: 9
+  cardName: Overtake
+  description: Choose a faction. On that factions next turn, you play instead.
+  image: {fileID: 2800000, guid: 8c013e28d57476948880b7aa674270b4, type: 3}
   faction: 4
   isPlaced: 0
   cardType: 1

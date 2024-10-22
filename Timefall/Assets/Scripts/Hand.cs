@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Hand : MonoBehaviour
 {
+    public static string LOCATION = "HAND";
     public Deck targetDeck;
     public Button drawButton;
     public Button shuffleButton;
@@ -13,6 +14,8 @@ public class Hand : MonoBehaviour
     public GameObject agentCardDisplay;
     public GameObject essenceCardDisplay;
     public GameObject eventCardDisplay;
+
+    public Transform expandedViewTransform;
     // Start is called before the first frame update
     void Start()
     {
@@ -46,39 +49,26 @@ public class Hand : MonoBehaviour
                 obj = Instantiate(agentCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
                 AgentCardDisplay agentDC = obj.GetComponent<AgentCardDisplay>();
 
-                if(agentDC == null)
-                {
-                    Debug.Log ("No Agent display :(");
-                    return;
-                } 
-
-                Debug.Log ("Setting Agent display :)");
+                if(agentDC == null){return;} 
                 agentDC.SetCard(card);
+                agentDC.InstantiateInHand(transform);
 
                 break;
             case CardType.ESSENCE:
                 obj = Instantiate(essenceCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
                 EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
 
-                if(essenceDC == null)
-                {
-                    Debug.Log ("No Essence display :(");
-                    return;
-                } 
-                Debug.Log ("Setting Essence display :)");
+                if(essenceDC == null){return;} 
                 essenceDC.SetCard(card);
+                essenceDC.InstantiateInHand(transform);
                 break;
             case CardType.EVENT:
                 obj = Instantiate(eventCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
                 EventCardDisplay eventDC = obj.GetComponent<EventCardDisplay>();
 
-                if(eventDC == null)
-                {
-                    Debug.Log ("No Event display :(");
-                    return;
-                } 
-                Debug.Log ("Setting Event display :)");
+                if(eventDC == null){return;} 
                 eventDC.SetCard(card);
+                eventDC.InstantiateInHand(transform);
                 break;
             default:
             //Error handling
@@ -86,14 +76,67 @@ public class Hand : MonoBehaviour
                 return;
         }
 
-        obj.transform.SetParent(transform);
-        obj.transform.localScale =  new Vector3(0.55f, 0.55f, 0.55f);
+        // obj.transform.SetParent(transform);
+        //obj.transform.localScale =  new Vector3(0.55f, 0.55f, 0.55f);
         
 	}
 
     void ShuffleDeck(){
-		Debug.Log ("Attempt to shuffle!");
         targetDeck.Shuffle();
 	}
+
+    public void ExpandCardView(Card card)
+    {
+        if(card == null){ return;}
+
+        CardType cardType = card.cardType;
+
+        Debug.Log (card.ToString());
+
+        GameObject obj = null;
+
+        switch(cardType) 
+        {
+            case CardType.AGENT:
+                obj = Instantiate(agentCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
+                AgentCardDisplay agentDC = obj.GetComponent<AgentCardDisplay>();
+
+                if(agentDC == null){return;} 
+                agentDC.SetCard(card);
+                agentDC.Place(expandedViewTransform, "EXPAND");
+
+                break;
+            case CardType.ESSENCE:
+                obj = Instantiate(essenceCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
+                EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
+
+                if(essenceDC == null){return;} 
+                essenceDC.SetCard(card);
+                essenceDC.Place(expandedViewTransform, "EXPAND");
+                break;
+            case CardType.EVENT:
+                obj = Instantiate(eventCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
+                EventCardDisplay eventDC = obj.GetComponent<EventCardDisplay>();
+
+                if(eventDC == null){return;} 
+                eventDC.SetCard(card);
+                eventDC.Place(expandedViewTransform, "EXPAND");
+                break;
+            default:
+            //Error handling
+                Debug.Log ("Invalid Card Type: " + cardType);
+                return;
+        }
+
+        obj.transform.SetParent(expandedViewTransform, false);
+
+    }
+
+    public void CloseExpandCardView()
+    {
+        while (expandedViewTransform.childCount > 0) {
+            DestroyImmediate(expandedViewTransform.GetChild(0).gameObject);
+        }
+    }
 
 }

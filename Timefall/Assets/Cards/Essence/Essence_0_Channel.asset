@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   cardName: Channel
-  description: Channel Desc
-  image: {fileID: 2800000, guid: 8355ba10999029148a0af970e1cec6c5, type: 3}
+  description: Choose a card from your hand. Do not discard it at the end of this
+    turn.
+  image: {fileID: 2800000, guid: 9c1c8e0ed37376549973613e43ef59e7, type: 3}
   faction: 4
   isPlaced: 0
   cardType: 1
