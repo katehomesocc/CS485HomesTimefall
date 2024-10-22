@@ -24,7 +24,7 @@ public class EventCardDisplay : CardDisplay
     void Start()
     {
         eventDB = GameObject.FindGameObjectWithTag("EventDB").GetComponent<CardDatabase>().cardList;
-        displayCard = eventDB[0];
+        displayCard = eventDB[pos];
         ResetDisplay((EventCard) displayCard);
     }
 

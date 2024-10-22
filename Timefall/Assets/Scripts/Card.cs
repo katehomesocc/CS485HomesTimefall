@@ -14,4 +14,6 @@ public class Card : ScriptableObject
     public Texture image;
     public Faction faction;
 
+    public bool isPlaced = false;
+
 }

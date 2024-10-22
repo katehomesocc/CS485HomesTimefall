@@ -20,7 +20,7 @@ public class AgentCardDisplay : CardDisplay
     void Start()
     {
         agentDB = GameObject.FindGameObjectWithTag("AgentDB").GetComponent<CardDatabase>().cardList;
-        displayCard = agentDB[0];
+        displayCard = agentDB[pos];
         ResetDisplay((AgentCard) displayCard);
     }
 
