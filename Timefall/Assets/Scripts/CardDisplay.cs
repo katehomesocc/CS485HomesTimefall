@@ -92,7 +92,7 @@ public class CardDisplay : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
         // if(onBoard){ return;}
 
-        this.transform.SetParent(returnParent);   
+        this.transform.SetParent(returnParent, false);   
         this.transform.SetSiblingIndex(returnSiblingIndex);
 
         GetComponent<CanvasGroup>().blocksRaycasts = true;

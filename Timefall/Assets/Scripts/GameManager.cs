@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
         else 
         { 
             Instance = this; 
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(transform.gameObject);
         } 
     }
 
