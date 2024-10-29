@@ -36,6 +36,8 @@ public class TurnManager : MonoBehaviour
     public TMP_Text startOfGameCountdownText;
     public GameObject endOfGamePanel;
 
+    public TMP_Text endOfGameVPText;
+
     public Hand hand;
     
 
@@ -234,6 +236,10 @@ public class TurnManager : MonoBehaviour
 
     void EndOfGame()
     {
+        int[] vpArr = boardManager.TotalVictoryPointsOnBoard();
+        string result = string.Join(",", vpArr);
+        endOfGameVPText.text = result;
+        Debug.Log(result);
         endOfGamePanel.SetActive(true);
     }
 

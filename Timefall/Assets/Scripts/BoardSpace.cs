@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Linq;
 
 public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -23,7 +24,9 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     public Color resetColor;
 
     public TurnManager turnManager;
-    
+
+    public Card eventCard; //TODO: change to EventCard after testing
+
     // Start is called before the first frame update
     void Start()
     {
@@ -105,6 +108,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
                 if(eventDC == null){return;} 
                 eventDC.SetCard(card);
                 eventDC.Place(this.transform, LOCATION);
+                eventCard = card;
                 break;
             default:
             //Error handling
@@ -167,5 +171,10 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
         return turnManagerApproved;
         
+    }
+
+    public void SetEventCard(EventCard card)
+    {
+        eventCard = card;
     }
 }

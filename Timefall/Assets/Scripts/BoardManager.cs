@@ -35,7 +35,35 @@ public class BoardManager : MonoBehaviour
     {
         BoardSpace space = spaces[round-1];
         StartCoroutine(cardDisplay.ScaleToPositionAndSize(space.transform.position,space.transform.lossyScale, 1f, space.transform));
+
+        if(cardDisplay.displayCard.cardType == CardType.EVENT)
+        {
+            space.SetEventCard((EventCard) cardDisplay.displayCard);
+        }
+        
         cardDisplay.playState = CardPlayState.IDK;
+    }
+
+    public int[] TotalVictoryPointsOnBoard()
+    {
+        int stewardsVP = 0;
+        int seekersVP = 0;
+        int sovereignsVP = 0;
+        int weaversVP = 0;
+
+        foreach (BoardSpace boardSpace in spaces)
+        {
+            EventCard eventCard = (EventCard) boardSpace.eventCard;
+
+            if(eventCard == null) { continue;}
+
+            stewardsVP += eventCard.victoryPoints[0];
+            seekersVP += eventCard.victoryPoints[1];
+            sovereignsVP += eventCard.victoryPoints[2];
+            weaversVP += eventCard.victoryPoints[3];
+        }
+
+        return new int[] {stewardsVP, seekersVP, sovereignsVP, weaversVP};
     }
 
 

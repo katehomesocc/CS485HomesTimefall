@@ -239,16 +239,6 @@ public class Hand : MonoBehaviour
 
     public void SetPlayerDeck(Faction faction, Deck deck)
     {
-        if(faction == null)
-        {
-            Debug.Log("ERROR: Faction null");
-        }
-
-        if(deck == null)
-        {
-            Debug.Log("ERROR: Deck null");
-        }
-        
         playerDeckDisplay.SetPlayerDeck(faction, deck);
     }
 
