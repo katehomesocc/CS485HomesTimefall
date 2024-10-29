@@ -12,12 +12,11 @@ public class Deck : MonoBehaviour
 
     public List<Card> discardPile = new List<Card>();
 
-    public TMP_Text deckCountTMP;
 
     private void Awake() {
         cardList.AddRange(cardDB.cardList);
         Shuffle();
-        UpdateCountText(); 
+        // UpdateCountText(); 
     }
 
     // Start is called before the first frame update
@@ -53,7 +52,7 @@ public class Deck : MonoBehaviour
         if(cardList.Count < 1) { return null;}
         Card drawnCard = cardList[0];
         cardList.RemoveAt(0);
-        UpdateCountText();
+        // UpdateCountText();
 
         return drawnCard;
     }
@@ -66,9 +65,22 @@ public class Deck : MonoBehaviour
         return drawnCard;
     }
 
-    void UpdateCountText()
+    // void UpdateCountText()
+    // {
+    //     deckCountTMP.text = cardList.Count.ToString();
+    //     discardCountTMP.text = discardPile.Count.ToString();
+    // }
+
+    public void Discard(Card card)
     {
-        deckCountTMP.text = cardList.Count.ToString();
+        discardPile.Add(card);
+        // UpdateCountText();
+    }
+
+    public void ShuffleHandBackIn(List<Card> hand)
+    {
+        cardList.AddRange(hand);
+        Shuffle();
     }
 
 }

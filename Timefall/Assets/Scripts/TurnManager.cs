@@ -56,6 +56,7 @@ public class TurnManager : MonoBehaviour
 
     
     public void EndTurn(){
+        hand.ShuffleHandBackIntoDeck();
         EndOfTurnCycle();
     }
 
@@ -185,6 +186,8 @@ public class TurnManager : MonoBehaviour
 
         boardManager.UnlockSpace(currentTurn, currentFaction);
 
+        hand.SetPlayerDeck(currentFaction, currentPlayer.deck);
+
         if(essenceCount == 0)
         {
             //set end turn button UI to highlighted as there are no further actions to be taken   
@@ -200,6 +203,8 @@ public class TurnManager : MonoBehaviour
     void StartFactionTurn()
     {
         Debug.Log("Start faction turn");
+
+        hand.DrawStartOfTurnHand();
 
         //draw from timeline deck and place on next available spot
         hand.DrawFromTimelineDeck();

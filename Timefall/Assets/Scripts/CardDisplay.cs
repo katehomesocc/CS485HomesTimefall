@@ -155,7 +155,7 @@ public class CardDisplay : MonoBehaviour,
         Hand hand = GetComponentInParent<Hand>();
         if(hand == null){ return;}
 
-        hand.ExpandCardView(displayCard);
+        hand.ExpandCardView(displayCard, true);
         isExpanded = true;
     }
 

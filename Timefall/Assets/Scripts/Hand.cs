@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Hand : MonoBehaviour
 {
     public static string LOCATION = "HAND";
-    public Deck playerDeck;
+    public DeckDisplay playerDeckDisplay;
     public Deck timelineDeck;
     public Button drawPlayerButton;
     public Button shufflePlayerButton;
@@ -18,11 +18,15 @@ public class Hand : MonoBehaviour
     public GameObject essenceCardDisplay;
     public GameObject eventCardDisplay;
 
-    public Transform expandedViewTransform;
+    public Transform expandedHoverTransform;
+
+    public Transform expandedStaticTransform;
 
     public BoardManager boardManager;
 
     public TurnManager turnManager;
+
+    public List<Card> cardsInHand;
 
     // Start is called before the first frame update
     void Start()
@@ -46,14 +50,14 @@ public class Hand : MonoBehaviour
 
     void DrawFromPlayerDeck()
     {
-        DrawFromDeck(playerDeck);
+        DrawFromDeck(playerDeckDisplay.deck);
     }
 
 
 
     void ShufflePlayerDeck()
     {
-        ShuffleDeck(playerDeck);
+        ShuffleDeck(playerDeckDisplay.deck);
     }
 
     void DrawFromDeck(Deck targetDeck){
@@ -100,6 +104,8 @@ public class Hand : MonoBehaviour
                 return;
         }
 
+        cardsInHand.Add(card);
+
         // obj.transform.SetParent(transform);
         //obj.transform.localScale =  new Vector3(0.55f, 0.55f, 0.55f);
         
@@ -109,7 +115,7 @@ public class Hand : MonoBehaviour
         targetDeck.Shuffle();
 	}
 
-    public CardDisplay ExpandCardView(Card card)
+    public CardDisplay ExpandCardView(Card card, bool hoverClear)
     {
         if(card == null){ return null;}
 
@@ -120,6 +126,8 @@ public class Hand : MonoBehaviour
         GameObject obj = null;
 
         CardDisplay displayToReturn = null;
+
+        Transform expandedViewTransform = hoverClear ? expandedHoverTransform :  expandedStaticTransform;
 
         switch(cardType) 
         {
@@ -169,8 +177,8 @@ public class Hand : MonoBehaviour
 
     public void CloseExpandCardView()
     {
-        while (expandedViewTransform.childCount > 0) {
-            DestroyImmediate(expandedViewTransform.GetChild(0).gameObject);
+        while (expandedHoverTransform.childCount > 0) {
+            DestroyImmediate(expandedHoverTransform.GetChild(0).gameObject);
         }
     }
 
@@ -187,7 +195,7 @@ public class Hand : MonoBehaviour
         if(card == null){ return;}
         Debug.Log("card exists!");
 
-        CardDisplay display = ExpandCardView(card);
+        CardDisplay display = ExpandCardView(card, false);
 
         display.playState = CardPlayState.IntialTimelineDraw;
 
@@ -204,6 +212,44 @@ public class Hand : MonoBehaviour
     public bool CanPlayCard(Card card)
     {
         return turnManager.CanPlayCard(card);
+    }
+
+    public void DrawStartOfTurnHand()
+    {
+
+        int handSize = 5; //TODO: get player hand size
+        for (int i = 0; i < handSize; i++)
+        {
+            DrawFromPlayerDeck();
+        }
+    }
+
+    public void ShuffleHandBackIntoDeck()
+    {
+        playerDeckDisplay.deck.ShuffleHandBackIn(cardsInHand);
+
+        cardsInHand.Clear();
+
+        while (this.transform.childCount > 0) {
+            DestroyImmediate(this.transform.GetChild(0).gameObject);
+        }
+
+
+    }
+
+    public void SetPlayerDeck(Faction faction, Deck deck)
+    {
+        if(faction == null)
+        {
+            Debug.Log("ERROR: Faction null");
+        }
+
+        if(deck == null)
+        {
+            Debug.Log("ERROR: Deck null");
+        }
+        
+        playerDeckDisplay.SetPlayerDeck(faction, deck);
     }
 
 }
