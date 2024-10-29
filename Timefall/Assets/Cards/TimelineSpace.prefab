@@ -93,7 +93,9 @@ MonoBehaviour:
     type: 3}
   eventCardDisplay: {fileID: 5005135767539618931, guid: ddc35f70be5e6d942837bfd6cf73f628,
     type: 3}
+  isUnlocked: 0
   testCard: {fileID: 11400000, guid: 2b16a801c80b0344d8bfa7763d3db542, type: 2}
+  border: {fileID: 1684156381291475156}
 --- !u!1 &3785567376982575291
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,7 +243,6 @@ GameObject:
   - component: {fileID: 2750795020926030798}
   - component: {fileID: 1314182112898187640}
   - component: {fileID: 8781825867196139279}
-  - component: {fileID: 7499835501312895772}
   m_Layer: 5
   m_Name: top left corner
   m_TagString: Untagged
@@ -304,25 +305,6 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &7499835501312895772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6021656037504257297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b509c92a64f1b5f46a6c8fb3dc56f6c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentCardDisplay: {fileID: 3842333250223465393, guid: 892b5fb4d94787d49b1f5a9836ce3b53,
-    type: 3}
-  essenceCardDisplay: {fileID: 5005135767539618931, guid: 586fe19d25eba694bbd4130b2777c8f9,
-    type: 3}
-  eventCardDisplay: {fileID: 5005135767539618931, guid: ddc35f70be5e6d942837bfd6cf73f628,
-    type: 3}
-  testCard: {fileID: 11400000, guid: 2b16a801c80b0344d8bfa7763d3db542, type: 2}
 --- !u!1 &6456486015378113381
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,7 +340,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 195, y: 295}
+  m_SizeDelta: {x: 190, y: 290}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7612168170630464548
 CanvasRenderer:

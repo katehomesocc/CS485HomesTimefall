@@ -27,6 +27,16 @@ public class TurnManager : MonoBehaviour
     public TMP_Text currentTurnText;
 
     public Button endTurnButton;
+
+    public BoardManager boardManager;
+
+    public GameObject startOfGamePanel;
+    public TMP_Text startOfGameText;
+
+    public TMP_Text startOfGameCountdownText;
+    public GameObject endOfGamePanel;
+
+    public Hand hand;
     
 
     // Start is called before the first frame update
@@ -35,9 +45,7 @@ public class TurnManager : MonoBehaviour
         currentTurn = 0;
         essenceCount = 3;
 
-        //any pre game graphics/text
-
-        StartNextFactionTurn();
+        StartCoroutine(StartOfGame());
     }
 
     // Update is called once per frame
@@ -49,6 +57,38 @@ public class TurnManager : MonoBehaviour
     
     public void EndTurn(){
         EndOfTurnCycle();
+    }
+
+    public bool CanPlayCard(Card card)
+    {
+        if(card == null){ return false;}
+
+        CardType cardType = card.cardType;
+
+        switch(cardType) 
+        {
+            case CardType.AGENT:
+                if(essenceCount < PLAY_AGENT_CARD)
+                {
+                    return true;
+                }
+
+                break;
+            case CardType.ESSENCE:
+
+                if(essenceCount < PLAY_ESSENCE_CARD)
+                {
+                    return true;
+                }
+
+                break;
+            default:
+            //Error handling
+                Debug.Log ("Invalid Card Type: " + cardType);
+                break;
+        }
+
+        return false;
     }
 
     public bool PlayEssenceCard(EssenceCard essenceCard)
@@ -125,10 +165,16 @@ public class TurnManager : MonoBehaviour
             //if a tie occurs, Weavers hand size increased
         //All players shuffle deck
 
-        StartNextFactionTurn();
+        if(currentTurn == 32)
+        {
+            EndOfGame();
+            return;
+        }
+        
+        SetupNextFactionTurn();
     }
 
-    void StartNextFactionTurn()
+    void SetupNextFactionTurn()
     {
         currentTurn++;
 
@@ -136,6 +182,8 @@ public class TurnManager : MonoBehaviour
         currentFaction = currentPlayer.faction;
 
         currentTurnText.text = string.Format("{0} | {1}", currentTurn, currentFaction);
+
+        boardManager.UnlockSpace(currentTurn, currentFaction);
 
         if(essenceCount == 0)
         {
@@ -151,8 +199,10 @@ public class TurnManager : MonoBehaviour
 
     void StartFactionTurn()
     {
+        Debug.Log("Start faction turn");
 
         //draw from timeline deck and place on next available spot
+        hand.DrawFromTimelineDeck();
 
         //spend essence
 
@@ -177,6 +227,35 @@ public class TurnManager : MonoBehaviour
         return null;
     }
 
+    void EndOfGame()
+    {
+        endOfGamePanel.SetActive(true);
+    }
 
+    IEnumerator StartOfGame()
+    {
+        //TODO: play audio?
+        
+        startOfGamePanel.SetActive(true);
+
+        int startupTime = 0; //5; //commented for testing
+
+        for (int i = startupTime; i > 0; i--)
+        {
+            startOfGameCountdownText.text = i.ToString();
+            yield return new WaitForSeconds(1);
+            
+        }
+
+        startOfGameText.text = "";
+
+        startOfGameCountdownText.text = "BATTLE";
+        yield return new WaitForSeconds(1);
+
+        startOfGamePanel.SetActive(false);
+
+        SetupNextFactionTurn();
+
+    }
     
 }

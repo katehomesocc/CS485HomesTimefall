@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class Deck : MonoBehaviour
 {
@@ -13,12 +14,18 @@ public class Deck : MonoBehaviour
 
     public TMP_Text deckCountTMP;
 
+    private void Awake() {
+        cardList.AddRange(cardDB.cardList);
+        Shuffle();
+        UpdateCountText(); 
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        cardList.AddRange(cardDB.cardList);
-        Shuffle();
-        UpdateCountText();
+        // cardList.AddRange(cardDB.cardList);
+        // Shuffle();
+        // UpdateCountText(); 
     }
 
     // Update is called once per frame

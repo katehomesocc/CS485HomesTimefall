@@ -5,7 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
-public class CardDisplay : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class CardDisplay : MonoBehaviour,
+    IBeginDragHandler, IDragHandler, IEndDragHandler, 
+    IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler 
 {
     public static Color COLOUR_SEEKERS = new Color(33f/255,197f/255,104f/255, 1f);
     public static Color COLOUR_SOVEREIGNS = new Color(255f/255,35f/255,147f/255, 1f);
@@ -25,6 +27,12 @@ public class CardDisplay : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public bool isExpanded = false;
     public Hand lastHand;
 
+    public bool inPlaceAnimation = false;
+
+    public bool canBePlayed = false;
+
+    public CardPlayState playState = CardPlayState.IDK;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +47,7 @@ public class CardDisplay : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         
     }
 
-    public Color GetFactionColor(Faction faction)
+    public static Color GetFactionColor(Faction faction)
     {
         switch(faction) 
         {
@@ -88,6 +96,7 @@ public class CardDisplay : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if(inPlaceAnimation){ return;}
         // Debug.Log("OnEndDrag");
 
         // if(onBoard){ return;}
@@ -162,6 +171,76 @@ public class CardDisplay : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
         hand.CloseExpandCardView();
         isExpanded = false;
+    }
+
+    public IEnumerator MoveToPosition(Vector3 position, float timeToMove)
+    {
+        var currentPos = this.transform.position;
+        var t = 0f;
+        while(t <= 1f)
+        {
+            t += Time.deltaTime / timeToMove;
+            this.transform.position = Vector3.Lerp(currentPos, position, t);
+            yield return null;
+        }
+        this.transform.position = position;
+    }
+
+    public IEnumerator ScaleToSize(Vector3 localScale, float timeToMove)
+    {
+        var currentScale = this.transform.localScale;
+        var t = 0f;
+        while(t <= 1f)
+        {
+            t += Time.deltaTime / timeToMove;
+            this.transform.localScale = Vector3.Lerp(currentScale, localScale, t);
+            yield return null;
+        }
+        this.transform.localScale = localScale;
+    }
+
+    public IEnumerator ScaleToPositionAndSize(Vector3 position, Vector3 localScale, float timeToMove, Transform boardSpaceTransform)
+    {
+        var currentPos = this.transform.position;
+        var currentScale = this.transform.localScale;
+        var t = 0f;
+        while(t <= 1f)
+        {
+            t += Time.deltaTime / timeToMove;
+            this.transform.position = Vector3.Lerp(currentPos, position, t);
+            this.transform.localScale = Vector3.Lerp(currentScale, localScale, t);
+            yield return null;
+        }
+        this.transform.position = position;
+        this.transform.localScale = localScale;
+
+        this.transform.SetParent(boardSpaceTransform, false);
+
+        this.transform.localPosition = Vector3.one;
+        this.transform.localScale = Vector3.one;
+    }
+
+    //Detect if a click occurs
+    public void OnPointerClick(PointerEventData pointerEventData)
+    {
+        
+        Debug.Log(name + " Game Object Clicked!");
+        //if card play state equals...
+        //IntialTimelineDraw
+
+        switch (playState)
+        {
+            case CardPlayState.IntialTimelineDraw:
+                Hand hand = FindObjectOfType<Hand>();
+                if(hand == null){ return;}
+                Debug.Log("hand exisyts");
+                hand.PlayTimelineCard(this);
+                break;
+            default:
+                //nothing
+                break;
+        }
+
     }
 
 

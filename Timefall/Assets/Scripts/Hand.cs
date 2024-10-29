@@ -6,9 +6,12 @@ using UnityEngine.UI;
 public class Hand : MonoBehaviour
 {
     public static string LOCATION = "HAND";
-    public Deck targetDeck;
-    public Button drawButton;
-    public Button shuffleButton;
+    public Deck playerDeck;
+    public Deck timelineDeck;
+    public Button drawPlayerButton;
+    public Button shufflePlayerButton;
+    public Button drawTimelineButton;
+    public Button shuffleTimelineButton;
     public RectTransform  handPanel;
 
     public GameObject agentCardDisplay;
@@ -16,14 +19,23 @@ public class Hand : MonoBehaviour
     public GameObject eventCardDisplay;
 
     public Transform expandedViewTransform;
+
+    public BoardManager boardManager;
+
+    public TurnManager turnManager;
+
     // Start is called before the first frame update
     void Start()
     {
-        Button drawBtn = drawButton.GetComponent<Button>();
-		drawBtn.onClick.AddListener(DrawFromDeck);
+        turnManager = FindObjectOfType<TurnManager>();
 
-        Button shuffleBtn = shuffleButton.GetComponent<Button>();
-		shuffleBtn.onClick.AddListener(ShuffleDeck);
+		drawPlayerButton.onClick.AddListener(DrawFromPlayerDeck);
+
+		shufflePlayerButton.onClick.AddListener(ShufflePlayerDeck);
+
+		drawTimelineButton.onClick.AddListener(DrawFromTimelineDeck);
+
+		shuffleTimelineButton.onClick.AddListener(ShuffleTimelineDeck);
     }
 
     // Update is called once per frame
@@ -32,14 +44,26 @@ public class Hand : MonoBehaviour
         
     }
 
-    void DrawFromDeck(){
+    void DrawFromPlayerDeck()
+    {
+        DrawFromDeck(playerDeck);
+    }
+
+
+
+    void ShufflePlayerDeck()
+    {
+        ShuffleDeck(playerDeck);
+    }
+
+    void DrawFromDeck(Deck targetDeck){
         Card card = targetDeck.Draw();
 
         if(card == null){ return;}
 
         CardType cardType = card.cardType;
 
-        Debug.Log (card.ToString());
+        // Debug.Log (card.ToString());
 
         GameObject obj = null;
 
@@ -81,19 +105,21 @@ public class Hand : MonoBehaviour
         
 	}
 
-    void ShuffleDeck(){
+    void ShuffleDeck(Deck targetDeck){
         targetDeck.Shuffle();
 	}
 
-    public void ExpandCardView(Card card)
+    public CardDisplay ExpandCardView(Card card)
     {
-        if(card == null){ return;}
+        if(card == null){ return null;}
 
         CardType cardType = card.cardType;
 
-        Debug.Log (card.ToString());
+        // Debug.Log (card.ToString());
 
         GameObject obj = null;
+
+        CardDisplay displayToReturn = null;
 
         switch(cardType) 
         {
@@ -101,35 +127,44 @@ public class Hand : MonoBehaviour
                 obj = Instantiate(agentCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
                 AgentCardDisplay agentDC = obj.GetComponent<AgentCardDisplay>();
 
-                if(agentDC == null){return;} 
+                if(agentDC == null){return null;} 
                 agentDC.SetCard(card);
                 agentDC.Place(expandedViewTransform, "EXPAND");
+
+                displayToReturn = agentDC;
 
                 break;
             case CardType.ESSENCE:
                 obj = Instantiate(essenceCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
                 EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
 
-                if(essenceDC == null){return;} 
+                if(essenceDC == null){return null;} 
                 essenceDC.SetCard(card);
                 essenceDC.Place(expandedViewTransform, "EXPAND");
+
+                displayToReturn = essenceDC;
+
                 break;
             case CardType.EVENT:
                 obj = Instantiate(eventCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
                 EventCardDisplay eventDC = obj.GetComponent<EventCardDisplay>();
 
-                if(eventDC == null){return;} 
+                if(eventDC == null){return null;} 
                 eventDC.SetCard(card);
                 eventDC.Place(expandedViewTransform, "EXPAND");
+
+                displayToReturn = eventDC;
+
                 break;
             default:
             //Error handling
                 Debug.Log ("Invalid Card Type: " + cardType);
-                return;
+                return null;
         }
 
         obj.transform.SetParent(expandedViewTransform, false);
 
+        return displayToReturn;
     }
 
     public void CloseExpandCardView()
@@ -137,6 +172,38 @@ public class Hand : MonoBehaviour
         while (expandedViewTransform.childCount > 0) {
             DestroyImmediate(expandedViewTransform.GetChild(0).gameObject);
         }
+    }
+
+        void ShuffleTimelineDeck()
+    {
+        ShuffleDeck(timelineDeck);
+    }
+
+    public void DrawFromTimelineDeck()
+    {
+        Debug.Log("Drawing from tiemline deck!");
+        Card card = timelineDeck.Draw();
+
+        if(card == null){ return;}
+        Debug.Log("card exists!");
+
+        CardDisplay display = ExpandCardView(card);
+
+        display.playState = CardPlayState.IntialTimelineDraw;
+
+        // display.OnPointerClick.AddListener(PlayTimelineCard(display));
+    }
+
+     public void PlayTimelineCard(CardDisplay display)
+    {
+        if(display == null){ return;}
+
+        boardManager.PlaceTimelineEventForTurn(display);
+    }
+
+    public bool CanPlayCard(Card card)
+    {
+        return turnManager.CanPlayCard(card);
     }
 
 }
