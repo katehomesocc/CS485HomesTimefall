@@ -130,7 +130,7 @@ public class CardDisplay : MonoBehaviour,
                     break;
             }
 
-            Debug.Log (string.Format("Placing At: {0} | inHand = {1} | onBoard = {2} ", location, inHand, onBoard));
+            //Debug.Log (string.Format("Placing At: {0} | inHand = {1} | onBoard = {2} ", location, inHand, onBoard));
         }
     }
 
@@ -224,7 +224,7 @@ public class CardDisplay : MonoBehaviour,
     public void OnPointerClick(PointerEventData pointerEventData)
     {
         
-        Debug.Log(name + " Game Object Clicked!");
+        //Debug.Log(name + " Game Object Clicked!");
         //if card play state equals...
         //IntialTimelineDraw
 
@@ -233,7 +233,7 @@ public class CardDisplay : MonoBehaviour,
             case CardPlayState.IntialTimelineDraw:
                 Hand hand = FindObjectOfType<Hand>();
                 if(hand == null){ return;}
-                Debug.Log("hand exisyts");
+                //Debug.Log("hand exisyts");
                 hand.PlayTimelineCard(this);
                 break;
             default:

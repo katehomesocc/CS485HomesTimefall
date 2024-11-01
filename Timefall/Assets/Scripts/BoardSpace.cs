@@ -150,6 +150,8 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
             Debug.Log("Can be played on this space");
 
+            turnManager.SetVictoryPointUI();
+
 
 
         
@@ -177,4 +179,6 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     {
         eventCard = card;
     }
+
+    
 }

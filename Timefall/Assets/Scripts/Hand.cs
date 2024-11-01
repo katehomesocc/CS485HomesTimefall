@@ -189,11 +189,11 @@ public class Hand : MonoBehaviour
 
     public void DrawFromTimelineDeck()
     {
-        Debug.Log("Drawing from tiemline deck!");
+        //Debug.Log("Drawing from timeline deck!");
         Card card = timelineDeck.Draw();
 
         if(card == null){ return;}
-        Debug.Log("card exists!");
+        //Debug.Log("card exists!");
 
         CardDisplay display = ExpandCardView(card, false);
 
@@ -207,6 +207,7 @@ public class Hand : MonoBehaviour
         if(display == null){ return;}
 
         boardManager.PlaceTimelineEventForTurn(display);
+        turnManager.SetVictoryPointUI();
     }
 
     public bool CanPlayCard(Card card)

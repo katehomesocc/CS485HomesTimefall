@@ -9,13 +9,11 @@ public class BoardManager : MonoBehaviour
 
     public BoardSpace[] spaces = new BoardSpace[32];
 
-    public GameManager gameManager;
 
     public int round = 0;
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
     }
 
     // Update is called once per frame
@@ -44,14 +42,14 @@ public class BoardManager : MonoBehaviour
         cardDisplay.playState = CardPlayState.IDK;
     }
 
-    public int[] TotalVictoryPointsOnBoard()
+    public int[] CalculateVPInList(BoardSpace[] spacesToCalc)
     {
         int stewardsVP = 0;
         int seekersVP = 0;
         int sovereignsVP = 0;
         int weaversVP = 0;
 
-        foreach (BoardSpace boardSpace in spaces)
+        foreach (BoardSpace boardSpace in spacesToCalc)
         {
             EventCard eventCard = (EventCard) boardSpace.eventCard;
 
@@ -66,5 +64,25 @@ public class BoardManager : MonoBehaviour
         return new int[] {stewardsVP, seekersVP, sovereignsVP, weaversVP};
     }
 
+    public int[] TotalVictoryPointsOnBoard()
+    {
+        return CalculateVPInList(spaces);
+    }
+
+    public int[] CalculateVPForTurnCycle(int cycleNumber)
+    {
+        int offset = (cycleNumber - 1) * 4;
+
+        Debug.Log(string.Format("cycleNum:[0], offset:[{1}], calcuating: [{2},{3},{4},{5}]", cycleNumber, offset, 0 + offset, 1 + offset, 2 + offset, 3 + offset));
+
+        BoardSpace[] spacesToCalc = new BoardSpace[4];
+
+        spacesToCalc[0] = spaces[0 + offset];
+        spacesToCalc[1] = spaces[1 + offset];
+        spacesToCalc[2] = spaces[2 + offset];
+        spacesToCalc[3] = spaces[3 + offset];
+
+        return CalculateVPInList(spacesToCalc);
+    }
 
 }
