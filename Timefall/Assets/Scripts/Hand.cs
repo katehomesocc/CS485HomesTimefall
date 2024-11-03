@@ -6,27 +6,35 @@ using UnityEngine.UI;
 public class Hand : MonoBehaviour
 {
     public static string LOCATION = "HAND";
-    public DeckDisplay playerDeckDisplay;
+
+    public RectTransform  handPanel;
+
+    public List<Card> cardsInHand;
+
+    [Header("Managers")]
+    public BoardManager boardManager;
+
+    public TurnManager turnManager;
     public Deck timelineDeck;
+    public DeckDisplay playerDeckDisplay;
+
+    [Header("Buttons")]
     public Button drawPlayerButton;
     public Button shufflePlayerButton;
     public Button drawTimelineButton;
     public Button shuffleTimelineButton;
-    public RectTransform  handPanel;
 
+    [Header("Card Display Prefabs")]
     public GameObject agentCardDisplay;
     public GameObject essenceCardDisplay;
     public GameObject eventCardDisplay;
 
+    [Header("Expanded Card View")]
     public Transform expandedHoverTransform;
 
     public Transform expandedStaticTransform;
 
-    public BoardManager boardManager;
-
-    public TurnManager turnManager;
-
-    public List<Card> cardsInHand;
+    public List<CardDisplay> staticCards = new List<CardDisplay>();
 
     // Start is called before the first frame update
     void Start()
@@ -172,12 +180,18 @@ public class Hand : MonoBehaviour
 
         obj.transform.SetParent(expandedViewTransform, false);
 
+        if(!hoverClear)
+        {
+            staticCards.Add(displayToReturn);
+        }
+
         return displayToReturn;
     }
 
     public void CloseExpandCardView()
     {
         while (expandedHoverTransform.childCount > 0) {
+            
             DestroyImmediate(expandedHoverTransform.GetChild(0).gameObject);
         }
     }
@@ -202,12 +216,23 @@ public class Hand : MonoBehaviour
         // display.OnPointerClick.AddListener(PlayTimelineCard(display));
     }
 
-     public void PlayTimelineCard(CardDisplay display)
+    public void PlayTimelineCard(CardDisplay display)
     {
         if(display == null){ return;}
 
         boardManager.PlaceTimelineEventForTurn(display);
         turnManager.SetVictoryPointUI();
+    }
+
+    public void AutoPlayTimelineCard()
+    {
+        Debug.Log("AutoPlayTimelineCard");
+        if(staticCards.Count == 1)
+        {
+            Debug.Log("count==1");
+            PlayTimelineCard(staticCards[0]);
+            staticCards.RemoveAt(0);
+        }
     }
 
     public bool CanPlayCard(Card card)

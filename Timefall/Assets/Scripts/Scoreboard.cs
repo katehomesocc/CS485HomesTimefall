@@ -19,18 +19,43 @@ public class Scoreboard : MonoBehaviour
         
     }
 
-    public void SetEndOfGameUI()
+    public void UpdateRound(int round, int[] cycleArr)
     {
-        for (int i = 0; i < 8; i++)
-        {
-            int[] cycleArr = boardManager.CalculateVPForTurnCycle(i+1);
-            rows[i].SetUI(cycleArr);
-        }
+        rows[round-1].SetUI(cycleArr);
+    }
 
-        int[] boardArr = boardManager.TotalVictoryPointsOnBoard();
+    public void UpdateBoard(int[] boardArr)
+    {
         rows[8].SetUI(boardArr);
     }
 
-    
-    
+    public void SetEndOfGameUI(int[] boardArr)
+    {
+        for (int i = 1; i < 8; i++)
+        {
+            int[] cycleArr = boardManager.CalculateVPForTurnCycle(i);
+            UpdateRound(i, cycleArr);
+        }
+
+        UpdateBoard(boardArr);
+    }
+
+    public void SetCycleHighlight(int round)
+    {
+        // Debug.Log("Setting highlight for: " + round.ToString());
+        int index = round -1;
+        if (index - 1 >= 0)
+        {
+            rows[index-1].ToggleLabelHighlight();
+        }
+
+        rows[index].ToggleLabelHighlight();
+    }
+
+    public void SetCycleWinner(int round, Faction faction)
+    {
+        Debug.Log("Setting Winner for round: " + round.ToString());
+
+        rows[round-1].ShowWinner(faction);
+    }
 }

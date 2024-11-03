@@ -73,7 +73,7 @@ public class BoardManager : MonoBehaviour
     {
         int offset = (cycleNumber - 1) * 4;
 
-        Debug.Log(string.Format("cycleNum:[0], offset:[{1}], calcuating: [{2},{3},{4},{5}]", cycleNumber, offset, 0 + offset, 1 + offset, 2 + offset, 3 + offset));
+        Debug.Log(string.Format("cycleNum:[{0}], offset:[{1}], calcuating: [{2},{3},{4},{5}]", cycleNumber, offset, 0 + offset, 1 + offset, 2 + offset, 3 + offset));
 
         BoardSpace[] spacesToCalc = new BoardSpace[4];
 

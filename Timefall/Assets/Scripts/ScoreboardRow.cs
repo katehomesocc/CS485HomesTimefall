@@ -5,19 +5,18 @@ using UnityEngine.UI;
 using TMPro;
 public class ScoreboardRow : MonoBehaviour
 {
-
+    public TMP_Text labelText;
     public TMP_Text stewardVPText;
     public TMP_Text seekerVPText;
     public TMP_Text sovereignVPText;
     public TMP_Text weaverVPText;
-    // Start is called before the first frame update
-    void Start()
-    {
-        // stewardVPText.text = "0";
-        // seekerVPText.text = "0";
-        // sovereignVPText.text = "0";
-        // weaverVPText.text = "0";
-    }
+
+    public GameObject winnerBox;
+    public RawImage gemImage;
+
+    public TMP_Text winnerText;
+
+    bool isHighlighted = false;
 
     public void SetUI(int[] vpArr)
     {
@@ -34,5 +33,26 @@ public class ScoreboardRow : MonoBehaviour
         else if (vp < 0) { symbol = "-";}
 
         return string.Format("{0}{1}", symbol, Mathf.Abs(vp));
+    }
+
+    public void ToggleLabelHighlight()
+    {
+        if(isHighlighted)
+        {
+            labelText.color = Color.white;
+            isHighlighted = false;
+        } else
+        {
+            labelText.color = Color.yellow;
+            isHighlighted = true;
+        }
+        
+    }
+
+    public void ShowWinner(Faction faction)
+    {
+        gemImage.color = CardDisplay.GetFactionColor(faction);
+        // winnerText.text = "+5";
+        winnerBox.SetActive(true);
     }
 }
