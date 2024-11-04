@@ -19,5 +19,5 @@ MonoBehaviour:
   faction: 4
   isPlaced: 0
   cardType: 1
-  essenceAction: {fileID: -4673227160655812887, guid: 2bf63be83c163fc4aa286395e1a000f8,
+  essenceAction: {fileID: -1864973816729090405, guid: b642bec8b61fa8e41b592705a413e384,
     type: 3}
