@@ -9,33 +9,37 @@ public class CardDisplay : MonoBehaviour,
     IBeginDragHandler, IDragHandler, IEndDragHandler, 
     IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler 
 {
-    public static Color COLOUR_SEEKERS = new Color(33f/255,197f/255,104f/255, 1f);
-    public static Color COLOUR_SOVEREIGNS = new Color(255f/255,35f/255,147f/255, 1f);
-    public static Color COLOUR_STEWARDS = new Color(24f/255,147f/255,248f/255, 1f);
-    public static Color COLOUR_WEAVERS = new Color(97f/255,65f/255,172f/255, 1f);
     public Card displayCard;
-    public RawImage selectionImage;
+    public Hand hand;
+    
+    [Header("Return Info")]
+    public Transform returnParent = null;
+    int returnSiblingIndex = 0;
 
+    [Header("UI")]
+    public RawImage selectionImage;
     public TMP_Text nameText;
     public TMP_Text descText;
     public RawImage image;
 
-    public Transform returnParent = null;
-    int returnSiblingIndex = 0;
+    [Header("State Info")]
+    public CardPlayState playState = CardPlayState.IDK;
     public bool inHand = false;
     public bool onBoard = false;
     public bool isExpanded = false;
-    public Hand lastHand;
-
     public bool inPlaceAnimation = false;
+    public bool isTargetable = false;
 
-    public bool canBePlayed = false;
-
-    public CardPlayState playState = CardPlayState.IDK;
+    [Header("Colors [NEED TO MOVE TO CORRECT CLASS]")] //TODO: move this somewhere that makes sense
+    public static Color COLOUR_SEEKERS = new Color(33f/255,197f/255,104f/255, 1f);
+    public static Color COLOUR_SOVEREIGNS = new Color(255f/255,35f/255,147f/255, 1f);
+    public static Color COLOUR_STEWARDS = new Color(24f/255,147f/255,248f/255, 1f);
+    public static Color COLOUR_WEAVERS = new Color(97f/255,65f/255,172f/255, 1f);
 
     // Start is called before the first frame update
     void Start()
     {
+        hand = FindObjectOfType<Hand>();
         if(displayCard != null)
         {
             nameText.text = displayCard.cardName;
@@ -76,6 +80,8 @@ public class CardDisplay : MonoBehaviour,
         this.transform.SetParent(this.transform.parent.parent); //edit layer later
 
         GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+        hand.BeginDragCard(this);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -86,7 +92,7 @@ public class CardDisplay : MonoBehaviour,
 
         if(isExpanded)
         {
-            lastHand.CloseExpandCardView();
+            hand.CloseExpandCardView();
             isExpanded = false;
         }
 
@@ -96,6 +102,7 @@ public class CardDisplay : MonoBehaviour,
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        hand.EndDragCard();
         if(inPlaceAnimation){ return;}
         // Debug.Log("OnEndDrag");
 
@@ -123,7 +130,6 @@ public class CardDisplay : MonoBehaviour,
             {
                 case "HAND":
                     inHand = true;
-                    lastHand = GetComponentInParent<Hand>();
                     break;
                 case "BOARD":
                     onBoard = true;
@@ -151,8 +157,7 @@ public class CardDisplay : MonoBehaviour,
         if(!inHand){ return;}
 
         selectionImage.enabled = true;
-
-        Hand hand = GetComponentInParent<Hand>();
+        
         if(hand == null){ return;}
 
         hand.ExpandCardView(displayCard, true);
@@ -241,6 +246,11 @@ public class CardDisplay : MonoBehaviour,
                 break;
         }
 
+    }
+
+    public void SetTargetable(bool targetable)
+    {
+        isTargetable = targetable;
     }
 
 

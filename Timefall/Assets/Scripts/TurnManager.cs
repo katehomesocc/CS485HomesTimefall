@@ -93,22 +93,29 @@ public class TurnManager : MonoBehaviour
 
     public bool CanPlayCard(Card card)
     {
-        if(card == null){ return false;}
+        Debug.Log("TM: CanPlayCard");
+        if(card == null)
+        { 
+            Debug.Log("Error: card is null");
+            return false;
+        }
 
         CardType cardType = card.cardType;
 
         switch(cardType) 
         {
             case CardType.AGENT:
-                if(essenceCount < PLAY_AGENT_CARD)
+            Debug.Log("TM: AGENT");
+                if(essenceCount >= PLAY_AGENT_CARD)
                 {
                     return true;
                 }
 
                 break;
             case CardType.ESSENCE:
+            Debug.Log("TM: ESSENCE");
 
-                if(essenceCount < PLAY_ESSENCE_CARD)
+                if(essenceCount >= PLAY_ESSENCE_CARD)
                 {
                     return true;
                 }
@@ -125,7 +132,7 @@ public class TurnManager : MonoBehaviour
 
     public bool PlayEssenceCard(EssenceCard essenceCard)
     {
-        if(essenceCount < PLAY_ESSENCE_CARD) {return false;}
+        if(essenceCount >= PLAY_ESSENCE_CARD) {return false;}
 
         //do stuff
 
@@ -134,7 +141,7 @@ public class TurnManager : MonoBehaviour
 
     public bool UseAgentEffect(AgentCard agentCard)
     {
-        if(essenceCount < ROLL_AGENT_EFFECT) {return false;}
+        if(essenceCount >= ROLL_AGENT_EFFECT) {return false;}
 
         //do stuff
 
@@ -143,7 +150,7 @@ public class TurnManager : MonoBehaviour
 
     public bool PlayAgentCard(AgentCard agentCard)
     {
-        if(essenceCount < PLAY_AGENT_CARD) {return false;}
+        if(essenceCount >= PLAY_AGENT_CARD) {return false;}
 
         //do stuff
 
@@ -152,7 +159,7 @@ public class TurnManager : MonoBehaviour
 
     public bool DiscardHandAndDraw()
     {
-        if(essenceCount < DISCARD_HAND_AND_DRAW) {return false;}
+        if(essenceCount >= DISCARD_HAND_AND_DRAW) {return false;}
 
         //do stuff
 
@@ -161,7 +168,7 @@ public class TurnManager : MonoBehaviour
 
     public bool ReplaceTimelineEvent(EventCard timelineEvent, EventCard replaceEvent)
     {
-        if(essenceCount < REPLACE_TIMELINE_EVENT) {return false;}
+        if(essenceCount >= REPLACE_TIMELINE_EVENT) {return false;}
 
         //do stuff
 

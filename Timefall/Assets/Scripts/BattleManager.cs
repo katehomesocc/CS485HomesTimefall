@@ -8,7 +8,8 @@ public class BattleManager : MonoBehaviour
     BoardManager boardManager;
     Hand hand;
 
-    public bool autoplayTimeToEnd = false;
+    public bool autoplay = false;
+    public int autoplayUntilTurn = 32;
 
     int turn = 1;
     public float autoplayWaitTime = 1.5f;
@@ -20,7 +21,7 @@ public class BattleManager : MonoBehaviour
         boardManager = FindObjectOfType<BoardManager>();
         hand = FindObjectOfType<Hand>();
 
-        if(autoplayTimeToEnd)
+        if(autoplay)
         {
             StartCoroutine(QueueFirstAutoplay());
         }
@@ -50,12 +51,24 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
 
-        if(turn < 32)
+        if(turn < autoplayUntilTurn)
         {
             turn++;
             StartCoroutine(AutoplayRound());
         }
         
+    }
+
+    public void SetCardPossibilities(Card card)
+    {
+        Debug.Log("BM: SetCardPossibilities");
+        boardManager.SetCardPossibilities(card);
+    }
+
+    public void ClearPossibilities()
+    {
+        Debug.Log("BM: ClearPossibilities");
+        boardManager.ClearPossibilities();
     }
 
 }

@@ -8,16 +8,6 @@ using System.Linq;
 public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public static string LOCATION = "BOARD";
-    public GameObject agentCardDisplay;
-    public GameObject essenceCardDisplay;
-    public GameObject eventCardDisplay;
-
-    public bool isUnlocked = false;
-    public bool hasEvent = false;
-    public bool hasAgent = false;
-
-
-    public Card testCard;
 
     public RawImage border;
 
@@ -25,13 +15,29 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
     public TurnManager turnManager;
 
-    public Card eventCard; //TODO: change to EventCard after testing
+    public GameObject highlight;
+
+    [Header("Display Prefabs")]
+    public GameObject agentDisplayPrefab;
+    public GameObject essenceDisplayPrefab;
+    public GameObject eventDisplayPrefab;
+
+    [Header("Properties")]
+    public bool isUnlocked = false;
+    public bool hasEvent = false;
+    public bool hasAgent = false;
+    public bool isTargetable = false;
+    public EventCard eventCard;
+
+    public AgentCard agentCard;
+
+    public EventCardDisplay eventDisplay;
+    public AgentCardDisplay agentDisplay;
 
     // Start is called before the first frame update
     void Start()
     {
         turnManager = FindObjectOfType<TurnManager>();
-        //SetCard(testCard);
         border.color = Color.white;
     }
 
@@ -43,7 +49,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
     public void OnDrop(PointerEventData eventData)
     {
-        if (isUnlocked)
+        if (isUnlocked && isTargetable)
         {
             Debug.Log(eventData.pointerDrag.name + " was dropped on " + gameObject.name);
 
@@ -61,18 +67,15 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
     void PlaceCard(CardDisplay cardDisplay) 
     {
-        //cardDisplay.Place(this.transform, LOCATION);
-        SetCard(cardDisplay.displayCard);
-
-        hasEvent = true;//for testing, change
-
-        StartCoroutine(cardDisplay.MoveToPosition(this.transform.position, 10f));
-
-        //Destroy(cardDisplay.gameObject);
+        StartCoroutine(cardDisplay.ScaleToPositionAndSize(this.transform.position, this.transform.lossyScale, 1f, this.transform));
+        
+        SetCardDisplay(cardDisplay.displayCard);
+        
+        cardDisplay.playState = CardPlayState.IDK;
     }
 
 
-    public void SetCard(Card card)
+    public void SetCardDisplay(Card card)
     {
         if(card == null){ return;}
 
@@ -85,30 +88,32 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         switch(cardType) 
         {
             case CardType.AGENT:
-                obj = Instantiate(agentCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
-                AgentCardDisplay agentDC = obj.GetComponent<AgentCardDisplay>();
+                // obj = Instantiate(agentDisplayPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+                // AgentCardDisplay agentDC = obj.GetComponent<AgentCardDisplay>();
 
-                if(agentDC == null){return;} 
-                agentDC.SetCard(card);
-                agentDC.Place(this.transform, LOCATION);
+                // if(agentDC == null){return;} 
+                // agentDC.SetCard(card);
+                // agentDC.Place(this.transform, LOCATION);
 
-                break;
+                // break;
+                return;
             case CardType.ESSENCE:
-                obj = Instantiate(essenceCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
-                EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
+                // obj = Instantiate(essenceDisplayPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+                // EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
 
-                if(essenceDC == null){return;} 
-                essenceDC.SetCard(card);
-                essenceDC.Place(this.transform, LOCATION);
-                break;
+                // if(essenceDC == null){return;} 
+                // essenceDC.SetCard(card);
+                // essenceDC.Place(this.transform, LOCATION);
+                // break;
+                return;
             case CardType.EVENT:
-                obj = Instantiate(eventCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
+                obj = Instantiate(eventDisplayPrefab, new Vector3(0, 0, 0), Quaternion.identity);
                 EventCardDisplay eventDC = obj.GetComponent<EventCardDisplay>();
 
                 if(eventDC == null){return;} 
                 eventDC.SetCard(card);
                 eventDC.Place(this.transform, LOCATION);
-                eventCard = card;
+                SetEventCard(eventDC);
                 break;
             default:
             //Error handling
@@ -131,9 +136,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     {
         if(isUnlocked)
         {
-            resetColor = border.color;
-            border.color = Color.yellow;
-
+            // Highlight();
             
             if(pointerEventData.pointerDrag == null) { return;}
 
@@ -152,9 +155,6 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
             turnManager.SetVictoryPointUI();
 
-
-
-        
         }
     }
 
@@ -163,7 +163,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     {
         if(isUnlocked)
         {
-            border.color = resetColor;
+            // EndHighlight();
         }
     }
 
@@ -175,9 +175,25 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         
     }
 
-    public void SetEventCard(EventCard card)
+    public void SetEventCard(EventCardDisplay display)
     {
-        eventCard = card;
+        this.eventDisplay = display;
+        this.eventCard = (EventCard) eventDisplay.displayCard;
+        this.hasEvent = true;
+    }
+
+    public void Highlight()
+    {
+        highlight.transform.SetAsLastSibling();
+        highlight.SetActive(true);
+        // resetColor = border.color;
+        // border.color = Color.yellow;
+    }
+
+    public void EndHighlight()
+    {
+        highlight.SetActive(false);
+        // border.color = resetColor;
     }
 
     

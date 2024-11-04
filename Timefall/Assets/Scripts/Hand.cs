@@ -12,6 +12,7 @@ public class Hand : MonoBehaviour
     public List<Card> cardsInHand;
 
     [Header("Managers")]
+    public BattleManager battleManager;
     public BoardManager boardManager;
 
     public TurnManager turnManager;
@@ -40,6 +41,7 @@ public class Hand : MonoBehaviour
     void Start()
     {
         turnManager = FindObjectOfType<TurnManager>();
+        battleManager = FindObjectOfType<BattleManager>();
 
 		drawPlayerButton.onClick.AddListener(DrawFromPlayerDeck);
 
@@ -266,6 +268,29 @@ public class Hand : MonoBehaviour
     public void SetPlayerDeck(Faction faction, Deck deck)
     {
         playerDeckDisplay.SetPlayerDeck(faction, deck);
+    }
+
+    public void BeginDragCard(CardDisplay cardDisplay)
+    {
+        Debug.Log("Hand: beginDragCard");
+        Card card = cardDisplay.displayCard;
+
+        //check if enough essence to play card
+        bool haveEnoughEssence = CanPlayCard(card);
+
+        Debug.Log("haveEnoughEssence = " + haveEnoughEssence);
+
+        if(!haveEnoughEssence) {return;}
+
+        Debug.Log("Hand: beginDragCard enough essence");
+
+        //set card possibilities
+        battleManager.SetCardPossibilities(card);
+    }
+
+    public void EndDragCard()
+    {
+        battleManager.ClearPossibilities();
     }
 
 }

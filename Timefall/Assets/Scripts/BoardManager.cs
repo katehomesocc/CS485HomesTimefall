@@ -9,6 +9,8 @@ public class BoardManager : MonoBehaviour
 
     public BoardSpace[] spaces = new BoardSpace[32];
 
+    public List<BoardSpace> targetsAvailable = new List<BoardSpace>();
+
 
     public int round = 0;
     // Start is called before the first frame update
@@ -31,13 +33,13 @@ public class BoardManager : MonoBehaviour
 
     public void PlaceTimelineEventForTurn(CardDisplay cardDisplay)
     {
-        BoardSpace space = spaces[round-1];
-        StartCoroutine(cardDisplay.ScaleToPositionAndSize(space.transform.position,space.transform.lossyScale, 1f, space.transform));
+        if(cardDisplay.displayCard.cardType != CardType.EVENT){ return;}
 
-        if(cardDisplay.displayCard.cardType == CardType.EVENT)
-        {
-            space.SetEventCard((EventCard) cardDisplay.displayCard);
-        }
+        BoardSpace space = spaces[round-1];
+
+        StartCoroutine(cardDisplay.ScaleToPositionAndSize(space.transform.position,space.transform.lossyScale, 1f, space.transform));
+        
+        space.SetEventCard((EventCardDisplay)cardDisplay);
         
         cardDisplay.playState = CardPlayState.IDK;
     }
@@ -83,6 +85,57 @@ public class BoardManager : MonoBehaviour
         spacesToCalc[3] = spaces[3 + offset];
 
         return CalculateVPInList(spacesToCalc);
+    }
+
+    public void SetCardPossibilities(Card card)
+    {
+        //For each space
+            //Can card be played
+                //if so highlight
+            switch(card.cardType) 
+            {
+                case CardType.AGENT:
+
+
+                    break;
+                case CardType.ESSENCE:
+                    SetEssencePossibilities((EssenceCard) card);
+                    break;
+                case CardType.EVENT:
+
+
+                    break;
+                default:
+                //Error handling
+                    Debug.Log ("Invalid Card Type: " + card.cardType);
+                    return;
+            }
+
+
+
+    }
+
+    void SetEssencePossibilities(EssenceCard essenceCard)
+    {
+        List<BoardSpace> targetable = essenceCard.GetTargatableSpaces(new List<BoardSpace>(spaces));
+
+        foreach (BoardSpace boardSpace in targetable)
+        {
+            boardSpace.Highlight();
+            targetsAvailable.Add(boardSpace);
+            boardSpace.isTargetable = true;
+        }
+    }
+
+    public void ClearPossibilities()
+    {
+        foreach (BoardSpace boardSpace in targetsAvailable)
+        {
+            boardSpace.EndHighlight();
+            boardSpace.isTargetable = false;
+        }
+
+        targetsAvailable.Clear();
     }
 
 }
