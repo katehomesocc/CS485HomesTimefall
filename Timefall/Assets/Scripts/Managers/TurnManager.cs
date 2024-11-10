@@ -52,19 +52,19 @@ public class TurnManager : MonoBehaviour
     public TMP_Text scoreboardLabelText;
     public TMP_Text scoreboardWinnerText;
 
-    public List<Faction> cycleWinners = new List<Faction>();
+    public List<Faction> roundWinners = new List<Faction>();
 
     [Header("Victory Points")]
-    public TMP_Text cycleNumText;
+    public TMP_Text roundNumText;
     public TMP_Text stewardVPText;
     public TMP_Text seekerVPText;
     public TMP_Text sovereignVPText;
     public TMP_Text weaverVPText;
 
-    public TMP_Text stewardCycleVPText;
-    public TMP_Text seekerCycleVPText;
-    public TMP_Text sovereignCycleVPText;
-    public TMP_Text weaverCycleVPText;
+    public TMP_Text stewardRoundVPText;
+    public TMP_Text seekerRoundVPText;
+    public TMP_Text sovereignRoundVPText;
+    public TMP_Text weaverRoundVPText;
 
     [Header("Essence Count Textures")] 
     public Texture ZERO_ESSENCE_TEXTURE;
@@ -117,7 +117,7 @@ public class TurnManager : MonoBehaviour
 
         int mod = currentTurn % 4;
 
-        if(mod == 0) //end of turn cycle, do fabric of time calculation
+        if(mod == 0) //end of turn round, do fabric of time calculation
         {
             Debug.Log("TM: Waiting for EndOfRound to finish...");
             yield return StartCoroutine(EndOfRound());
@@ -282,15 +282,15 @@ public class TurnManager : MonoBehaviour
             //calculate VP on sectioon played this turn
             //whoever wins gets wins this section of the fabric of time
             //if a tie occurs, Weavers hand size increased
-        int cycleNum = GetCycleNumFromRoundNum(currentTurn);
-        int[] vpCycleArr = boardManager.CalculateVPForTurnCycle(cycleNum);
+        int roundNum = GetRoundFromTurn(currentTurn);
+        int[] vpRoundArr = boardManager.CalculateVPForRound(roundNum);
 
-        Faction cycleWinner = GetWinner(vpCycleArr);
-        cycleWinners.Add(cycleWinner);
-        scoreboard.SetCycleWinner(cycleNum, cycleWinner);
-        Debug.Log(string.Format("Cycle[{0}] Winner: {1}", cycleNum, cycleWinner));
+        Faction roundWinner = GetWinner(vpRoundArr);
+        roundWinners.Add(roundWinner);
+        scoreboard.SetRoundWinner(roundNum, roundWinner);
+        Debug.Log(string.Format("round[{0}] Winner: {1}", roundNum, roundWinner));
 
-        yield return StartCoroutine (fabricOfTime.PerformEndOfRoundUpdate(cycleNum, cycleWinner));
+        yield return StartCoroutine (fabricOfTime.PerformEndOfRoundUpdate(roundNum, roundWinner));
     }
 
     void SetupNextFactionTurn()
@@ -341,18 +341,18 @@ public class TurnManager : MonoBehaviour
     Player GetPlayerForThisTurn()
     {
         int mod = currentTurn % 4;
-        int cycle = GetCycleNumFromRoundNum(currentTurn);
+        int round = GetRoundFromTurn(currentTurn);
 
         switch(mod)
         {
             case 1:
-                cycleNumText.text = string.Format("R{0}", cycle);
-                stewardCycleVPText.text = "0";
-                seekerCycleVPText.text = "0";
-                sovereignCycleVPText.text = "0";
-                weaverCycleVPText.text = "0";
+                roundNumText.text = string.Format("R{0}", round);
+                stewardRoundVPText.text = "0";
+                seekerRoundVPText.text = "0";
+                sovereignRoundVPText.text = "0";
+                weaverRoundVPText.text = "0";
 
-                scoreboard.SetCycleHighlight(cycle);
+                scoreboard.SetRoundHighlight(round);
                 return stewardPlayer;
             case 2:
                 return seekerPlayer;
@@ -372,12 +372,12 @@ public class TurnManager : MonoBehaviour
         // endOfGameVPText.text = result;
         // Debug.Log(result);
 
-        scoreboard.SetCycleHighlight(9);
+        scoreboard.SetRoundHighlight(9);
 
         int[] boardArr = boardManager.TotalVictoryPointsOnBoard();
 
         //add fabricOfTime VP 
-        foreach (var faction in cycleWinners)
+        foreach (var faction in roundWinners)
         {
             switch (faction)
             {
@@ -455,16 +455,16 @@ public class TurnManager : MonoBehaviour
         sovereignVPText.text = GetVPText(vpArr[2]);
         weaverVPText.text = GetVPText(vpArr[3]);
 
-        //Set for turn cycle
-        int cycleNum = GetCycleNumFromRoundNum(currentTurn);
-        int[] vpCycleArr = boardManager.CalculateVPForTurnCycle(cycleNum);
+        //Set for turn round
+        int roundNum = GetRoundFromTurn(currentTurn);
+        int[] vpRoundArr = boardManager.CalculateVPForRound(roundNum);
 
-        stewardCycleVPText.text = GetVPText(vpCycleArr[0]);
-        seekerCycleVPText.text = GetVPText(vpCycleArr[1]);
-        sovereignCycleVPText.text = GetVPText(vpCycleArr[2]);
-        weaverCycleVPText.text = GetVPText(vpCycleArr[3]);
+        stewardRoundVPText.text = GetVPText(vpRoundArr[0]);
+        seekerRoundVPText.text = GetVPText(vpRoundArr[1]);
+        sovereignRoundVPText.text = GetVPText(vpRoundArr[2]);
+        weaverRoundVPText.text = GetVPText(vpRoundArr[3]);
 
-        scoreboard.UpdateRound(cycleNum, vpCycleArr);
+        scoreboard.UpdateRound(roundNum, vpRoundArr);
         scoreboard.UpdateBoard(vpArr);
     }
 
@@ -477,7 +477,7 @@ public class TurnManager : MonoBehaviour
         return string.Format("{0}{1}", symbol, Mathf.Abs(vp));
     }
 
-    int GetCycleNumFromRoundNum(int roundNum)
+    int GetRoundFromTurn(int roundNum)
     {
         return (int) Mathf.Ceil(roundNum / 4f);
     }

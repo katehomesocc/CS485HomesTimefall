@@ -63,6 +63,8 @@ public class BoardManager : MonoBehaviour
             weaversVP += eventCard.eventCardData.victoryPoints[3];
         }
 
+        Debug.Log(string.Format("BM calculated: [{0}] [{1}] [{2}] [{3}]", stewardsVP, seekersVP, sovereignsVP, weaversVP));
+
         return new int[] {stewardsVP, seekersVP, sovereignsVP, weaversVP};
     }
 
@@ -71,11 +73,11 @@ public class BoardManager : MonoBehaviour
         return CalculateVPInList(spaces);
     }
 
-    public int[] CalculateVPForTurnCycle(int cycleNumber)
+    public int[] CalculateVPForRound(int roundNumber)
     {
-        int offset = (cycleNumber - 1) * 4;
+        int offset = (roundNumber - 1) * 4;
 
-        Debug.Log(string.Format("cycleNum:[{0}], offset:[{1}], calcuating: [{2},{3},{4},{5}]", cycleNumber, offset, 0 + offset, 1 + offset, 2 + offset, 3 + offset));
+        Debug.Log(string.Format("roundNum:[{0}], offset:[{1}], calcuating: [{2},{3},{4},{5}]", roundNumber, offset, 0 + offset, 1 + offset, 2 + offset, 3 + offset));
 
         BoardSpace[] spacesToCalc = new BoardSpace[4];
 

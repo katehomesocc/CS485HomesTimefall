@@ -378,6 +378,7 @@ public class Hand : MonoBehaviour
                 break;
             case HandState.ACTION_END:
                 battleManager.ClearPossibilities();
+                turnManager.SetVictoryPointUI();
                 break;
             default:
                 break;

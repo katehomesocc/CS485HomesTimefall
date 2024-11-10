@@ -45,7 +45,7 @@ public class SwapEssenceAction : EssenceAction
         }
 
         //Must have atleast 2 targetable spaces on board to swap
-        if(targetableSpaces.Count < 2)
+        if(targetableSpaces.Count + targets.Count < 2)
         {
             Debug.Log("SwapEA: not enough targets");
             targetableSpaces.Clear();
@@ -143,8 +143,8 @@ public class SwapEssenceAction : EssenceAction
         target2.transform.localPosition = newLocalPositionT2;
         // target1.transform.localEulerAngles  = Vector3.zero;
 
-        targets[1].eventDisplay = target1;
-        targets[0].eventDisplay = target2;
+        targets[1].SetEventCard(target1);
+        targets[0].SetEventCard(target2);
 
         //end of action
         EndAction(targets);

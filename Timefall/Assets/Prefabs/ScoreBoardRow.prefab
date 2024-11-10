@@ -794,7 +794,7 @@ GameObject:
   - component: {fileID: 2081697753236289006}
   - component: {fileID: 1604444709165216419}
   m_Layer: 0
-  m_Name: CycleWinner
+  m_Name: RoundWinner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -965,7 +965,7 @@ GameObject:
   - component: {fileID: 8579331345308202983}
   - component: {fileID: 2766814321897323324}
   m_Layer: 5
-  m_Name: CycleWinnerGem
+  m_Name: RoundWinnerGem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1042,7 +1042,7 @@ GameObject:
   - component: {fileID: 5454567740267013306}
   - component: {fileID: 3199577991004188538}
   m_Layer: 5
-  m_Name: CycleWinnerText
+  m_Name: RoundWinnerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1309,6 +1309,7 @@ MonoBehaviour:
   winnerBox: {fileID: 5075926971462895584}
   gemImage: {fileID: 7287596135932753019}
   winnerText: {fileID: 3199577991004188538}
+  isUnlocked: 1
 --- !u!114 &1154509319878099749
 MonoBehaviour:
   m_ObjectHideFlags: 0

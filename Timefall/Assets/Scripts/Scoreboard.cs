@@ -20,11 +20,11 @@ public class Scoreboard : MonoBehaviour
         
     }
 
-    public void UpdateRound(int round, int[] cycleArr)
+    public void UpdateRound(int round, int[] roundArr)
     {
         ScoreboardRow row = rows[round-1];
         if(row.isUnlocked){
-            row.SetUI(cycleArr);
+            row.SetUI(roundArr);
         }
         
     }
@@ -38,14 +38,14 @@ public class Scoreboard : MonoBehaviour
     {
         // for (int i = 1; i < 8; i++)
         // {
-        //     int[] cycleArr = boardManager.CalculateVPForTurnCycle(i);
-        //     UpdateRound(i, cycleArr);
+        //     int[] roundArr = boardManager.CalculateVPForRound(i);
+        //     UpdateRound(i, roundArr);
         // }
 
         UpdateBoard(boardArr);
     }
 
-    public void SetCycleHighlight(int round)
+    public void SetRoundHighlight(int round)
     {
         // Debug.Log("Setting highlight for: " + round.ToString());
         int index = round -1;
@@ -57,7 +57,7 @@ public class Scoreboard : MonoBehaviour
         rows[index].ToggleLabelHighlight();
     }
 
-    public void SetCycleWinner(int round, Faction faction)
+    public void SetRoundWinner(int round, Faction faction)
     {
         Debug.Log("Setting Winner for round: " + round.ToString());
 
