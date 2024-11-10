@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Linq;
 
-public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler 
 {
     public static string LOCATION = "BOARD";
 
@@ -13,9 +13,14 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
     public Color resetColor;
 
-    public TurnManager turnManager;
+    
 
     public GameObject highlight;
+    public RawImage selectionIcon;
+
+    [Header("Managers")]
+    public Hand hand;
+    public TurnManager turnManager;
 
     [Header("Display Prefabs")]
     public GameObject agentDisplayPrefab;
@@ -27,6 +32,8 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     public bool hasEvent = false;
     public bool hasAgent = false;
     public bool isTargetable = false;
+
+    public bool isBeingTargeted = false;
     public EventCard eventCard;
 
     public AgentCard agentCard;
@@ -34,22 +41,17 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     public EventCardDisplay eventDisplay;
     public AgentCardDisplay agentDisplay;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        hand = FindObjectOfType<Hand>();
         turnManager = FindObjectOfType<TurnManager>();
         border.color = Color.white;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void OnDrop(PointerEventData eventData)
     {
-        if (isUnlocked && isTargetable)
+        if (isUnlocked && isTargetable && !isBeingTargeted)
         {
             Debug.Log(eventData.pointerDrag.name + " was dropped on " + gameObject.name);
 
@@ -59,9 +61,18 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
             if (display.onBoard) {return;}
 
-            display.inPlaceAnimation = true;
+            Card card = display.displayCard;
 
-            PlaceCard(display);
+            if(card.data.cardType == CardType.ESSENCE)
+            {
+                EssenceCard essenceCard = (EssenceCard) card;
+                
+                essenceCard.SelectTarget(this);  
+            }
+            
+
+            // display.inPlaceAnimation = true;
+            // PlaceCard(display);
         }
     }
 
@@ -79,45 +90,31 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     {
         if(card == null){ return;}
 
-        CardType cardType = card.cardType;
+        CardType cardType = card.data.cardType;
 
-        Debug.Log (card.ToString());
+        Debug.Log (card.data.ToString());
 
         GameObject obj = null;
 
         switch(cardType) 
         {
             case CardType.AGENT:
-                // obj = Instantiate(agentDisplayPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-                // AgentCardDisplay agentDC = obj.GetComponent<AgentCardDisplay>();
-
-                // if(agentDC == null){return;} 
-                // agentDC.SetCard(card);
-                // agentDC.Place(this.transform, LOCATION);
-
-                // break;
                 return;
             case CardType.ESSENCE:
-                // obj = Instantiate(essenceDisplayPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-                // EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
-
-                // if(essenceDC == null){return;} 
-                // essenceDC.SetCard(card);
-                // essenceDC.Place(this.transform, LOCATION);
-                // break;
                 return;
             case CardType.EVENT:
                 obj = Instantiate(eventDisplayPrefab, new Vector3(0, 0, 0), Quaternion.identity);
                 EventCardDisplay eventDC = obj.GetComponent<EventCardDisplay>();
 
                 if(eventDC == null){return;} 
-                eventDC.SetCard(card);
+                EventCard eventCard = (EventCard) card;
+                eventDC.SetCard(eventCard);
                 eventDC.Place(this.transform, LOCATION);
                 SetEventCard(eventDC);
                 break;
             default:
             //Error handling
-                Debug.Log ("Invalid Card Type: " + cardType);
+                Debug.Log ("Invalid CardData Type: " + cardType);
                 return;
         }
 
@@ -148,8 +145,6 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
             if (display.onBoard) {return;}
 
             if(!CanPlayCardOnThisSpace(display.displayCard)) {return;}
-
-            Card card = display.displayCard;
 
             Debug.Log("Can be played on this space");
 
@@ -196,5 +191,46 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         // border.color = resetColor;
     }
 
+    public void SelectAsTarget(Texture tex)
+    {
+        Debug.Log(tex);
+        if(tex == null)
+        {
+            Debug.Log("Texture is null, not selecting");
+            return;
+        }
+        selectionIcon.texture = tex;
+        selectionIcon.transform.SetAsLastSibling();
+        selectionIcon.gameObject.SetActive(true);
+        isBeingTargeted = true;
+    }
+
+    public void DeselectAsTarget()
+    {
+        selectionIcon.texture = null;
+        selectionIcon.gameObject.SetActive(false);
+        isBeingTargeted = false;
+    }
+
+    //Detect if a click occurs
+    public void OnPointerClick(PointerEventData pointerEventData)
+    {
+
+        switch (hand.handState)
+        {
+            case HandState.CHOOSING:
+                //TODO: implement
+                break;
+            case HandState.TARGET_SELECTION:
+                if(isTargetable)
+                {
+                    hand.SelectTarget(this);
+                }
+                break;
+            default:
+                return;
+        }
+
+    }
     
 }

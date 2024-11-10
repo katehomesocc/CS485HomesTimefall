@@ -4,5 +4,5 @@ using UnityEngine;
 
 public enum CardPlayState
 {
-    IDK, IntialTimelineDraw
+    IDK, START_TURN_DRAW_TIMELINE
 }

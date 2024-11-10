@@ -14,9 +14,38 @@ public class Deck : MonoBehaviour
 
 
     private void Awake() {
-        cardList.AddRange(cardDB.cardList);
+
+        foreach (var cardData in cardDB.cardList)
+        {
+            Card card = GetCardFromCardData(cardData);
+            if(card == null)
+            {
+                Debug.Log("Card is null");
+            }
+            cardList.Add(card);
+        }
         Shuffle();
         // UpdateCountText(); 
+    }
+
+    private Card GetCardFromCardData(CardData cardData)
+    {
+        switch (cardData.cardType)
+        {
+           case CardType.AGENT:
+                AgentCard agentCard = new AgentCard((AgentCardData) cardData);
+                return agentCard;
+            case CardType.ESSENCE:
+                EssenceCard essenceCard = new EssenceCard((EssenceCardData)cardData);
+                return essenceCard;
+            case CardType.EVENT:
+                EventCard eventCard = new EventCard((EventCardData)cardData);
+                return eventCard;
+            default:
+            //Error handling
+                Debug.Log ("Invalid CardData Type: " + cardData.cardType);
+                return null;
+        }
     }
 
     // Start is called before the first frame update

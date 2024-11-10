@@ -37,6 +37,10 @@ public class Hand : MonoBehaviour
 
     public List<CardDisplay> staticCards = new List<CardDisplay>();
 
+    [Header("Hand State")]
+    public HandState handState = HandState.NONE;
+    public Card cardPlaying;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,9 +79,9 @@ public class Hand : MonoBehaviour
 
         if(card == null){ return;}
 
-        CardType cardType = card.cardType;
+        CardType cardType = card.data.cardType;
 
-        // Debug.Log (card.ToString());
+        // Debug.Log (card.data.ToString());
 
         GameObject obj = null;
 
@@ -88,7 +92,10 @@ public class Hand : MonoBehaviour
                 AgentCardDisplay agentDC = obj.GetComponent<AgentCardDisplay>();
 
                 if(agentDC == null){return;} 
-                agentDC.SetCard(card);
+                AgentCard agentCard = (AgentCard) card;
+
+                if(agentCard == null){return;} 
+                agentDC.SetCard(agentCard);
                 agentDC.InstantiateInHand(transform);
 
                 break;
@@ -97,7 +104,10 @@ public class Hand : MonoBehaviour
                 EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
 
                 if(essenceDC == null){return;} 
-                essenceDC.SetCard(card);
+                EssenceCard essenceCard = (EssenceCard) card;
+
+                if(essenceCard == null){return;} 
+                essenceDC.SetCard(essenceCard);
                 essenceDC.InstantiateInHand(transform);
                 break;
             case CardType.EVENT:
@@ -105,12 +115,15 @@ public class Hand : MonoBehaviour
                 EventCardDisplay eventDC = obj.GetComponent<EventCardDisplay>();
 
                 if(eventDC == null){return;} 
-                eventDC.SetCard(card);
+                EventCard eventCard = (EventCard) card;
+
+                if(eventCard == null){return;} 
+                eventDC.SetCard(eventCard);
                 eventDC.InstantiateInHand(transform);
                 break;
             default:
             //Error handling
-                Debug.Log ("Invalid Card Type: " + cardType);
+                Debug.Log ("Invalid CardData Type: " + cardType);
                 return;
         }
 
@@ -129,9 +142,9 @@ public class Hand : MonoBehaviour
     {
         if(card == null){ return null;}
 
-        CardType cardType = card.cardType;
+        CardType cardType = card.data.cardType;
 
-        // Debug.Log (card.ToString());
+        // Debug.Log (card.data.ToString());
 
         GameObject obj = null;
 
@@ -146,7 +159,8 @@ public class Hand : MonoBehaviour
                 AgentCardDisplay agentDC = obj.GetComponent<AgentCardDisplay>();
 
                 if(agentDC == null){return null;} 
-                agentDC.SetCard(card);
+                AgentCard agentCard = (AgentCard) card;
+                agentDC.SetCard(agentCard);
                 agentDC.Place(expandedViewTransform, "EXPAND");
 
                 displayToReturn = agentDC;
@@ -156,8 +170,9 @@ public class Hand : MonoBehaviour
                 obj = Instantiate(essenceCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
                 EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
 
-                if(essenceDC == null){return null;} 
-                essenceDC.SetCard(card);
+                if(essenceDC == null){return null;}
+                EssenceCard essenceCard = (EssenceCard) card ;
+                essenceDC.SetCard(essenceCard);
                 essenceDC.Place(expandedViewTransform, "EXPAND");
 
                 displayToReturn = essenceDC;
@@ -168,7 +183,8 @@ public class Hand : MonoBehaviour
                 EventCardDisplay eventDC = obj.GetComponent<EventCardDisplay>();
 
                 if(eventDC == null){return null;} 
-                eventDC.SetCard(card);
+                EventCard eventCard = (EventCard) card;
+                eventDC.SetCard(eventCard);
                 eventDC.Place(expandedViewTransform, "EXPAND");
 
                 displayToReturn = eventDC;
@@ -176,7 +192,7 @@ public class Hand : MonoBehaviour
                 break;
             default:
             //Error handling
-                Debug.Log ("Invalid Card Type: " + cardType);
+                Debug.Log ("Invalid CardData Type: " + cardType);
                 return null;
         }
 
@@ -213,9 +229,8 @@ public class Hand : MonoBehaviour
 
         CardDisplay display = ExpandCardView(card, false);
 
-        display.playState = CardPlayState.IntialTimelineDraw;
-
-        // display.OnPointerClick.AddListener(PlayTimelineCard(display));
+        display.playState = CardPlayState.START_TURN_DRAW_TIMELINE;
+        SetHandState(HandState.START_TURN_DRAW_TIMELINE);
     }
 
     public void PlayTimelineCard(CardDisplay display)
@@ -224,14 +239,16 @@ public class Hand : MonoBehaviour
 
         boardManager.PlaceTimelineEventForTurn(display);
         turnManager.SetVictoryPointUI();
+
+        SetHandState(HandState.CHOOSING);
     }
 
     public void AutoPlayTimelineCard()
     {
-        Debug.Log("AutoPlayTimelineCard");
+        // Debug.Log("AutoPlayTimelineCard");
         if(staticCards.Count == 1)
         {
-            Debug.Log("count==1");
+            // Debug.Log("count==1");
             PlayTimelineCard(staticCards[0]);
             staticCards.RemoveAt(0);
         }
@@ -244,7 +261,7 @@ public class Hand : MonoBehaviour
 
     public void DrawStartOfTurnHand()
     {
-
+        SetHandState(HandState.START_TURN_DRAW_HAND);
         int handSize = 5; //TODO: get player hand size
         for (int i = 0; i < handSize; i++)
         {
@@ -272,17 +289,17 @@ public class Hand : MonoBehaviour
 
     public void BeginDragCard(CardDisplay cardDisplay)
     {
-        Debug.Log("Hand: beginDragCard");
+        // Debug.Log("Hand: beginDragCard");
         Card card = cardDisplay.displayCard;
 
         //check if enough essence to play card
         bool haveEnoughEssence = CanPlayCard(card);
 
-        Debug.Log("haveEnoughEssence = " + haveEnoughEssence);
+        // Debug.Log("haveEnoughEssence = " + haveEnoughEssence);
 
         if(!haveEnoughEssence) {return;}
 
-        Debug.Log("Hand: beginDragCard enough essence");
+        // Debug.Log("Hand: beginDragCard enough essence");
 
         //set card possibilities
         battleManager.SetCardPossibilities(card);
@@ -293,4 +310,72 @@ public class Hand : MonoBehaviour
         battleManager.ClearPossibilities();
     }
 
+    public void PlayCard(CardDisplay cardDisplay)
+    {
+        Debug.Log("Hand.PlayCard()");
+        //TODO handle event and agent cards
+
+        if(cardDisplay.GetCardType() == CardType.ESSENCE)
+        {
+            SetHandState(HandState.TARGET_SELECTION);
+
+            EssenceCardDisplay essenceCardDisplay = (EssenceCardDisplay) cardDisplay;
+            
+            //set card possibilities
+            battleManager.SetCardPossibilities(cardDisplay.displayCard);
+
+            //start essence action
+            EssenceCard essenceCard = essenceCardDisplay.PlayFromHand();
+
+            cardPlaying = essenceCard;
+
+        }
+
+        
+    }
+
+    public void SelectTarget(BoardSpace boardSpace)
+    {
+        cardPlaying.SelectTarget(boardSpace);
+    }
+
+    public void SetHandState(HandState newHandState)
+    {
+        handState = newHandState;
+
+        switch (handState)
+        {
+            case HandState.NONE: 
+                break;
+            case HandState.START_TURN_DRAW_HAND: 
+                break;
+            case HandState.START_TURN_DRAW_TIMELINE: 
+                break;
+            case HandState.CHOOSING: 
+                break;
+            case HandState.TARGET_SELECTION: 
+                break;
+            case HandState.ACTION_END:
+                battleManager.ClearPossibilities();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void RemoveCardAfterPlaying()
+    {
+        //TODO: Implement animation effects
+
+        int index = cardsInHand.IndexOf(cardPlaying);
+
+        cardsInHand.RemoveAt(index);
+        
+
+        cardPlaying = null;
+
+        DestroyImmediate(this.transform.GetChild(index).gameObject);
+
+        SetHandState(HandState.CHOOSING);
+    }
 }

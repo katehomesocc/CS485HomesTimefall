@@ -563,8 +563,8 @@ GameObject:
   - component: {fileID: 2217108800739047043}
   - component: {fileID: 13194533179865988}
   - component: {fileID: 3021003383206389667}
-  - component: {fileID: 2292339615740116651}
   - component: {fileID: -607657783489550980}
+  - component: {fileID: -1423984810092859952}
   m_Layer: 5
   m_Name: Agent Card Display
   m_TagString: Untagged
@@ -627,34 +627,6 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &2292339615740116651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3842333250223465393}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a3773f8a17d0c546925d72a5bfb3b10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayCard: {fileID: 0}
-  selectionImage: {fileID: 3021003383206389667}
-  nameText: {fileID: 4282721005758853712}
-  descText: {fileID: 6777950944549462080}
-  image: {fileID: 3460947973978020409}
-  returnParent: {fileID: 0}
-  inHand: 0
-  onBoard: 0
-  isExpanded: 0
-  lastHand: {fileID: 0}
-  factionText: {fileID: 2483684380081832322}
-  diceTypeText: {fileID: 96241212314246200}
-  diceCostText: {fileID: 5333784640080443502}
-  pos: 0
-  diceImage: {fileID: 1407890657996376131}
-  borderImage: {fileID: 5872661780738954089}
 --- !u!225 &-607657783489550980
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -667,6 +639,39 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &-1423984810092859952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3842333250223465393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3773f8a17d0c546925d72a5bfb3b10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayCard:
+    data: {fileID: 0}
+    targets: []
+  hand: {fileID: 0}
+  returnParent: {fileID: 0}
+  selectionImage: {fileID: 3021003383206389667}
+  nameText: {fileID: 4282721005758853712}
+  descText: {fileID: 6777950944549462080}
+  image: {fileID: 3460947973978020409}
+  playState: 0
+  inHand: 0
+  onBoard: 0
+  isExpanded: 0
+  inPlaceAnimation: 0
+  isTargetable: 0
+  factionText: {fileID: 2483684380081832322}
+  diceTypeText: {fileID: 96241212314246200}
+  diceCostText: {fileID: 5333784640080443502}
+  pos: 0
+  diceImage: {fileID: 1407890657996376131}
+  borderImage: {fileID: 5872661780738954089}
 --- !u!1 &3927381154021930948
 GameObject:
   m_ObjectHideFlags: 0
