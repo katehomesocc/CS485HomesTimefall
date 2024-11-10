@@ -68,7 +68,7 @@ public class AgentCardDisplay : CardDisplay
                 factionText.text = "the Steward";
                 break;
             default:
-                Debug.Log("Invalid Faction");
+                Debug.LogError("Invalid Faction");
                 break;
         }
     }

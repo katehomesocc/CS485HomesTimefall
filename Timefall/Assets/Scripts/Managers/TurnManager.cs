@@ -7,8 +7,10 @@ using TMPro;
 
 public class TurnManager : MonoBehaviour
 {
-    static int PLAY_ESSENCE_CARD, ROLL_AGENT_EFFECT = 1;
-    static int PLAY_AGENT_CARD, DISCARD_HAND_AND_DRAW = 2;
+    static int PLAY_ESSENCE_CARD = 1;
+    static int ROLL_AGENT_EFFECT = 1;
+    static int PLAY_AGENT_CARD = 2;
+    static int DISCARD_HAND_AND_DRAW = 2;
     static int REPLACE_TIMELINE_EVENT = 3;
     public Button endTurnButton;
 
@@ -24,10 +26,9 @@ public class TurnManager : MonoBehaviour
     [SerializeField]
     private Player currentPlayer;
     [SerializeField]
-    private Faction currentFaction; 
+    private Faction currentFaction;
     [SerializeField]
     private int essenceCount;
-    public TMP_Text essenceText;
     public TMP_Text currentTurnText;
 
     [Header("Factions")]
@@ -62,6 +63,13 @@ public class TurnManager : MonoBehaviour
     public TMP_Text sovereignCycleVPText;
     public TMP_Text weaverCycleVPText;
 
+    [Header("Essence Count Textures")] 
+    public Texture ZERO_ESSENCE_TEXTURE;
+    public Texture ONE_ESSENCE_TEXTURE;
+    public Texture TWO_ESSENCE_TEXTURE;
+    public Texture THREE_ESSENCE_TEXTURE;
+    public RawImage essenceCountImage;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -91,12 +99,21 @@ public class TurnManager : MonoBehaviour
         EndOfTurnCycle();
     }
 
+    public void EnableEndTurnButton()
+    {
+        endTurnButton.interactable = true;
+    }
+
+    public void DisableEndTurnButton()
+    {
+        endTurnButton.interactable = false;
+    }
+
     public bool CanPlayCard(Card card)
     {
-        Debug.Log("TM: CanPlayCard");
         if(card == null)
         { 
-            Debug.Log("Error: card is null");
+            Debug.LogError("card is null");
             return false;
         }
 
@@ -105,7 +122,6 @@ public class TurnManager : MonoBehaviour
         switch(cardType) 
         {
             case CardType.AGENT:
-            Debug.Log("TM: AGENT");
                 if(essenceCount >= PLAY_AGENT_CARD)
                 {
                     return true;
@@ -113,7 +129,6 @@ public class TurnManager : MonoBehaviour
 
                 break;
             case CardType.ESSENCE:
-            Debug.Log("TM: ESSENCE");
 
                 if(essenceCount >= PLAY_ESSENCE_CARD)
                 {
@@ -123,16 +138,17 @@ public class TurnManager : MonoBehaviour
                 break;
             default:
             //Error handling
-                Debug.Log ("Invalid Card Type: " + cardType);
+                Debug.LogError("Invalid Card Type: " + cardType);
                 break;
         }
 
         return false;
     }
 
-    public bool PlayEssenceCard(EssenceCard essenceCard)
+    public bool PlayEssenceCard()
     {
-        if(essenceCount >= PLAY_ESSENCE_CARD) {return false;}
+        Debug.Log("Play essence card");
+        SpendEssence(PLAY_ESSENCE_CARD);
 
         //do stuff
 
@@ -143,6 +159,8 @@ public class TurnManager : MonoBehaviour
     {
         if(essenceCount >= ROLL_AGENT_EFFECT) {return false;}
 
+        SpendEssence(ROLL_AGENT_EFFECT);
+
         //do stuff
 
         return true;
@@ -151,6 +169,8 @@ public class TurnManager : MonoBehaviour
     public bool PlayAgentCard(AgentCard agentCard)
     {
         if(essenceCount >= PLAY_AGENT_CARD) {return false;}
+
+        SpendEssence(PLAY_AGENT_CARD);
 
         //do stuff
 
@@ -161,6 +181,8 @@ public class TurnManager : MonoBehaviour
     {
         if(essenceCount >= DISCARD_HAND_AND_DRAW) {return false;}
 
+        SpendEssence(DISCARD_HAND_AND_DRAW);
+
         //do stuff
 
         return true;
@@ -169,6 +191,8 @@ public class TurnManager : MonoBehaviour
     public bool ReplaceTimelineEvent(EventCard timelineEvent, EventCard replaceEvent)
     {
         if(essenceCount >= REPLACE_TIMELINE_EVENT) {return false;}
+
+        SpendEssence(REPLACE_TIMELINE_EVENT);
 
         //do stuff
 
@@ -184,8 +208,8 @@ public class TurnManager : MonoBehaviour
     {
         if(essenceCount < cost) {return false;}
 
-        essenceCount -= cost;
-        essenceText.text = string.Format("{0}§", essenceCount);
+        essenceCount = essenceCount - cost;
+        SetEssenceTexture();
 
         //other stuff
         if(essenceCount == 0)
@@ -195,6 +219,28 @@ public class TurnManager : MonoBehaviour
         }
 
         return true;
+    }
+
+    void SetEssenceTexture()
+    {
+        switch (essenceCount)
+        {
+            case 0:
+                essenceCountImage.texture = ZERO_ESSENCE_TEXTURE;
+                break;
+            case 1:
+                essenceCountImage.texture = ONE_ESSENCE_TEXTURE;
+                break;
+            case 2:
+                essenceCountImage.texture = TWO_ESSENCE_TEXTURE;
+                break;
+            case 3:
+                essenceCountImage.texture = THREE_ESSENCE_TEXTURE;
+                break;
+            default:
+                Debug.LogError("shouldnt get here?");
+                break;
+        }
     }
 
     void EndOfTurnCycle()
@@ -244,16 +290,19 @@ public class TurnManager : MonoBehaviour
         }
 
         essenceCount = 3;
-        essenceText.text = string.Format("{0}§", essenceCount);
+        
+        SetEssenceTexture();
 
         SetTurnOrderCovers();
+        
+        DisableEndTurnButton();
 
         StartFactionTurn();
     }
 
     void StartFactionTurn()
     {
-        Debug.Log("Start faction turn");
+        // Debug.Log("Start faction turn");
 
         hand.DrawStartOfTurnHand();
 

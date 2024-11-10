@@ -92,8 +92,6 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
         CardType cardType = card.data.cardType;
 
-        Debug.Log (card.data.ToString());
-
         GameObject obj = null;
 
         switch(cardType) 
@@ -114,7 +112,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
                 break;
             default:
             //Error handling
-                Debug.Log ("Invalid CardData Type: " + cardType);
+                Debug.LogError ("Invalid CardData Type: " + cardType);
                 return;
         }
 
@@ -131,35 +129,33 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         //Detect if the Cursor starts to pass over the GameObject
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
-        if(isUnlocked)
-        {
-            // Highlight();
+        // if(isUnlocked)
+        // {
+        //     // Highlight();
             
-            if(pointerEventData.pointerDrag == null) { return;}
+        //     if(pointerEventData.pointerDrag == null) { return;}
 
-            CardDisplay display = pointerEventData.pointerDrag.GetComponent<CardDisplay>();
+        //     CardDisplay display = pointerEventData.pointerDrag.GetComponent<CardDisplay>();
 
-            if (display == null) {return;}
+        //     if (display == null) {return;}
 
 
-            if (display.onBoard) {return;}
+        //     if (display.onBoard) {return;}
 
-            if(!CanPlayCardOnThisSpace(display.displayCard)) {return;}
+        //     if(!CanPlayCardOnThisSpace(display.displayCard)) {return;}
 
-            Debug.Log("Can be played on this space");
+        //     turnManager.SetVictoryPointUI();
 
-            turnManager.SetVictoryPointUI();
-
-        }
+        // }
     }
 
     //Detect when Cursor leaves the GameObject
     public void OnPointerExit(PointerEventData pointerEventData)
     {
-        if(isUnlocked)
-        {
-            // EndHighlight();
-        }
+        // if(isUnlocked)
+        // {
+        //     // EndHighlight();
+        // }
     }
 
     bool CanPlayCardOnThisSpace(Card card)
@@ -193,10 +189,10 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
     public void SelectAsTarget(Texture tex)
     {
-        Debug.Log(tex);
+        // Debug.Log(tex);
         if(tex == null)
         {
-            Debug.Log("Texture is null, not selecting");
+            //Debug.Log("Texture is null, not selecting");
             return;
         }
         selectionIcon.texture = tex;

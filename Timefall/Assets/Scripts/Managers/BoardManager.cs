@@ -92,7 +92,7 @@ public class BoardManager : MonoBehaviour
         //For each space
             //Can card be played
                 //if so highlight
-            switch(card.data.cardType) 
+            switch(card.GetCardType()) 
             {
                 case CardType.AGENT:
 
@@ -107,7 +107,7 @@ public class BoardManager : MonoBehaviour
                     break;
                 default:
                 //Error handling
-                    Debug.Log ("Invalid Card Type: " + card.data.cardType);
+                    Debug.LogError("Invalid Card Type: " + card.data.cardType);
                     return;
             }
 

@@ -29,6 +29,11 @@ public class Card
         
     }
 
+    public CardType GetCardType()
+    {
+        return data.cardType;
+    }
+
     public virtual void SelectTarget(BoardSpace boardSpace)
     {
         return; //override

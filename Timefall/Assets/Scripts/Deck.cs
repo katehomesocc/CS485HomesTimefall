@@ -43,7 +43,7 @@ public class Deck : MonoBehaviour
                 return eventCard;
             default:
             //Error handling
-                Debug.Log ("Invalid CardData Type: " + cardData.cardType);
+                Debug.LogError("Invalid CardData Type: " + cardData.cardType);
                 return null;
         }
     }

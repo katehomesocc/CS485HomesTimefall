@@ -15,8 +15,6 @@ public class SwapEssenceAction : EssenceAction
 
     public override bool CanTargetSpace(BoardSpace boardSpace, List<BoardSpace> targets)
     {
-        Debug.Log("SwapEA: CanTargetSpace");
-
         EventCard eventCard = (EventCard) boardSpace.eventCard;
         AgentCard agentCard = boardSpace.agentCard;
         
@@ -35,11 +33,9 @@ public class SwapEssenceAction : EssenceAction
     */
     public override List<BoardSpace> GetTargatableSpaces(List<BoardSpace> spacesToTest, List<BoardSpace> targets)
     {
-        Debug.Log("SwapEA: GetTargatableSpaces");
-
         List<BoardSpace> targetableSpaces = new List<BoardSpace>();
 
-        if(targets.Count == 2){ Debug.Log("SwapEA: 2 targets already");return targetableSpaces;}
+        if(targets.Count == 2){ return targetableSpaces;}
 
         foreach (BoardSpace boardSpace in spacesToTest)
         {
@@ -48,21 +44,18 @@ public class SwapEssenceAction : EssenceAction
             targetableSpaces.Add(boardSpace);
         }
 
-        //Must have atleast 2 plable spaces on board to swap
+        //Must have atleast 2 targetable spaces on board to swap
         if(targetableSpaces.Count < 2)
         {
             Debug.Log("SwapEA: not enough targets");
             targetableSpaces.Clear();
         }
 
-        Debug.Log(string.Format("SwapEA: PS Count [{0}]", targetableSpaces.Count));
-
         return targetableSpaces;
     }
 
     public override Texture GetSelectionTexture(List<BoardSpace> targets)
     {
-        Debug.Log("GetSelectionTexture:");
         if(targets.Count == 0)
         {
             return CARD_TAP_UP_TEX;
@@ -70,22 +63,17 @@ public class SwapEssenceAction : EssenceAction
             return CARD_TAP_DOWN_TEX;
         }
 
-        Debug.Log("GetSelectionTexture: returning null");
-
         return null;
     }
 
     public Texture2D GetCursorTexture(List<BoardSpace> targets)
     {
-        Debug.Log("GetCursorTexture:");
         if(targets.Count == 0)
         {
             return CURSOR_CARD_TAP_UP_TEX;
         } else if (targets.Count == 1) {
             return CURSOR_CARD_TAP_DOWN_TEX;
         }
-
-        Debug.Log("GetCursorTexture: returning null");
 
         return null;
     }
@@ -94,12 +82,15 @@ public class SwapEssenceAction : EssenceAction
     {
         if(targets.Count < 2)
         {
-            Texture selectionTexture = GetSelectionTexture(targets);
-            boardSpace.SelectAsTarget(selectionTexture);
             targets.Add(boardSpace);
 
             Cursor.SetCursor(GetCursorTexture(targets), Vector2.zero, CursorMode.Auto);
+
+            Texture selectionTexture = GetSelectionTexture(targets);
+            boardSpace.SelectAsTarget(selectionTexture);
         }
+        
+        FindObjectOfType<Hand>().UpdatePossibilities();
 
         if(targets.Count == 2)
         {

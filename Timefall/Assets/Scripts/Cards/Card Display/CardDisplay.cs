@@ -15,6 +15,7 @@ public class CardDisplay : MonoBehaviour,
     [Header("Return Info")]
     public Transform returnParent = null;
     int returnSiblingIndex = 0;
+    public int positionInHand = -1;
 
     [Header("UI")]
     public RawImage selectionImage;
@@ -237,14 +238,14 @@ public class CardDisplay : MonoBehaviour,
             case HandState.START_TURN_DRAW_TIMELINE:
                 if(playState == CardPlayState.START_TURN_DRAW_TIMELINE)
                 {
-                    hand.PlayTimelineCard(this);
+                    hand.PlayInitialTimelineCard(this);
                 }
                 break;
             case HandState.CHOOSING:
                 if(inHand)
                 {
                     int clickCount = pointerEventData.clickCount;
-                    Debug.Log("clickCount = " + clickCount);
+                    // Debug.Log("clickCount = " + clickCount);
                     if(clickCount == 2)
                     {
                         DoubleClickToPlayCard();
@@ -264,15 +265,12 @@ public class CardDisplay : MonoBehaviour,
 
     void DoubleClickToPlayCard()
     {
-        Debug.Log("DoubleClickToPlayCard");
         //TODO handle event and agent cards
+
         CardType cardType = GetCardType();
-        Debug.Log(string.Format("cardType: [{0}]", cardType));
 
         if(cardType == CardType.ESSENCE)
         {
-            Debug.Log("DoubleClickToPlayCard playing");
-            //EssenceCard essenceCard = (EssenceCard) displayCard;
             hand.PlayCard(this);
         } 
     }
