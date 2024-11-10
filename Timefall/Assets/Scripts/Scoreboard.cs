@@ -7,6 +7,7 @@ public class Scoreboard : MonoBehaviour
 
     public BoardManager boardManager;
     public ScoreboardRow[] rows = new ScoreboardRow[9];
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +22,11 @@ public class Scoreboard : MonoBehaviour
 
     public void UpdateRound(int round, int[] cycleArr)
     {
-        rows[round-1].SetUI(cycleArr);
+        ScoreboardRow row = rows[round-1];
+        if(row.isUnlocked){
+            row.SetUI(cycleArr);
+        }
+        
     }
 
     public void UpdateBoard(int[] boardArr)
@@ -31,11 +36,11 @@ public class Scoreboard : MonoBehaviour
 
     public void SetEndOfGameUI(int[] boardArr)
     {
-        for (int i = 1; i < 8; i++)
-        {
-            int[] cycleArr = boardManager.CalculateVPForTurnCycle(i);
-            UpdateRound(i, cycleArr);
-        }
+        // for (int i = 1; i < 8; i++)
+        // {
+        //     int[] cycleArr = boardManager.CalculateVPForTurnCycle(i);
+        //     UpdateRound(i, cycleArr);
+        // }
 
         UpdateBoard(boardArr);
     }
@@ -56,6 +61,8 @@ public class Scoreboard : MonoBehaviour
     {
         Debug.Log("Setting Winner for round: " + round.ToString());
 
-        rows[round-1].ShowWinner(faction);
+        ScoreboardRow row = rows[round-1];
+        row.ShowWinner(faction);
+        row.isUnlocked = false;
     }
 }

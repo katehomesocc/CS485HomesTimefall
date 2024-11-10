@@ -18,6 +18,8 @@ public class ScoreboardRow : MonoBehaviour
 
     bool isHighlighted = false;
 
+    public bool isUnlocked = true;
+
     public void SetUI(int[] vpArr)
     {
         stewardVPText.text = GetVPText(vpArr[0]);

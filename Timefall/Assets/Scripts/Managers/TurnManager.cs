@@ -17,6 +17,7 @@ public class TurnManager : MonoBehaviour
     public BoardManager boardManager;
 
     public Hand hand;
+    public FabricOfTime fabricOfTime;
 
     public GameObject[] turnOrderCovers = new GameObject[4];
 
@@ -30,6 +31,8 @@ public class TurnManager : MonoBehaviour
     [SerializeField]
     private int essenceCount;
     public TMP_Text currentTurnText;
+
+    public TurnState turnState = TurnState.START_OF_GAME;
 
     [Header("Factions")]
     public Player seekerPlayer;
@@ -73,9 +76,6 @@ public class TurnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentTurn = 0;
-        essenceCount = 3;
-
         StartCoroutine(StartOfGame());
     }
 
@@ -91,12 +91,46 @@ public class TurnManager : MonoBehaviour
         {
             HideScoreboard();
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            ShowFOT();
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            HideFOT();
+        }
     }
 
-    
-    public void EndTurn(){
+    public void KickoffEndTurn()
+    {
+        if(turnState == TurnState.FACTION_TURN)
+        {
+            StartCoroutine(EndTurn());
+        }
+    }
+    public IEnumerator EndTurn(){
+        turnState = TurnState.END_OF_TURN;
+
         hand.ShuffleHandBackIntoDeck();
-        EndOfTurnCycle();
+
+        int mod = currentTurn % 4;
+
+        if(mod == 0) //end of turn cycle, do fabric of time calculation
+        {
+            Debug.Log("TM: Waiting for EndOfRound to finish...");
+            yield return StartCoroutine(EndOfRound());
+            Debug.Log("TM: ...Picking back up");
+        }
+
+        if(currentTurn == 32)
+        {
+            EndOfGame();
+            yield break;
+        }
+        
+        SetupNextFactionTurn();
     }
 
     public void EnableEndTurnButton()
@@ -243,35 +277,25 @@ public class TurnManager : MonoBehaviour
         }
     }
 
-    void EndOfTurnCycle()
+    IEnumerator EndOfRound()
     {
-        int mod = currentTurn % 4;
+            //calculate VP on sectioon played this turn
+            //whoever wins gets wins this section of the fabric of time
+            //if a tie occurs, Weavers hand size increased
+        int cycleNum = GetCycleNumFromRoundNum(currentTurn);
+        int[] vpCycleArr = boardManager.CalculateVPForTurnCycle(cycleNum);
 
-        if(mod == 0) //end of turny cycle, do fabric of time calculation
-        {
-             //calculate VP on sectioon played this turn
-                //whoever wins gets wins this section of the fabric of time
-                //if a tie occurs, Weavers hand size increased
-            int cycleNum = GetCycleNumFromRoundNum(currentTurn);
-            int[] vpCycleArr = boardManager.CalculateVPForTurnCycle(cycleNum);
+        Faction cycleWinner = GetWinner(vpCycleArr);
+        cycleWinners.Add(cycleWinner);
+        scoreboard.SetCycleWinner(cycleNum, cycleWinner);
+        Debug.Log(string.Format("Cycle[{0}] Winner: {1}", cycleNum, cycleWinner));
 
-            Faction cycleWinner = GetWinner(vpCycleArr);
-            cycleWinners.Add(cycleWinner);
-            scoreboard.SetCycleWinner(cycleNum, cycleWinner);
-            Debug.Log(string.Format("Cycle[{0}] Winner: {1}", cycleNum, cycleWinner));
-        }
-
-        if(currentTurn == 32)
-        {
-            EndOfGame();
-            return;
-        }
-        
-        SetupNextFactionTurn();
+        yield return StartCoroutine (fabricOfTime.PerformEndOfRoundUpdate(cycleNum, cycleWinner));
     }
 
     void SetupNextFactionTurn()
     {
+        turnState = TurnState.TURN_SETUP;
         currentTurn++;
 
         currentPlayer = GetPlayerForThisTurn();
@@ -294,7 +318,7 @@ public class TurnManager : MonoBehaviour
         SetEssenceTexture();
 
         SetTurnOrderCovers();
-        
+
         DisableEndTurnButton();
 
         StartFactionTurn();
@@ -302,6 +326,7 @@ public class TurnManager : MonoBehaviour
 
     void StartFactionTurn()
     {
+        turnState = TurnState.FACTION_TURN;
         // Debug.Log("Start faction turn");
 
         hand.DrawStartOfTurnHand();
@@ -379,6 +404,7 @@ public class TurnManager : MonoBehaviour
 
     IEnumerator StartOfGame()
     {
+        turnState = TurnState.START_OF_GAME;
         //TODO: play audio?
         
         startOfGamePanel.SetActive(true);
@@ -507,7 +533,15 @@ public class TurnManager : MonoBehaviour
   
     }
 
+    void ShowFOT()
+    {
+        fabricOfTime.ShowPanel();
+    }
 
+    void HideFOT()
+    {
+        fabricOfTime.HidePanel();
+    }
 
     
 }
