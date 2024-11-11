@@ -41,12 +41,6 @@ public class TurnManager : MonoBehaviour
     public Player stewardPlayer;
     public Player weaverPlayer;
 
-    [Header("Start Of Game")]
-    public GameObject startOfGamePanel;
-    public TMP_Text startOfGameText;
-
-    public TMP_Text startOfGameCountdownText;
-
     [Header("ScoreBoard")]
     public Scoreboard scoreboard;
     public GameObject scoreboardPanel;
@@ -92,7 +86,6 @@ public class TurnManager : MonoBehaviour
     {
         hand = Hand.Instance;
         boardManager = BoardManager.Instance;
-        StartCoroutine(StartOfGame());
     }
 
     // Update is called once per frame
@@ -117,6 +110,11 @@ public class TurnManager : MonoBehaviour
         {
             HideFOT();
         }
+    }
+
+    public void StartGame()
+    {
+        StartCoroutine(StartOfGame());
     }
 
     public void KickoffEndTurn()
@@ -146,7 +144,7 @@ public class TurnManager : MonoBehaviour
             yield break;
         }
         
-        SetupNextFactionTurn();
+        yield return SetupNextFactionTurn();
     }
 
     public void EnableEndTurnButton()
@@ -309,7 +307,7 @@ public class TurnManager : MonoBehaviour
         yield return StartCoroutine (fabricOfTime.PerformEndOfRoundUpdate(roundNum, roundWinner));
     }
 
-    void SetupNextFactionTurn()
+    IEnumerator SetupNextFactionTurn()
     {
         turnState = TurnState.TURN_SETUP;
         currentTurn++;
@@ -338,6 +336,8 @@ public class TurnManager : MonoBehaviour
         DisableEndTurnButton();
 
         StartFactionTurn();
+
+        yield break;
     }
 
     void StartFactionTurn()
@@ -418,30 +418,12 @@ public class TurnManager : MonoBehaviour
         scoreboardPanel.SetActive(true);
     }
 
-    IEnumerator StartOfGame()
+    public IEnumerator StartOfGame()
     {
+        Debug.Log("TM: StartOfGame()...");
         turnState = TurnState.START_OF_GAME;
-        //TODO: play audio?
-        
-        startOfGamePanel.SetActive(true);
 
-        int startupTime = 0; //5; //commented for testing
-
-        for (int i = startupTime; i > 0; i--)
-        {
-            startOfGameCountdownText.text = i.ToString();
-            yield return new WaitForSeconds(1);
-            
-        }
-
-        startOfGameText.text = "";
-
-        startOfGameCountdownText.text = "BATTLE";
-        yield return new WaitForSeconds(1);
-
-        startOfGamePanel.SetActive(false);
-
-        SetupNextFactionTurn();
+        yield return SetupNextFactionTurn();
 
     }
 

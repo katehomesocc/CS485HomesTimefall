@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class BattleManager : MonoBehaviour
 {
@@ -9,11 +10,19 @@ public class BattleManager : MonoBehaviour
     BoardManager boardManager;
     Hand hand;
 
+    int turn = 1;
+
+    [Header("Autoplay (Development Testing)")]
     public bool autoplay = false;
     public int autoplayUntilTurn = 32;
-
-    int turn = 1;
     public float autoplayWaitTime = 1.5f;
+
+    [Header("Start Of Game")]
+    public float startupTime = 5f;
+    public GameObject startOfGamePanel;
+    public TMP_Text startOfGameText;
+
+    public TMP_Text startOfGameCountdownText;
 
     void Awake()
     {
@@ -35,10 +44,7 @@ public class BattleManager : MonoBehaviour
         boardManager = BoardManager.Instance;
         hand = Hand.Instance;
 
-        if(autoplay)
-        {
-            StartCoroutine(QueueFirstAutoplay());
-        }
+        StartCoroutine(StartOfGame());
         
     }
 
@@ -50,8 +56,12 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator QueueFirstAutoplay()
     {
-        Debug.Log("Queuing First Autoplay");
-        yield return new WaitForSeconds(autoplayWaitTime);
+        Debug.Log("BM: waiting for TM.StartOFGame()...");
+        
+
+        yield return StartCoroutine(turnManager.StartOfGame());
+
+        Debug.Log("BM: ...Queuing First Autoplay");
 
         StartCoroutine(AutoplayRound());
     }
@@ -71,5 +81,36 @@ public class BattleManager : MonoBehaviour
             StartCoroutine(AutoplayRound());
         }
         
+    }
+
+    IEnumerator StartOfGame()
+    {
+        //TODO: play audio?
+        
+        startOfGamePanel.SetActive(true);
+
+        int startupTime = 0; //5; //commented for testing
+
+        for (int i = startupTime; i > 0; i--)
+        {
+            startOfGameCountdownText.text = i.ToString();
+            yield return new WaitForSeconds(1);
+            
+        }
+
+        startOfGameText.text = "";
+
+        startOfGameCountdownText.text = "BATTLE";
+        yield return new WaitForSeconds(1);
+
+        startOfGamePanel.SetActive(false);
+
+        if(autoplay)
+        {
+            StartCoroutine(QueueFirstAutoplay());
+        } else
+        {
+            turnManager.StartGame();
+        }
     }
 }
