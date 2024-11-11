@@ -10,7 +10,7 @@ public class CardDisplay : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler 
 {
     public Card displayCard;
-    public Hand hand;
+    Hand hand;
     
     [Header("Return Info")]
     public Transform returnParent = null;
@@ -37,18 +37,10 @@ public class CardDisplay : MonoBehaviour,
     public static Color COLOUR_STEWARDS = new Color(24f/255,147f/255,248f/255, 1f);
     public static Color COLOUR_WEAVERS = new Color(97f/255,65f/255,172f/255, 1f);
 
-    void Awake()
-    {
-        hand = FindObjectOfType<Hand>();
-
-        if(hand == null)
-        {
-            Debug.LogError("Hand is null :(");
-        }
-    }
     // Start is called before the first frame update
     void Start()
     {
+        hand = Hand.Instance;
         if(displayCard != null)
         {
             nameText.text = displayCard.data.cardName;
@@ -144,6 +136,8 @@ public class CardDisplay : MonoBehaviour,
                     onBoard = true;
                     break;
             }
+
+            hand = Hand.Instance;
 
             //Debug.Log (string.Format("Placing At: {0} | inHand = {1} | onBoard = {2} ", location, inHand, onBoard));
         }

@@ -17,7 +17,7 @@ public class TurnManager : MonoBehaviour
 
     BoardManager boardManager;
 
-    public Hand hand;
+    Hand hand;
     public FabricOfTime fabricOfTime;
 
     public GameObject[] turnOrderCovers = new GameObject[4];
@@ -90,6 +90,7 @@ public class TurnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        hand = Hand.Instance;
         boardManager = BoardManager.Instance;
         StartCoroutine(StartOfGame());
     }

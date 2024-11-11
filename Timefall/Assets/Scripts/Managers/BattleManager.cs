@@ -6,7 +6,7 @@ public class BattleManager : MonoBehaviour
 {
     TurnManager turnManager;
     BoardManager boardManager;
-    public Hand hand;
+    Hand hand;
 
     public bool autoplay = false;
     public int autoplayUntilTurn = 32;
@@ -19,8 +19,8 @@ public class BattleManager : MonoBehaviour
     {
         turnManager = TurnManager.Instance;
         boardManager = BoardManager.Instance;
-        hand = FindObjectOfType<Hand>();
-        
+        hand = Hand.Instance;
+
         if(autoplay)
         {
             StartCoroutine(QueueFirstAutoplay());

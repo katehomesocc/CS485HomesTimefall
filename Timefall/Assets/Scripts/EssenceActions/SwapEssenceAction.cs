@@ -87,7 +87,7 @@ public class SwapEssenceAction : EssenceAction
             boardSpace.SelectAsTarget(selectionTexture);
         }
         
-        FindObjectOfType<Hand>().UpdatePossibilities();
+        Hand.Instance.UpdatePossibilities();
 
         if(targets.Count == 2)
         {
@@ -103,7 +103,7 @@ public class SwapEssenceAction : EssenceAction
     public override void EndAction(List<BoardSpace> targets)
     {
         //set handstate
-        Hand hand = FindObjectOfType<Hand>();
+        Hand hand = Hand.Instance;
         hand.SetHandState(HandState.ACTION_END);
         
         //reset cursor
