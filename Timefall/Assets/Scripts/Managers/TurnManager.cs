@@ -200,9 +200,9 @@ public class TurnManager : MonoBehaviour
         return true;
     }
 
-    public bool PlayAgentCard(AgentCard agentCard)
+    public bool PlayAgentCard()
     {
-        if(essenceCount >= PLAY_AGENT_CARD) {return false;}
+        if(essenceCount < PLAY_AGENT_CARD) {return false;}
 
         SpendEssence(PLAY_AGENT_CARD);
 

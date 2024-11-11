@@ -80,4 +80,19 @@ public class AgentCardDisplay : CardDisplay
         factionText.color = color;
     }
 
+    public AgentCard GetAgentCard()
+    {
+        return (AgentCard) displayCard;
+    }
+
+    public AgentCard PlayFromHand()
+    {
+        Vector3 newPosition = this.transform.position + new Vector3(0, 50, 0);
+        StartCoroutine(this.MoveToPosition(newPosition, 0.25f));
+        
+        //TODO: set selection cursor
+
+        return GetAgentCard();
+    }
+
 }

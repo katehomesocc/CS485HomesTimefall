@@ -6,6 +6,8 @@ public class AgentCard : Card
 {
     public AgentCardData agentCardData;
 
+    public bool isOnBoard = false;
+
     public AgentCard (AgentCardData cardData)
     {
         this.data = cardData;
@@ -16,15 +18,46 @@ public class AgentCard : Card
         agentCardData = (AgentCardData) data;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public override void SelectTarget(BoardSpace boardSpace)
     {
-        
+        isOnBoard = true;
+        boardSpace.SetAgentCard(this);
+        BoardManager.Instance.ClearPossibilities();
+        Hand.Instance.RemoveCardAfterPlaying();
     }
 
-    // Update is called once per frame
-    void Update()
+    public List<BoardSpace> GetTargatableSpaces(List<BoardSpace> spacesToTest)
+    {
+        List<BoardSpace> targetableSpaces = new List<BoardSpace>();
+
+        foreach (BoardSpace boardSpace in spacesToTest)
+        {
+            if(!CanTargetSpace(boardSpace)) { continue;}
+
+            targetableSpaces.Add(boardSpace);
+        }
+
+        return targetableSpaces;
+    }
+
+    public bool CanTargetSpace(BoardSpace boardSpace)
     {
         
+        //must have an event & not have an agent
+        if(!boardSpace.hasEvent || boardSpace.hasAgent) { return false ;}
+
+        return true;
+    }
+
+    public override bool CanBePlayed()
+    {
+        if(isOnBoard)
+        {
+            return false;
+        }
+
+        int potentialTargets = BoardManager.Instance.GetAgentPossibilities(this).Count;
+
+        return potentialTargets > 0; 
     }
 }

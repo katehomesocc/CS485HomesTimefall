@@ -44,4 +44,13 @@ public class EssenceCard : Card
         GetEssenceAction().StartAction(targets);
     }
 
+    
+    public override bool CanBePlayed()
+    {
+
+        int potentialTargets = BoardManager.Instance.GetEssencePossibilities(this).Count;
+
+        return potentialTargets > 0; 
+    }
+
 }

@@ -34,8 +34,23 @@ public class Card
         return data.cardType;
     }
 
+    public Faction GetFaction()
+    {
+        return data.faction;
+    }
+
+    public Texture GetImageTexture()
+    {
+        return data.image;
+    }
+
     public virtual void SelectTarget(BoardSpace boardSpace)
     {
         return; //override
+    }
+
+    public virtual bool CanBePlayed()
+    {
+        return false; //override
     }
 }

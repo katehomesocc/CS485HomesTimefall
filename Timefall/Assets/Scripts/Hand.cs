@@ -269,7 +269,7 @@ public class Hand : MonoBehaviour
 
     public bool CanPlayCard(Card card)
     {
-        return turnManager.CanPlayCard(card);
+        return turnManager.CanPlayCard(card) && card.CanBePlayed();
     }
 
     public void DrawStartOfTurnHand()
@@ -337,18 +337,36 @@ public class Hand : MonoBehaviour
             turnManager.PlayEssenceCard();     
             SetHandState(HandState.TARGET_SELECTION);
 
-            EssenceCardDisplay essenceCardDisplay = (EssenceCardDisplay) cardDisplay;
+            EssenceCardDisplay ecDisplay = (EssenceCardDisplay) cardDisplay;
             
             //set card possibilities
-            battleManager.SetCardPossibilities(cardDisplay.displayCard);
+            battleManager.SetCardPossibilities(ecDisplay.displayCard);
 
             //start essence action
-            EssenceCard essenceCard = essenceCardDisplay.PlayFromHand();
+            EssenceCard essenceCard = ecDisplay.PlayFromHand();
             
 
 
             cardPlaying = essenceCard;
-            cardPlayingIndex = cardDisplay.positionInHand;
+            cardPlayingIndex = ecDisplay.positionInHand;
+
+        }
+
+        if(cardDisplay.GetCardType() == CardType.AGENT)
+        {       
+            turnManager.PlayAgentCard();     
+            SetHandState(HandState.TARGET_SELECTION);
+
+            AgentCardDisplay acDisplay = (AgentCardDisplay) cardDisplay;
+            
+            //set card possibilities
+            battleManager.SetCardPossibilities(acDisplay.displayCard);
+
+            //start essence action
+            AgentCard agentCard = acDisplay.PlayFromHand();
+
+            cardPlaying = agentCard;
+            cardPlayingIndex = acDisplay.positionInHand;
 
         }
 

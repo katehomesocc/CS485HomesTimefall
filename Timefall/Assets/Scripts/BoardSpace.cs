@@ -34,12 +34,16 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     public bool isTargetable = false;
 
     public bool isBeingTargeted = false;
-    public EventCard eventCard;
-
-    public AgentCard agentCard;
-
     public EventCardDisplay eventDisplay;
     public AgentCardDisplay agentDisplay;
+
+    [Header("Event")]
+    public EventCard eventCard;
+
+    [Header("Agent")]
+    public AgentCard agentCard;
+    public RawImage agentImage;
+    public RawImage agentIcon;
 
     void Awake()
     {
@@ -171,6 +175,18 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         this.eventDisplay = display;
         this.eventCard = (EventCard) eventDisplay.displayCard;
         this.hasEvent = true;
+    }
+
+    public void SetAgentCard(AgentCard card) //AgentCardDisplay display)
+    {
+        // this.agentDisplay = display;
+        this.agentCard = card;
+        this.hasAgent = true;
+
+        agentIcon.color = CardDisplay.GetFactionColor(agentCard.GetFaction());
+        agentImage.texture = agentCard.GetImageTexture();
+
+        agentIcon.transform.SetAsLastSibling();
     }
 
     public void Highlight()

@@ -265,14 +265,18 @@ public class CardDisplay : MonoBehaviour,
 
     void DoubleClickToPlayCard()
     {
-        //TODO handle event and agent cards
+        //TODO handle event
 
         CardType cardType = GetCardType();
 
-        if(cardType == CardType.ESSENCE)
+        switch (cardType)
         {
-            hand.PlayCard(this);
-        } 
+            case CardType.ESSENCE: case CardType.AGENT:
+                hand.PlayCard(this);
+                return;
+            default:    
+                return;
+        }
     }
 
     public CardType GetCardType()

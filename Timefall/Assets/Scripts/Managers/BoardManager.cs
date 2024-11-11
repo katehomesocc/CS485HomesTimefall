@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class BoardManager : MonoBehaviour
 {
+    public static BoardManager Instance;
     public static string LOCATION = "BOARD";
 
     public BoardSpace[] spaces = new BoardSpace[32];
@@ -13,15 +14,18 @@ public class BoardManager : MonoBehaviour
 
 
     public int round = 0;
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
-    // Update is called once per frame
-    void Update()
+    void Awake()
     {
-        
+        // If there is an instance, and it's not me, delete myself.
+        if (Instance != null && Instance != this) 
+        { 
+            Destroy(this); 
+        } 
+        else 
+        { 
+            Instance = this; 
+        } 
     }
 
     public void UnlockSpace(int _round, Faction faction)
@@ -97,8 +101,7 @@ public class BoardManager : MonoBehaviour
             switch(card.GetCardType()) 
             {
                 case CardType.AGENT:
-
-
+                    SetAgentPossibilities((AgentCard) card);
                     break;
                 case CardType.ESSENCE:
                     SetEssencePossibilities((EssenceCard) card);
@@ -117,9 +120,51 @@ public class BoardManager : MonoBehaviour
 
     }
 
+    public List<BoardSpace> GetCardPossibilities(Card card)
+    {
+        switch(card.GetCardType()) 
+        {
+            case CardType.AGENT:
+                GetAgentPossibilities((AgentCard) card);
+                break;
+            case CardType.ESSENCE:
+                GetEssencePossibilities((EssenceCard) card);
+                break;
+            case CardType.EVENT:
+                break;
+            default:
+            //Error handling
+                Debug.LogError("Invalid Card Type: " + card.data.cardType);
+                break;
+        }
+        return null;
+    }
+
+    public List<BoardSpace> GetEssencePossibilities(EssenceCard essenceCard)
+    {
+        return essenceCard.GetTargatableSpaces(new List<BoardSpace>(spaces));
+    }
+
     void SetEssencePossibilities(EssenceCard essenceCard)
     {
-        List<BoardSpace> targetable = essenceCard.GetTargatableSpaces(new List<BoardSpace>(spaces));
+        List<BoardSpace> targetable = GetEssencePossibilities(essenceCard);
+
+        foreach (BoardSpace boardSpace in targetable)
+        {
+            boardSpace.Highlight();
+            targetsAvailable.Add(boardSpace);
+            boardSpace.isTargetable = true;
+        }
+    }
+
+    public List<BoardSpace> GetAgentPossibilities(AgentCard agentCard)
+    {
+        return agentCard.GetTargatableSpaces(new List<BoardSpace>(spaces));
+    }
+
+    void SetAgentPossibilities(AgentCard agentCard)
+    {
+        List<BoardSpace> targetable = GetAgentPossibilities(agentCard);
 
         foreach (BoardSpace boardSpace in targetable)
         {

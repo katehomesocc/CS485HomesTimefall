@@ -14,12 +14,9 @@ public class SwapEssenceAction : EssenceAction
     public Texture2D CURSOR_CARD_TAP_DOWN_TEX;
 
     public override bool CanTargetSpace(BoardSpace boardSpace, List<BoardSpace> targets)
-    {
-        EventCard eventCard = (EventCard) boardSpace.eventCard;
-        AgentCard agentCard = boardSpace.agentCard;
-        
+    {   
         //must have an event & not have an agent & not already targeted
-        if(eventCard == null || agentCard != null || boardSpace.isBeingTargeted) { return false ;}
+        if(!boardSpace.hasEvent || boardSpace.hasAgent|| boardSpace.isBeingTargeted) { return false ;}
 
         return true;
     }
