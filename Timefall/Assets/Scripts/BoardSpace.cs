@@ -19,8 +19,8 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     public RawImage selectionIcon;
 
     [Header("Managers")]
-    public Hand hand;
-    public TurnManager turnManager;
+    Hand hand;
+    TurnManager turnManager;
 
     [Header("Display Prefabs")]
     public GameObject agentDisplayPrefab;
@@ -45,10 +45,10 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     public RawImage agentImage;
     public RawImage agentIcon;
 
-    void Awake()
+    void Start()
     {
-        hand = FindObjectOfType<Hand>();
-        turnManager = FindObjectOfType<TurnManager>();
+        hand = Hand.Instance;
+        turnManager = TurnManager.Instance;
         border.color = Color.white;
     }
 

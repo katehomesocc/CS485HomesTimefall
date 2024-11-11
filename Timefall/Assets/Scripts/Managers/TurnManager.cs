@@ -7,6 +7,7 @@ using TMPro;
 
 public class TurnManager : MonoBehaviour
 {
+    public static TurnManager Instance;
     static int PLAY_ESSENCE_CARD = 1;
     static int ROLL_AGENT_EFFECT = 1;
     static int PLAY_AGENT_CARD = 2;
@@ -72,6 +73,19 @@ public class TurnManager : MonoBehaviour
     public Texture TWO_ESSENCE_TEXTURE;
     public Texture THREE_ESSENCE_TEXTURE;
     public RawImage essenceCountImage;
+
+    void Awake()
+    {
+        // If there is an instance, and it's not me, delete myself.
+        if (Instance != null && Instance != this) 
+        { 
+            Destroy(this); 
+        } 
+        else 
+        { 
+            Instance = this; 
+        } 
+    }
 
     // Start is called before the first frame update
     void Start()

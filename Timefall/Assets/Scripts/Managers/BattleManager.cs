@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
-    public TurnManager turnManager;
+    TurnManager turnManager;
     BoardManager boardManager;
     public Hand hand;
 
@@ -14,21 +14,13 @@ public class BattleManager : MonoBehaviour
     int turn = 1;
     public float autoplayWaitTime = 1.5f;
 
-    void Awake()
-    {
-        turnManager = FindObjectOfType<TurnManager>();
-        boardManager = BoardManager.Instance;
-        hand = FindObjectOfType<Hand>();
-
-        if(boardManager == null)
-        {
-            Debug.LogError("25: boardManager == null");
-        }
-    }
-
     // Start is called before the first frame update
     void Start()
     {
+        turnManager = TurnManager.Instance;
+        boardManager = BoardManager.Instance;
+        hand = FindObjectOfType<Hand>();
+        
         if(autoplay)
         {
             StartCoroutine(QueueFirstAutoplay());
@@ -74,16 +66,6 @@ public class BattleManager : MonoBehaviour
 
     public void ClearPossibilities()
     {
-        if(boardManager == null)
-        {
-            Debug.LogError("81:boardManager == null");
-            boardManager = FindObjectOfType<BoardManager>();
-        }
-
-        if(boardManager == null)
-        {
-            Debug.LogError("87:boardManager still == null");
-        }
         boardManager.ClearPossibilities();
     }
 

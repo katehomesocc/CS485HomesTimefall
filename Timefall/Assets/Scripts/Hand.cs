@@ -16,7 +16,7 @@ public class Hand : MonoBehaviour
     public BattleManager battleManager;
     BoardManager boardManager;
 
-    public TurnManager turnManager;
+    TurnManager turnManager;
     public Deck timelineDeck;
     public DeckDisplay playerDeckDisplay;
 
@@ -59,7 +59,7 @@ public class Hand : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        turnManager = FindObjectOfType<TurnManager>();
+        turnManager = TurnManager.Instance;
         battleManager = FindObjectOfType<BattleManager>();
         boardManager = BoardManager.Instance;
 
