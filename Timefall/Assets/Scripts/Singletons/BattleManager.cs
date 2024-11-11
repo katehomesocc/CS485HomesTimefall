@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
+    public static BattleManager Instance;
     TurnManager turnManager;
     BoardManager boardManager;
     Hand hand;
@@ -13,6 +14,19 @@ public class BattleManager : MonoBehaviour
 
     int turn = 1;
     public float autoplayWaitTime = 1.5f;
+
+    void Awake()
+    {
+        // If there is an instance, and it's not me, delete myself.
+        if (Instance != null && Instance != this) 
+        { 
+            Destroy(this); 
+        } 
+        else 
+        { 
+            Instance = this; 
+        } 
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -47,7 +61,7 @@ public class BattleManager : MonoBehaviour
         Debug.Log("AutoplayRound");
         
         hand.AutoPlayTimelineCard();
-        turnManager.EndTurn();
+        yield return turnManager.EndTurn();
 
         yield return new WaitForSeconds(0.1f);
 
@@ -58,15 +72,4 @@ public class BattleManager : MonoBehaviour
         }
         
     }
-
-    public void SetCardPossibilities(Card card)
-    {
-        boardManager.SetCardPossibilities(card);
-    }
-
-    public void ClearPossibilities()
-    {
-        boardManager.ClearPossibilities();
-    }
-
 }

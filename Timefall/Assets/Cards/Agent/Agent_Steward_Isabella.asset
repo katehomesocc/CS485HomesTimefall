@@ -16,7 +16,8 @@ MonoBehaviour:
   cardName: Isabella
   description: Choose a hole on the timeline. Draw a card from the timeline deck
     and fill that hole.
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: 2cd86890da16bff498f6ad96d6b7c1fc, type: 3}
   faction: 3
+  cardType: 0
   diceType: D8
   diceCost: 6

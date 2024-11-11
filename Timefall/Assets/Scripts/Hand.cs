@@ -11,9 +11,6 @@ public class Hand : MonoBehaviour
     public RectTransform  handPanel;
 
     public List<Card> cardsInHand;
-
-    [Header("Managers")]
-    public BattleManager battleManager;
     BoardManager boardManager;
 
     TurnManager turnManager;
@@ -60,7 +57,6 @@ public class Hand : MonoBehaviour
     void Start()
     {
         turnManager = TurnManager.Instance;
-        battleManager = FindObjectOfType<BattleManager>();
         boardManager = BoardManager.Instance;
 
 		drawPlayerButton.onClick.AddListener(DrawFromPlayerDeck);
@@ -316,12 +312,12 @@ public class Hand : MonoBehaviour
         // Debug.Log("Hand: beginDragCard enough essence");
 
         //set card possibilities
-        battleManager.SetCardPossibilities(card);
+        boardManager.SetCardPossibilities(card);
     }
 
     public void EndDragCard()
     {
-        battleManager.ClearPossibilities();
+        boardManager.ClearPossibilities();
     }
 
     public void PlayCard(CardDisplay cardDisplay)
@@ -341,7 +337,7 @@ public class Hand : MonoBehaviour
             EssenceCardDisplay ecDisplay = (EssenceCardDisplay) cardDisplay;
             
             //set card possibilities
-            battleManager.SetCardPossibilities(ecDisplay.displayCard);
+            boardManager.SetCardPossibilities(ecDisplay.displayCard);
 
             //start essence action
             EssenceCard essenceCard = ecDisplay.PlayFromHand();
@@ -361,7 +357,7 @@ public class Hand : MonoBehaviour
             AgentCardDisplay acDisplay = (AgentCardDisplay) cardDisplay;
             
             //set card possibilities
-            battleManager.SetCardPossibilities(acDisplay.displayCard);
+            boardManager.SetCardPossibilities(acDisplay.displayCard);
 
             //start essence action
             AgentCard agentCard = acDisplay.PlayFromHand();
@@ -396,7 +392,7 @@ public class Hand : MonoBehaviour
             case HandState.TARGET_SELECTION: 
                 break;
             case HandState.ACTION_END:
-                battleManager.ClearPossibilities();
+                boardManager.ClearPossibilities();
                 turnManager.SetVictoryPointUI();
                 break;
             default:
@@ -420,7 +416,7 @@ public class Hand : MonoBehaviour
 
     public void UpdatePossibilities()
     {
-        battleManager.ClearPossibilities();
+        boardManager.ClearPossibilities();
 
         if(cardPlaying.data == null)
         {
@@ -429,7 +425,7 @@ public class Hand : MonoBehaviour
 
         //Debug.Log("UpdatePossibilities + " + cardPlaying.data.ToString());
 
-        battleManager.SetCardPossibilities(cardPlaying);
+        boardManager.SetCardPossibilities(cardPlaying);
 
     }
 }

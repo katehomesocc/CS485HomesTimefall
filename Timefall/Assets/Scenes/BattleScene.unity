@@ -1013,8 +1013,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endTurnButton: {fileID: 799107644}
-  boardManager: {fileID: 1616130735}
-  hand: {fileID: 453933982}
   fabricOfTime: {fileID: 1131212133}
   turnOrderCovers:
   - {fileID: 352151419}
@@ -3800,9 +3798,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handPanel: {fileID: 453933977}
   cardsInHand: []
-  battleManager: {fileID: 2051374906}
-  boardManager: {fileID: 1616130735}
-  turnManager: {fileID: 140469341}
   timelineDeck: {fileID: 358142764}
   playerDeckDisplay: {fileID: 39290729}
   drawPlayerButton: {fileID: 1503055810}
@@ -7397,7 +7392,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80726d4b7ddaf0a4fb3195430ce79297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardManager: {fileID: 1616130735}
   rows:
   - {fileID: 1001542819}
   - {fileID: 584127656}
@@ -10760,7 +10754,7 @@ MonoBehaviour:
   - {fileID: 809643575}
   roundText: {fileID: 503110256}
   fotPanel: {fileID: 2034198042}
-  endOfRoundTime: 5
+  endOfRoundTime: 3
 --- !u!1 &1134149135
 GameObject:
   m_ObjectHideFlags: 0
@@ -10863,18 +10857,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b509c92a64f1b5f46a6c8fb3dc56f6c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1164497368 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5424184123933254769, guid: 70d42c402e3d1b64f8435f4a9efe06b0,
-    type: 3}
-  m_PrefabInstance: {fileID: 1659415614}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1167725129
@@ -19378,9 +19360,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f745643495b470b45a1015a5357406a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnManager: {fileID: 0}
-  boardManager: {fileID: 0}
-  hand: {fileID: 0}
   autoplay: 0
   autoplayUntilTurn: 10
   autoplayWaitTime: 1.5
@@ -20806,11 +20785,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TimelineSpace (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 4393711773286591289, guid: 70d42c402e3d1b64f8435f4a9efe06b0,
-        type: 3}
-      propertyPath: agentImage
-      value: 
-      objectReference: {fileID: 1164497368}
     - target: {fileID: 6543511027430123864, guid: 70d42c402e3d1b64f8435f4a9efe06b0,
         type: 3}
       propertyPath: m_Pivot.x
