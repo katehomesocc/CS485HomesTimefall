@@ -5,7 +5,7 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour
 {
     public TurnManager turnManager;
-    public BoardManager boardManager;
+    BoardManager boardManager;
     public Hand hand;
 
     public bool autoplay = false;
@@ -17,7 +17,7 @@ public class BattleManager : MonoBehaviour
     void Awake()
     {
         turnManager = FindObjectOfType<TurnManager>();
-        boardManager = FindObjectOfType<BoardManager>();
+        boardManager = BoardManager.Instance;
         hand = FindObjectOfType<Hand>();
 
         if(boardManager == null)

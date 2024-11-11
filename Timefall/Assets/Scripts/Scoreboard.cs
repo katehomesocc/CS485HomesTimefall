@@ -5,13 +5,13 @@ using UnityEngine;
 public class Scoreboard : MonoBehaviour
 {
 
-    public BoardManager boardManager;
+    BoardManager boardManager;
     public ScoreboardRow[] rows = new ScoreboardRow[9];
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        boardManager = BoardManager.Instance;
     }
 
     // Update is called once per frame

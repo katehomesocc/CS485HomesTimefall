@@ -14,7 +14,7 @@ public class Hand : MonoBehaviour
 
     [Header("Managers")]
     public BattleManager battleManager;
-    public BoardManager boardManager;
+    BoardManager boardManager;
 
     public TurnManager turnManager;
     public Deck timelineDeck;
@@ -61,6 +61,7 @@ public class Hand : MonoBehaviour
     {
         turnManager = FindObjectOfType<TurnManager>();
         battleManager = FindObjectOfType<BattleManager>();
+        boardManager = BoardManager.Instance;
 
 		drawPlayerButton.onClick.AddListener(DrawFromPlayerDeck);
 

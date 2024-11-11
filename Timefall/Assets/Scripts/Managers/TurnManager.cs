@@ -14,7 +14,7 @@ public class TurnManager : MonoBehaviour
     static int REPLACE_TIMELINE_EVENT = 3;
     public Button endTurnButton;
 
-    public BoardManager boardManager;
+    BoardManager boardManager;
 
     public Hand hand;
     public FabricOfTime fabricOfTime;
@@ -76,6 +76,7 @@ public class TurnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        boardManager = BoardManager.Instance;
         StartCoroutine(StartOfGame());
     }
 
