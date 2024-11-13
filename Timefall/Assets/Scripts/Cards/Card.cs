@@ -6,7 +6,10 @@ using UnityEngine;
 public class Card
 {
     public CardData data;
-    public List<BoardSpace> targets = new List<BoardSpace>();
+    public List<BoardSpace> boardTargets = new List<BoardSpace>();
+    public List<CardDisplay> handTargets = new List<CardDisplay>();
+
+    public bool channeling = false;
 
     public Card()
     {
@@ -16,17 +19,6 @@ public class Card
     public Card(CardData cardData)
     {
         this.data = cardData;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public CardType GetCardType()
@@ -49,8 +41,23 @@ public class Card
         return; //override
     }
 
+    public virtual void SelectTarget(CardDisplay handTarget)
+    {
+        return; //override
+    }
+
     public virtual bool CanBePlayed()
     {
         return false; //override
+    }
+
+    public void StartChannel()
+    {
+        channeling = true;
+    }
+
+        public void EndChannel()
+    {
+        channeling = false;
     }
 }

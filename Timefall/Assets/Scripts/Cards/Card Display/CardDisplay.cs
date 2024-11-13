@@ -30,6 +30,7 @@ public class CardDisplay : MonoBehaviour,
     public bool isExpanded = false;
     public bool inPlaceAnimation = false;
     public bool isTargetable = false;
+    public bool isBeingTargeted = false;
 
     [Header("Colors [NEED TO MOVE TO CORRECT CLASS]")] //TODO: move this somewhere that makes sense
     public static Color COLOUR_SEEKERS = new Color(33f/255,197f/255,104f/255, 1f);
@@ -48,7 +49,7 @@ public class CardDisplay : MonoBehaviour,
             image.texture = displayCard.data.image;
         }
 
-        selectionImage.enabled = false;
+        HighlightOff();
         
     }
 
@@ -71,8 +72,6 @@ public class CardDisplay : MonoBehaviour,
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        // Debug.Log("OnBeginDrag");
-
         if(!inHand){ return;}
 
         returnParent = this.transform.parent;
@@ -105,9 +104,6 @@ public class CardDisplay : MonoBehaviour,
     {
         hand.EndDragCard();
         if(inPlaceAnimation){ return;}
-        // Debug.Log("OnEndDrag");
-
-        // if(onBoard){ return;}
 
         this.transform.SetParent(returnParent, false);   
         this.transform.SetSiblingIndex(returnSiblingIndex);
@@ -159,7 +155,7 @@ public class CardDisplay : MonoBehaviour,
     {
         if(!inHand){ return;}
 
-        selectionImage.enabled = true;
+        HighlightOn();
 
         hand.ExpandCardView(displayCard, true);
         isExpanded = true;
@@ -170,7 +166,7 @@ public class CardDisplay : MonoBehaviour,
     {
         if(!inHand){ return;}
         
-        selectionImage.enabled = false;
+        HighlightOff();
 
         hand.CloseExpandCardView();
         isExpanded = false;
@@ -239,11 +235,17 @@ public class CardDisplay : MonoBehaviour,
                 if(inHand)
                 {
                     int clickCount = pointerEventData.clickCount;
-                    // Debug.Log("clickCount = " + clickCount);
+                    Debug.Log("clickCount = " + clickCount);
                     if(clickCount == 2)
                     {
                         DoubleClickToPlayCard();
                     }
+                }
+                break;
+            case HandState.TARGET_SELECTION:
+                if(inHand && isTargetable)
+                {
+                    hand.SelectTarget(this);
                 }
                 break;
             default:    
@@ -252,15 +254,8 @@ public class CardDisplay : MonoBehaviour,
 
     }
 
-    public void SetTargetable(bool targetable)
-    {
-        isTargetable = targetable;
-    }
-
     void DoubleClickToPlayCard()
     {
-        //TODO handle event
-
         CardType cardType = GetCardType();
 
         switch (cardType)
@@ -273,9 +268,50 @@ public class CardDisplay : MonoBehaviour,
         }
     }
 
+    public void SetTargetable(bool targetable)
+    {
+        isTargetable = targetable;
+    }
+
     public CardType GetCardType()
     {
         return this.displayCard.data.cardType;
+    }
+    
+    public void SelectAsTarget(Texture tex)
+    {
+        // // Debug.Log(tex);
+        // if(tex == null)
+        // {
+        //     //Debug.Log("Texture is null, not selecting");
+        //     return;
+        // }
+        // selectionIcon.texture = tex;
+        // selectionIcon.transform.SetAsLastSibling();
+        // selectionIcon.gameObject.SetActive(true);
+        isBeingTargeted = true;
+    }
+
+    public void DeselectAsTarget()
+    {
+        // selectionIcon.texture = null;
+        // selectionIcon.gameObject.SetActive(false);
+        isBeingTargeted = false;
+    }
+
+    public void HighlightOn()
+    {
+        selectionImage.enabled = true;
+    }
+
+    public void HighlightOff()
+    {
+        selectionImage.enabled = false;
+    }
+
+    public void ChannelCard()
+    {
+        displayCard.channeling = true;
     }
 
 

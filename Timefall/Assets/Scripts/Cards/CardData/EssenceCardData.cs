@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Essence CardData", menuName = "EssenceCardData")]
+[CreateAssetMenu(fileName = "New Essence CardData", menuName = "CardData/EssenceCardData")]
 public class EssenceCardData : CardData
 {
     [SerializeField]
@@ -12,16 +12,22 @@ public class EssenceCardData : CardData
         cardType = CardType.ESSENCE;
     }
 
-    public bool CanTargetSpace(BoardSpace boardSpaces, List<BoardSpace> targets)
+    public bool CanTargetSpace(BoardSpace boardSpaces, List<BoardSpace> boardTargets)
     {
         //TODO: add functionality
-        return essenceAction.CanTargetSpace(boardSpaces, targets);
+        return essenceAction.CanTargetSpace(boardSpaces, boardTargets);
     }
 
-    public List<BoardSpace> GetTargatableSpaces(List<BoardSpace> board, List<BoardSpace> targets)
+    public List<BoardSpace> GetTargatableSpaces(List<BoardSpace> board, List<BoardSpace> boardTargets)
     {
         //TODO: add functionality
-        return essenceAction.GetTargatableSpaces(board, targets);
+        return essenceAction.GetTargatableSpaces(board, boardTargets);
+    }
+
+    public List<CardDisplay> GetTargatableHandDisplays(List<CardDisplay> handDisplays, List<CardDisplay> handTargets)
+    {
+        //TODO: add functionality
+        return essenceAction.GetTargatableHandDisplays(handDisplays, handTargets);
     }
 
 }

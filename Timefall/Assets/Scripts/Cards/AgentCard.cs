@@ -22,7 +22,7 @@ public class AgentCard : Card
     {
         isOnBoard = true;
         boardSpace.SetAgentCard(this);
-        BoardManager.Instance.ClearPossibilities();
+        BattleManager.Instance.ClearPossibleTargetHighlights();
         Hand.Instance.RemoveCardAfterPlaying();
     }
 

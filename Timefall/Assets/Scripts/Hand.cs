@@ -10,12 +10,14 @@ public class Hand : MonoBehaviour
 
     public RectTransform  handPanel;
 
-    public List<Card> cardsInHand;
+    public List<Card> cardsInHand = new List<Card>();
+    public List<CardDisplay> displaysInHand = new List<CardDisplay>();
     BoardManager boardManager;
-
     TurnManager turnManager;
+    BattleManager battleManager;
     public Deck timelineDeck;
     public DeckDisplay playerDeckDisplay;
+    public List<CardDisplay> targetsAvailable = new List<CardDisplay>();
 
     [Header("Buttons")]
     public Button drawPlayerButton;
@@ -58,6 +60,7 @@ public class Hand : MonoBehaviour
     {
         turnManager = TurnManager.Instance;
         boardManager = BoardManager.Instance;
+        battleManager = BattleManager.Instance;
 
 		drawPlayerButton.onClick.AddListener(DrawFromPlayerDeck);
 
@@ -76,64 +79,36 @@ public class Hand : MonoBehaviour
 
     void DrawFromPlayerDeck()
     {
-        DrawFromDeck(playerDeckDisplay.deck);
+        Card card = DrawFromDeck(playerDeckDisplay.deck);
+
+        InstantiateCardInHand(card);
+
     }
-
-
 
     void ShufflePlayerDeck()
     {
         ShuffleDeck(playerDeckDisplay.deck);
     }
 
-    void DrawFromDeck(Deck targetDeck){
-        Card card = targetDeck.Draw();
+    Card DrawFromDeck(Deck targetDeck){
+        return targetDeck.Draw();
+	}
 
-        if(card == null){ return;}
-
+    void InstantiateCardInHand(Card card)
+    {
         CardType cardType = card.data.cardType;
-
-        GameObject obj = null;
 
         switch(cardType) 
         {
             case CardType.AGENT:
-                obj = Instantiate(agentCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
-                AgentCardDisplay agentDC = obj.GetComponent<AgentCardDisplay>();
-
-                if(agentDC == null){return;} 
-                AgentCard agentCard = (AgentCard) card;
-
-                if(agentCard == null){return;} 
-                agentDC.SetCard(agentCard);
-                agentDC.InstantiateInHand(transform);
-                agentDC.positionInHand = cardsInHand.Count;
+                InstantiateAgentInHand((AgentCard) card);
 
                 break;
             case CardType.ESSENCE:
-                obj = Instantiate(essenceCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
-                EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
-
-                if(essenceDC == null){return;} 
-                EssenceCard essenceCard = (EssenceCard) card;
-
-                if(essenceCard == null){return;} 
-                essenceDC.SetCard(essenceCard);
-                essenceDC.InstantiateInHand(transform);
-                essenceDC.positionInHand = cardsInHand.Count;
-
+                InstantiateEssenceInHand((EssenceCard) card);
                 break;
             case CardType.EVENT:
-                obj = Instantiate(eventCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
-                EventCardDisplay eventDC = obj.GetComponent<EventCardDisplay>();
-
-                if(eventDC == null){return;} 
-                EventCard eventCard = (EventCard) card;
-
-                if(eventCard == null){return;} 
-                eventDC.SetCard(eventCard);
-                eventDC.InstantiateInHand(transform);
-                eventDC.positionInHand = cardsInHand.Count;
+                InstantiateEventInHand((EventCard) card);
 
                 break;
             default:
@@ -143,11 +118,47 @@ public class Hand : MonoBehaviour
         }
 
         cardsInHand.Add(card);
+    }
 
-        // obj.transform.SetParent(transform);
-        //obj.transform.localScale =  new Vector3(0.55f, 0.55f, 0.55f);
-        
-	}
+    void InstantiateAgentInHand(AgentCard agentCard)
+    {
+        GameObject obj = Instantiate(agentCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
+        AgentCardDisplay agentDC = obj.GetComponent<AgentCardDisplay>();
+
+        if(agentDC == null){return;} 
+
+        agentDC.SetCard(agentCard);
+        agentDC.InstantiateInHand(transform);
+        agentDC.positionInHand = displaysInHand.Count;
+
+        displaysInHand.Add(agentDC);
+    }
+
+    void InstantiateEssenceInHand(EssenceCard essenceCard)
+    {
+        GameObject obj = Instantiate(essenceCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
+        EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
+
+        if(essenceDC == null){return;} 
+
+        essenceDC.SetCard(essenceCard);
+        essenceDC.InstantiateInHand(transform);
+        essenceDC.positionInHand = displaysInHand.Count;
+        displaysInHand.Add(essenceDC);
+    }
+
+    void InstantiateEventInHand(EventCard eventCard)
+    {
+        GameObject obj = Instantiate(eventCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
+        EventCardDisplay eventDC = obj.GetComponent<EventCardDisplay>();
+
+        if(eventDC == null){return;} 
+
+        eventDC.SetCard(eventCard);
+        eventDC.InstantiateInHand(transform);
+        eventDC.positionInHand = displaysInHand.Count;
+        displaysInHand.Add(eventDC);
+    }
 
     void ShuffleDeck(Deck targetDeck){
         targetDeck.Shuffle();
@@ -269,21 +280,54 @@ public class Hand : MonoBehaviour
         return turnManager.CanPlayCard(card) && card.CanBePlayed();
     }
 
-    public void DrawStartOfTurnHand()
+    public void DrawStartOfTurnHand(Player player)
     {
         SetHandState(HandState.START_TURN_DRAW_HAND);
-        int handSize = 5; //TODO: get player hand size
-        for (int i = 0; i < handSize; i++)
+        
+        int drawSize = player.handSize - player.channelList.Count;
+
+        DrawChanneledCards(player);
+
+        for (int i = 0; i < drawSize; i++)
         {
             DrawFromPlayerDeck();
         }
     }
 
-    public void ShuffleHandBackIntoDeck()
+    void DrawChanneledCards(Player player)
     {
+        //TODO: animation?
+        List<Card> channelList = player.channelList;
+
+        foreach (Card channelCard in channelList)
+        {
+            channelCard.EndChannel();
+            InstantiateCardInHand(channelCard);
+        }
+
+        player.channelList.Clear();
+    }
+
+    void HandleChanneledCardsAtShuffle(Player player)
+    {
+        //TODO: animation?
+        List<Card> channelList = player.channelList;
+
+        foreach (Card channelCard in channelList)
+        {
+            cardsInHand.Remove(channelCard);
+        }
+
+    }
+
+    public void ShuffleHandBackIntoDeck(Player player)
+    {
+        HandleChanneledCardsAtShuffle(player);
+
         playerDeckDisplay.deck.ShuffleHandBackIn(cardsInHand);
 
         cardsInHand.Clear();
+        displaysInHand.Clear();
 
         while (this.transform.childCount > 0) {
             DestroyImmediate(this.transform.GetChild(0).gameObject);
@@ -312,20 +356,23 @@ public class Hand : MonoBehaviour
         // Debug.Log("Hand: beginDragCard enough essence");
 
         //set card possibilities
-        boardManager.SetCardPossibilities(card);
+        battleManager.SetPossibleTargetHighlights(card);
     }
 
     public void EndDragCard()
     {
-        boardManager.ClearPossibilities();
+        battleManager.ClearPossibleTargetHighlights();
     }
 
     public void PlayCard(CardDisplay cardDisplay)
     {
         if(!CanPlayCard(cardDisplay.displayCard))
         {
+            Debug.Log("cannot play card");
             return;
         }
+
+        Debug.Log("play card");
 
         //TODO handle event and agent cards
 
@@ -337,12 +384,10 @@ public class Hand : MonoBehaviour
             EssenceCardDisplay ecDisplay = (EssenceCardDisplay) cardDisplay;
             
             //set card possibilities
-            boardManager.SetCardPossibilities(ecDisplay.displayCard);
+            battleManager.SetPossibleTargetHighlights(ecDisplay.displayCard);
 
             //start essence action
             EssenceCard essenceCard = ecDisplay.PlayFromHand();
-            
-
 
             cardPlaying = essenceCard;
             cardPlayingIndex = ecDisplay.positionInHand;
@@ -357,7 +402,7 @@ public class Hand : MonoBehaviour
             AgentCardDisplay acDisplay = (AgentCardDisplay) cardDisplay;
             
             //set card possibilities
-            boardManager.SetCardPossibilities(acDisplay.displayCard);
+            battleManager.SetPossibleTargetHighlights(acDisplay.displayCard);
 
             //start essence action
             AgentCard agentCard = acDisplay.PlayFromHand();
@@ -366,13 +411,16 @@ public class Hand : MonoBehaviour
             cardPlayingIndex = acDisplay.positionInHand;
 
         }
-
-        
     }
 
     public void SelectTarget(BoardSpace boardSpace)
     {
         cardPlaying.SelectTarget(boardSpace);
+    }
+
+    public void SelectTarget(CardDisplay handDisplay)
+    {
+        cardPlaying.SelectTarget(handDisplay);
     }
 
     public void SetHandState(HandState newHandState)
@@ -392,7 +440,7 @@ public class Hand : MonoBehaviour
             case HandState.TARGET_SELECTION: 
                 break;
             case HandState.ACTION_END:
-                boardManager.ClearPossibilities();
+                battleManager.ClearPossibleTargetHighlights();
                 turnManager.SetVictoryPointUI();
                 break;
             default:
@@ -407,6 +455,8 @@ public class Hand : MonoBehaviour
         Debug.Log(string.Format("# of cardsInHand: {0}, removing index: {1}", cardsInHand.Count, cardPlayingIndex));
     
         cardsInHand.RemoveAt(cardPlayingIndex);
+        displaysInHand.RemoveAt(cardPlayingIndex);
+
         DestroyImmediate(this.transform.GetChild(cardPlayingIndex).gameObject);
 
         cardPlaying = null;
@@ -416,7 +466,7 @@ public class Hand : MonoBehaviour
 
     public void UpdatePossibilities()
     {
-        boardManager.ClearPossibilities();
+        battleManager.ClearPossibleTargetHighlights();
 
         if(cardPlaying.data == null)
         {
@@ -425,7 +475,78 @@ public class Hand : MonoBehaviour
 
         //Debug.Log("UpdatePossibilities + " + cardPlaying.data.ToString());
 
-        boardManager.SetCardPossibilities(cardPlaying);
+        battleManager.SetPossibleTargetHighlights(cardPlaying);
 
     }
+
+    public void SetPossibleTargetHighlight(Card card)
+    {
+            switch(card.GetCardType()) 
+            {
+                case CardType.AGENT:
+                    // SetAgentPossibilities((AgentCard) card);
+                    break;
+                case CardType.ESSENCE:
+                    SetEssencePossibilities((EssenceCard) card);
+                    break;
+                case CardType.EVENT:
+
+
+                    break;
+                default:
+                //Error handling
+                    Debug.LogError("Invalid Card Type: " + card.data.cardType);
+                    return;
+            }
+
+    }
+
+    public void ClearPossibleTargetHighlights()
+    {
+        foreach (CardDisplay cardDisplay in targetsAvailable)
+        {
+            cardDisplay.HighlightOff();
+            cardDisplay.isTargetable = false;
+        }
+
+        targetsAvailable.Clear();
+    }
+
+    public List<CardDisplay> GetPossibleTargets(Card card)
+    {
+        switch(card.GetCardType()) 
+        {
+            case CardType.AGENT:
+                //return GetAgentPossibilities((AgentCard) card);
+                break;
+            case CardType.ESSENCE:
+                return GetEssencePossibilities((EssenceCard) card);
+            case CardType.EVENT:
+                break;
+            default:
+            //Error handling
+                Debug.LogError("Invalid Card Type: " + card.data.cardType);
+                break;
+        }
+        return null;
+    }
+
+    public List<CardDisplay> GetEssencePossibilities(EssenceCard essenceCard)
+    {   
+        return essenceCard.GetTargatableHandDisplays(displaysInHand, essenceCard.handTargets);
+    }
+
+    void SetEssencePossibilities(EssenceCard essenceCard)
+    {
+        List<CardDisplay> targetable = GetEssencePossibilities(essenceCard);
+
+        foreach (CardDisplay cardDisplay in targetable)
+        {
+            cardDisplay.HighlightOn();
+            targetsAvailable.Add(cardDisplay);
+            cardDisplay.isTargetable = true;
+        }
+    }
+
+    
 }

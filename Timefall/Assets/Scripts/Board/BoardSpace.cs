@@ -177,9 +177,8 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         this.hasEvent = true;
     }
 
-    public void SetAgentCard(AgentCard card) //AgentCardDisplay display)
+    public void SetAgentCard(AgentCard card)
     {
-        // this.agentDisplay = display;
         this.agentCard = card;
         this.hasAgent = true;
 

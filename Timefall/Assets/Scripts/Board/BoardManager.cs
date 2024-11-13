@@ -93,7 +93,7 @@ public class BoardManager : MonoBehaviour
         return CalculateVPInList(spacesToCalc);
     }
 
-    public void SetCardPossibilities(Card card)
+    public void SetPossibleTargetHighlight(Card card)
     {
         //For each space
             //Can card be played
@@ -116,20 +116,16 @@ public class BoardManager : MonoBehaviour
                     return;
             }
 
-
-
     }
 
-    public List<BoardSpace> GetCardPossibilities(Card card)
+    public List<BoardSpace> GetPossibleTargets(Card card)
     {
         switch(card.GetCardType()) 
         {
             case CardType.AGENT:
-                GetAgentPossibilities((AgentCard) card);
-                break;
+                return GetAgentPossibilities((AgentCard) card);
             case CardType.ESSENCE:
-                GetEssencePossibilities((EssenceCard) card);
-                break;
+                return GetEssencePossibilities((EssenceCard) card);
             case CardType.EVENT:
                 break;
             default:
@@ -141,7 +137,7 @@ public class BoardManager : MonoBehaviour
     }
 
     public List<BoardSpace> GetEssencePossibilities(EssenceCard essenceCard)
-    {
+    {   
         return essenceCard.GetTargatableSpaces(new List<BoardSpace>(spaces));
     }
 
@@ -174,7 +170,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void ClearPossibilities()
+    public void ClearPossibleTargetHighlights()
     {
         foreach (BoardSpace boardSpace in targetsAvailable)
         {

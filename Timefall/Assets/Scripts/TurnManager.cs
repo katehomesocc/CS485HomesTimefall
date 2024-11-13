@@ -127,7 +127,7 @@ public class TurnManager : MonoBehaviour
     public IEnumerator EndTurn(){
         turnState = TurnState.END_OF_TURN;
 
-        hand.ShuffleHandBackIntoDeck();
+        hand.ShuffleHandBackIntoDeck(currentPlayer);
 
         int mod = currentTurn % 4;
 
@@ -345,7 +345,7 @@ public class TurnManager : MonoBehaviour
         turnState = TurnState.FACTION_TURN;
         // Debug.Log("Start faction turn");
 
-        hand.DrawStartOfTurnHand();
+        hand.DrawStartOfTurnHand(currentPlayer);
 
         //draw from timeline deck and place on next available spot
         hand.DrawFromTimelineDeck();
@@ -539,6 +539,11 @@ public class TurnManager : MonoBehaviour
     void HideFOT()
     {
         fabricOfTime.HidePanel();
+    }
+
+    public Player GetCurrentPlayer()
+    {
+        return currentPlayer;
     }
 
     

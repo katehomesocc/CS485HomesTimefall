@@ -56,21 +56,15 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator QueueFirstAutoplay()
     {
-        Debug.Log("BM: waiting for TM.StartOFGame()...");
-        
-
         yield return StartCoroutine(turnManager.StartOfGame());
-
-        Debug.Log("BM: ...Queuing First Autoplay");
 
         StartCoroutine(AutoplayRound());
     }
 
     IEnumerator AutoplayRound()
     {
-        Debug.Log("AutoplayRound");
-        
         hand.AutoPlayTimelineCard();
+        
         yield return turnManager.EndTurn();
 
         yield return new WaitForSeconds(0.1f);
@@ -85,8 +79,6 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator StartOfGame()
     {
-        //TODO: play audio?
-        
         startOfGamePanel.SetActive(true);
 
         for (int i = startupTime; i > 0; i--)
@@ -110,5 +102,17 @@ public class BattleManager : MonoBehaviour
         {
             turnManager.StartGame();
         }
+    }
+
+    public void SetPossibleTargetHighlights(Card card)
+    {
+        boardManager.SetPossibleTargetHighlight(card);
+        hand.SetPossibleTargetHighlight(card);
+    }
+
+    public void ClearPossibleTargetHighlights()
+    {
+        boardManager.ClearPossibleTargetHighlights();
+        hand.ClearPossibleTargetHighlights();
     }
 }
