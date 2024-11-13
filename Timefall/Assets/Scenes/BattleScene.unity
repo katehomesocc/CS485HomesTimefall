@@ -1061,10 +1061,6 @@ MonoBehaviour:
   essenceCount: 0
   currentTurnText: {fileID: 1119059257}
   turnState: 1
-  seekerPlayer: {fileID: 745033238}
-  sovereignPlayer: {fileID: 752113216}
-  stewardPlayer: {fileID: 504536985}
-  weaverPlayer: {fileID: 1378618516}
   scoreboard: {fileID: 762729346}
   scoreboardPanel: {fileID: 508962572}
   scoreboardLabelText: {fileID: 813591763}
@@ -3943,7 +3939,7 @@ MonoBehaviour:
   handPanel: {fileID: 453933977}
   cardsInHand: []
   displaysInHand: []
-  timelineDeck: {fileID: 358142764}
+  timelineDeck: {fileID: 0}
   playerDeckDisplay: {fileID: 39290729}
   targetsAvailable: []
   drawPlayerButton: {fileID: 1503055810}
@@ -20376,6 +20372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f745643495b470b45a1015a5357406a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timelineDeck: {fileID: 358142764}
   autoplay: 0
   autoplayUntilTurn: 32
   autoplayWaitTime: 1.5
@@ -20383,6 +20380,10 @@ MonoBehaviour:
   startOfGamePanel: {fileID: 700815710}
   startOfGameText: {fileID: 1190048822}
   startOfGameCountdownText: {fileID: 1123807178}
+  seekerPlayer: {fileID: 745033238}
+  sovereignPlayer: {fileID: 752113216}
+  stewardPlayer: {fileID: 504536985}
+  weaverPlayer: {fileID: 1378618516}
 --- !u!4 &2051374907
 Transform:
   m_ObjectHideFlags: 0

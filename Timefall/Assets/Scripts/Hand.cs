@@ -62,6 +62,8 @@ public class Hand : MonoBehaviour
         boardManager = BoardManager.Instance;
         battleManager = BattleManager.Instance;
 
+        timelineDeck = battleManager.timelineDeck;
+
 		drawPlayerButton.onClick.AddListener(DrawFromPlayerDeck);
 
 		shufflePlayerButton.onClick.AddListener(ShufflePlayerDeck);
@@ -246,7 +248,7 @@ public class Hand : MonoBehaviour
         }
     }
 
-        void ShuffleTimelineDeck()
+    void ShuffleTimelineDeck()
     {
         ShuffleDeck(timelineDeck);
     }

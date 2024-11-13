@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc051ac83da923c438e4addae26709ed, type: 3}
+  m_Name: EA_Paradox
+  m_EditorClassIdentifier: 
+  PARADOX_TEX: {fileID: 2800000, guid: ef5e6eade042aff41b57761e581e4551, type: 3}
+  CURSOR_PARADOX_TEX: {fileID: 2800000, guid: 2f35c6ced74cba748abbcff0c3565472, type: 3}

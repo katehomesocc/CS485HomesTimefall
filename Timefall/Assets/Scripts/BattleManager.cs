@@ -12,6 +12,8 @@ public class BattleManager : MonoBehaviour
 
     int turn = 1;
 
+    public Deck timelineDeck;
+
     [Header("Autoplay (Development Testing)")]
     public bool autoplay = false;
     public int autoplayUntilTurn = 32;
@@ -23,6 +25,13 @@ public class BattleManager : MonoBehaviour
     public TMP_Text startOfGameText;
 
     public TMP_Text startOfGameCountdownText;
+
+    [Header("Players")]
+    public Player seekerPlayer;
+    public Player sovereignPlayer;
+    public Player stewardPlayer;
+    public Player weaverPlayer;
+
 
     void Awake()
     {
@@ -114,5 +123,35 @@ public class BattleManager : MonoBehaviour
     {
         boardManager.ClearPossibleTargetHighlights();
         hand.ClearPossibleTargetHighlights();
+    }
+
+    public Player GetFactionPlayer(Faction faction)
+    {
+        switch (faction)
+        {
+            case Faction.STEWARDS:
+                return stewardPlayer;
+            case Faction.SEEKERS:
+                return seekerPlayer;
+            case Faction.SOVEREIGNS:
+                return sovereignPlayer;   
+            case Faction.WEAVERS:
+                return weaverPlayer;    
+        }
+
+        return null;
+    }
+
+    public void DiscardToDeck(Card card, Faction faction)
+    {
+        if(faction == Faction.NONE)
+        {
+            timelineDeck.Discard(card);
+            return;
+        }
+
+        Player player = GetFactionPlayer(faction);
+        player.deck.Discard(card);
+        
     }
 }

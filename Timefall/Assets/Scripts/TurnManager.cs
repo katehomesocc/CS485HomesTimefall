@@ -16,6 +16,7 @@ public class TurnManager : MonoBehaviour
     public Button endTurnButton;
 
     BoardManager boardManager;
+    BattleManager battleManager;
 
     Hand hand;
     public FabricOfTime fabricOfTime;
@@ -34,12 +35,6 @@ public class TurnManager : MonoBehaviour
     public TMP_Text currentTurnText;
 
     public TurnState turnState = TurnState.START_OF_GAME;
-
-    [Header("Factions")]
-    public Player seekerPlayer;
-    public Player sovereignPlayer;
-    public Player stewardPlayer;
-    public Player weaverPlayer;
 
     [Header("ScoreBoard")]
     public Scoreboard scoreboard;
@@ -86,6 +81,7 @@ public class TurnManager : MonoBehaviour
     {
         hand = Hand.Instance;
         boardManager = BoardManager.Instance;
+        battleManager = BattleManager.Instance;
     }
 
     // Update is called once per frame
@@ -369,13 +365,13 @@ public class TurnManager : MonoBehaviour
                 weaverRoundVPText.text = "0";
 
                 scoreboard.SetRoundHighlight(round);
-                return stewardPlayer;
+                return battleManager.GetFactionPlayer(Faction.STEWARDS); 
             case 2:
-                return seekerPlayer;
+                return battleManager.GetFactionPlayer(Faction.SEEKERS); 
             case 3:
-                return sovereignPlayer;
+                return battleManager.GetFactionPlayer(Faction.SOVEREIGNS); 
             case 0:
-                return weaverPlayer;    
+                return battleManager.GetFactionPlayer(Faction.WEAVERS);    
         }
 
         return null;

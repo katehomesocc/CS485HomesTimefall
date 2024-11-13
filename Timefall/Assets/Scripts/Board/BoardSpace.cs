@@ -31,9 +31,12 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     public bool isUnlocked = false;
     public bool hasEvent = false;
     public bool hasAgent = false;
-    public bool isTargetable = false;
 
+    public bool isTargetable = false;
     public bool isBeingTargeted = false;
+    
+    public bool shielded = false;
+
     public EventCardDisplay eventDisplay;
     public AgentCardDisplay agentDisplay;
 
@@ -177,6 +180,15 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         this.hasEvent = true;
     }
 
+    public void RemoveEventCard()
+    {
+        Destroy(this.eventDisplay.gameObject);
+
+        this.eventDisplay = null;
+        this.eventCard = null;
+        this.hasEvent = false;
+    }
+
     public void SetAgentCard(AgentCard card)
     {
         this.agentCard = card;
@@ -186,6 +198,14 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         agentImage.texture = agentCard.GetImageTexture();
 
         agentIcon.transform.SetAsLastSibling();
+    }
+
+    public void RemoveAgentCard()
+    {
+        agentIcon.transform.SetAsFirstSibling();
+
+        this.agentCard = null;
+        this.hasAgent = false;
     }
 
     public void Highlight()
