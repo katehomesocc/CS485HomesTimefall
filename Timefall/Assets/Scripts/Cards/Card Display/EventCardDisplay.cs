@@ -6,10 +6,10 @@ using TMPro;
 
 public class EventCardDisplay : CardDisplay
 {
-    public int pos = 0;
+    [Header("Event")]
     public Image borderImage;
 
-    [Header("Victory Points")]
+    [Header("Event / Victory Points")]
     public TMP_Text stewardText;
     public Image stewardImage;
     public TMP_Text seekerText;

@@ -13,8 +13,8 @@ public class Player : MonoBehaviour
 
     public void ChannelCard(CardDisplay cardDisplay)
     {
-        Card card = cardDisplay.displayCard;    
-        card.StartChannel();
-        channelList.Add(card);
+        cardDisplay.ApplyChannelEffect();
+
+        channelList.Add(cardDisplay.displayCard);
     }
 }

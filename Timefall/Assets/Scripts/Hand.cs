@@ -94,70 +94,78 @@ public class Hand : MonoBehaviour
         return targetDeck.Draw();
 	}
 
-    void InstantiateCardInHand(Card card)
+    CardDisplay InstantiateCardInHand(Card card)
     {
         CardType cardType = card.data.cardType;
 
+        CardDisplay returnDisplay;
+        
         switch(cardType) 
         {
             case CardType.AGENT:
-                InstantiateAgentInHand((AgentCard) card);
-
+                returnDisplay = InstantiateAgentInHand((AgentCard) card);
                 break;
             case CardType.ESSENCE:
-                InstantiateEssenceInHand((EssenceCard) card);
+                returnDisplay = InstantiateEssenceInHand((EssenceCard) card);
                 break;
             case CardType.EVENT:
-                InstantiateEventInHand((EventCard) card);
+                returnDisplay = InstantiateEventInHand((EventCard) card);
 
                 break;
             default:
             //Error handling
                 Debug.LogError("Invalid CardData Type: " + cardType);
-                return;
+                return null;
         }
 
         cardsInHand.Add(card);
+        return returnDisplay;
     }
 
-    void InstantiateAgentInHand(AgentCard agentCard)
+    CardDisplay InstantiateAgentInHand(AgentCard agentCard)
     {
         GameObject obj = Instantiate(agentCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
         AgentCardDisplay agentDC = obj.GetComponent<AgentCardDisplay>();
 
-        if(agentDC == null){return;} 
+        if(agentDC == null){return null;} 
 
         agentDC.SetCard(agentCard);
         agentDC.InstantiateInHand(transform);
         agentDC.positionInHand = displaysInHand.Count;
 
         displaysInHand.Add(agentDC);
+        
+        return agentDC;
     }
 
-    void InstantiateEssenceInHand(EssenceCard essenceCard)
+    CardDisplay InstantiateEssenceInHand(EssenceCard essenceCard)
     {
         GameObject obj = Instantiate(essenceCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
         EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
 
-        if(essenceDC == null){return;} 
+        if(essenceDC == null){return null;} 
 
         essenceDC.SetCard(essenceCard);
         essenceDC.InstantiateInHand(transform);
         essenceDC.positionInHand = displaysInHand.Count;
         displaysInHand.Add(essenceDC);
+
+        return essenceDC;
     }
 
-    void InstantiateEventInHand(EventCard eventCard)
+    CardDisplay InstantiateEventInHand(EventCard eventCard)
     {
         GameObject obj = Instantiate(eventCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
         EventCardDisplay eventDC = obj.GetComponent<EventCardDisplay>();
 
-        if(eventDC == null){return;} 
+        if(eventDC == null){return null;} 
 
         eventDC.SetCard(eventCard);
         eventDC.InstantiateInHand(transform);
         eventDC.positionInHand = displaysInHand.Count;
         displaysInHand.Add(eventDC);
+
+        return eventDC;
     }
 
     void ShuffleDeck(Deck targetDeck){
@@ -263,6 +271,11 @@ public class Hand : MonoBehaviour
         turnManager.SetVictoryPointUI();
         turnManager.EnableEndTurnButton();
 
+        staticCards.RemoveAt(0);
+
+        //handle pre turn card effects
+        PreTurnCardEffects();
+
         SetHandState(HandState.CHOOSING);
     }
 
@@ -271,7 +284,22 @@ public class Hand : MonoBehaviour
         if(staticCards.Count == 1)
         {
             PlayInitialTimelineCard(staticCards[0]);
-            staticCards.RemoveAt(0);
+        }
+    }
+
+    void PreTurnCardEffects()
+    {
+        ResolveChannelEffects();
+    }
+
+    void ResolveChannelEffects()
+    {
+        foreach (CardDisplay display in displaysInHand)
+        {
+            if(display.displayCard.channeling)
+            {
+                display.RemoveChannelEffect();
+            }
         }
     }
 
@@ -301,8 +329,8 @@ public class Hand : MonoBehaviour
 
         foreach (Card channelCard in channelList)
         {
-            channelCard.EndChannel();
-            InstantiateCardInHand(channelCard);
+            CardDisplay channelDisplay = InstantiateCardInHand(channelCard);
+            channelDisplay.ApplyChannelEffect();
         }
 
         player.channelList.Clear();
@@ -390,7 +418,7 @@ public class Hand : MonoBehaviour
             EssenceCard essenceCard = ecDisplay.PlayFromHand();
 
             cardPlaying = essenceCard;
-            cardPlayingIndex = ecDisplay.positionInHand;
+            cardPlayingIndex = ecDisplay.GetPositionInHand();
 
         }
 
@@ -408,7 +436,7 @@ public class Hand : MonoBehaviour
             AgentCard agentCard = acDisplay.PlayFromHand();
 
             cardPlaying = agentCard;
-            cardPlayingIndex = acDisplay.positionInHand;
+            cardPlayingIndex = acDisplay.GetPositionInHand();
 
         }
     }

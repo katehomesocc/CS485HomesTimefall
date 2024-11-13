@@ -6,12 +6,10 @@ using TMPro;
 
 public class AgentCardDisplay : CardDisplay
 {
+    [Header("Agent")]
     public TMP_Text factionText;
     public TMP_Text diceTypeText;
     public TMP_Text diceCostText;
-
-    public int pos = 0;
-
     public Image diceImage;
     public Image borderImage;
 

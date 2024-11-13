@@ -38,6 +38,9 @@ public class CardDisplay : MonoBehaviour,
     public static Color COLOUR_STEWARDS = new Color(24f/255,147f/255,248f/255, 1f);
     public static Color COLOUR_WEAVERS = new Color(97f/255,65f/255,172f/255, 1f);
 
+    [Header("Effects")]
+    public GameObject channelEffect;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -309,10 +312,26 @@ public class CardDisplay : MonoBehaviour,
         selectionImage.enabled = false;
     }
 
-    public void ChannelCard()
+    public void ApplyChannelEffect()
     {
-        displayCard.channeling = true;
+        displayCard.StartChannel();
+        channelEffect.SetActive(true);
     }
 
+    public void RemoveChannelEffect()
+    {
+        displayCard.EndChannel();
+        channelEffect.SetActive(false);
+    }
+
+    public int GetPositionInHand()
+    {
+        if(!inHand)
+        {
+            return -1;
+        }
+
+        return this.transform.GetSiblingIndex();
+    }
 
 }
