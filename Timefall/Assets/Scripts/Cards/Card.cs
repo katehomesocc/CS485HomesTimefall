@@ -9,7 +9,9 @@ public class Card
     public List<BoardSpace> boardTargets = new List<BoardSpace>();
     public List<CardDisplay> handTargets = new List<CardDisplay>();
 
+    [Header("Effects")]
     public bool channeling = false;
+    public bool shielded = false;
 
     public Card()
     {

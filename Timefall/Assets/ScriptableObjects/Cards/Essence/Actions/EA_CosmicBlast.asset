@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc024ebc8f57b374cb76ca833afc539d, type: 3}
+  m_Name: EA_CosmicBlast
+  m_EditorClassIdentifier: 
+  COSMIC_BLAST_TEX: {fileID: 2800000, guid: 901976f625fb173468d029ff5100fe31, type: 3}
+  CURSOR_COSMIC_BLAST_TEX: {fileID: 2800000, guid: d3ee5c92060ef4249aeede7e3d2ee51c,
+    type: 3}
