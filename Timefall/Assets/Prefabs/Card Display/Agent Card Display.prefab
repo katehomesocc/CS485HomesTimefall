@@ -406,7 +406,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: b712b20f4b5e6d44bbc9771331d175fb, type: 3}
+  m_Texture: {fileID: 2800000, guid: 0d70c76e55de68645bc55079cf1462b4, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -743,6 +743,7 @@ MonoBehaviour:
   inPlaceAnimation: 0
   isTargetable: 0
   isBeingTargeted: 0
+  onInventory: 0
   channelEffect: {fileID: 4349072201132833201}
   factionText: {fileID: 2483684380081832322}
   diceTypeText: {fileID: 96241212314246200}
@@ -1141,7 +1142,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: b712b20f4b5e6d44bbc9771331d175fb, type: 3}
+  m_Texture: {fileID: 2800000, guid: 0d70c76e55de68645bc55079cf1462b4, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0

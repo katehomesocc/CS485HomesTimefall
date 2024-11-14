@@ -555,7 +555,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: b712b20f4b5e6d44bbc9771331d175fb, type: 3}
+  m_Texture: {fileID: 2800000, guid: 0d70c76e55de68645bc55079cf1462b4, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1344,6 +1344,7 @@ MonoBehaviour:
     boardTargets: []
     handTargets: []
     channeling: 0
+    shielded: 0
   returnParent: {fileID: 0}
   positionInHand: -1
   selectionImage: {fileID: 8315982465142336593}
@@ -1357,6 +1358,7 @@ MonoBehaviour:
   inPlaceAnimation: 0
   isTargetable: 0
   isBeingTargeted: 0
+  onInventory: 0
   channelEffect: {fileID: 3546485451983473866}
   borderImage: {fileID: 5516196661500028631}
   stewardText: {fileID: 915036791275505396}
@@ -1521,7 +1523,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: b712b20f4b5e6d44bbc9771331d175fb, type: 3}
+  m_Texture: {fileID: 2800000, guid: 0d70c76e55de68645bc55079cf1462b4, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
