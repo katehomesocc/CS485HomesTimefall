@@ -31,12 +31,7 @@ public class CardDisplay : MonoBehaviour,
     public bool inPlaceAnimation = false;
     public bool isTargetable = false;
     public bool isBeingTargeted = false;
-
-    [Header("Colors [NEED TO MOVE TO CORRECT CLASS]")] //TODO: move this somewhere that makes sense
-    public static Color COLOUR_SEEKERS = new Color(33f/255,197f/255,104f/255, 1f);
-    public static Color COLOUR_SOVEREIGNS = new Color(255f/255,35f/255,147f/255, 1f);
-    public static Color COLOUR_STEWARDS = new Color(24f/255,147f/255,248f/255, 1f);
-    public static Color COLOUR_WEAVERS = new Color(97f/255,65f/255,172f/255, 1f);
+    public bool onInventory = false;
 
     [Header("Effects")]
     public GameObject channelEffect;
@@ -54,23 +49,6 @@ public class CardDisplay : MonoBehaviour,
 
         HighlightOff();
         
-    }
-
-    public static Color GetFactionColor(Faction faction)
-    {
-        switch(faction) 
-        {
-            case Faction.WEAVERS:
-                return COLOUR_WEAVERS;
-            case Faction.SEEKERS:
-                return COLOUR_SEEKERS;
-            case Faction.SOVEREIGNS:
-                return COLOUR_SOVEREIGNS;
-            case Faction.STEWARDS:
-                return COLOUR_STEWARDS;
-        }
-
-        return Color.black;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -134,6 +112,9 @@ public class CardDisplay : MonoBehaviour,
                 case "BOARD":
                     onBoard = true;
                     break;
+                case "INVENTORY":
+                    onInventory = true;
+                    break;
             }
 
             hand = Hand.Instance;
@@ -149,8 +130,15 @@ public class CardDisplay : MonoBehaviour,
         transform.localScale =  new Vector3(0.55f, 0.55f, 0.55f);
 
         Place(handParent, "HAND");
+    }
 
-        
+    public void InstantiateInInventory(Transform handParent)
+    {
+        transform.SetParent(handParent, false);
+
+        // transform.localScale =  new Vector3(0.55f, 0.55f, 0.55f);
+
+        Place(handParent, "INVENTORY");
     }
 
     //Detect if the Cursor starts to pass over the GameObject
@@ -324,12 +312,8 @@ public class CardDisplay : MonoBehaviour,
         channelEffect.SetActive(false);
     }
 
-    public int GetPositionInHand()
+    public int GetPositionInParent()
     {
-        if(!inHand)
-        {
-            return -1;
-        }
 
         return this.transform.GetSiblingIndex();
     }

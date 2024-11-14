@@ -13,6 +13,7 @@ public class BattleManager : MonoBehaviour
     int turn = 1;
 
     public Deck timelineDeck;
+    public CardInventoryDisplay inventory;
 
     [Header("Autoplay (Development Testing)")]
     public bool autoplay = false;
@@ -31,6 +32,23 @@ public class BattleManager : MonoBehaviour
     public Player sovereignPlayer;
     public Player stewardPlayer;
     public Player weaverPlayer;
+
+    [Header("Skyboxes")]
+    public Material seekerSkybox;
+    public Material sovereignSkybox;
+    public Material stewardSkybox;
+    public Material weaverSkybox;
+
+    [Header("Card Display Prefabs")]
+    public GameObject agentCardDisplay;
+    public GameObject essenceCardDisplay;
+    public GameObject eventCardDisplay;
+
+    [Header("Colors")]
+    public static Color COLOUR_SEEKERS = new Color(33f/255,197f/255,104f/255, 1f);
+    public static Color COLOUR_SOVEREIGNS = new Color(255f/255,35f/255,147f/255, 1f);
+    public static Color COLOUR_STEWARDS = new Color(24f/255,147f/255,248f/255, 1f);
+    public static Color COLOUR_WEAVERS = new Color(97f/255,65f/255,172f/255, 1f);
 
 
     void Awake()
@@ -142,6 +160,40 @@ public class BattleManager : MonoBehaviour
         return null;
     }
 
+    Material GetFactionSkybox(Faction faction)
+    {
+        switch (faction)
+        {
+            case Faction.STEWARDS:
+                return stewardSkybox;
+            case Faction.SEEKERS:
+                return seekerSkybox;
+            case Faction.SOVEREIGNS:
+                return sovereignSkybox; 
+            case Faction.WEAVERS:
+                return weaverSkybox;  
+        }
+
+        return null;
+    }
+
+    public static Color GetFactionColor(Faction faction)
+    {
+        switch(faction) 
+        {
+            case Faction.WEAVERS:
+                return COLOUR_WEAVERS;
+            case Faction.SEEKERS:
+                return COLOUR_SEEKERS;
+            case Faction.SOVEREIGNS:
+                return COLOUR_SOVEREIGNS;
+            case Faction.STEWARDS:
+                return COLOUR_STEWARDS;
+        }
+
+        return Color.black;
+    }
+
     public void DiscardToDeck(Card card, Faction faction)
     {
         if(faction == Faction.NONE)
@@ -153,5 +205,22 @@ public class BattleManager : MonoBehaviour
         Player player = GetFactionPlayer(faction);
         player.deck.Discard(card);
         
+    }
+
+    public void SetSkybox(Faction faction)
+    {
+        RenderSettings.skybox = GetFactionSkybox(faction);
+    }
+
+    public void SetAndShowInventory(List<Card> cardsToDisplay)
+    {
+        inventory.SetInventory(cardsToDisplay);
+        inventory.OpenInventory();
+    }
+
+    public void ClearAndCloseInventory()
+    {
+        inventory.ClearInventory();
+        inventory.CloseInventory();
     }
 }

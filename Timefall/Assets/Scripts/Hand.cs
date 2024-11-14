@@ -19,16 +19,16 @@ public class Hand : MonoBehaviour
     public DeckDisplay playerDeckDisplay;
     public List<CardDisplay> targetsAvailable = new List<CardDisplay>();
 
+        // [Header("Card Display Prefabs")]
+    GameObject agentCardDisplay;
+    GameObject essenceCardDisplay;
+    GameObject eventCardDisplay;
+
     [Header("Buttons")]
     public Button drawPlayerButton;
     public Button shufflePlayerButton;
     public Button drawTimelineButton;
     public Button shuffleTimelineButton;
-
-    [Header("Card Display Prefabs")]
-    public GameObject agentCardDisplay;
-    public GameObject essenceCardDisplay;
-    public GameObject eventCardDisplay;
 
     [Header("Expanded Card View")]
     public Transform expandedHoverTransform;
@@ -63,6 +63,11 @@ public class Hand : MonoBehaviour
         battleManager = BattleManager.Instance;
 
         timelineDeck = battleManager.timelineDeck;
+
+        agentCardDisplay = battleManager.agentCardDisplay;
+        essenceCardDisplay = battleManager.essenceCardDisplay;
+        eventCardDisplay = battleManager.eventCardDisplay;
+
 
 		drawPlayerButton.onClick.AddListener(DrawFromPlayerDeck);
 
@@ -420,7 +425,7 @@ public class Hand : MonoBehaviour
             EssenceCard essenceCard = ecDisplay.PlayFromHand();
 
             cardPlaying = essenceCard;
-            cardPlayingIndex = ecDisplay.GetPositionInHand();
+            cardPlayingIndex = ecDisplay.GetPositionInParent();
 
         }
 
@@ -438,7 +443,7 @@ public class Hand : MonoBehaviour
             AgentCard agentCard = acDisplay.PlayFromHand();
 
             cardPlaying = agentCard;
-            cardPlayingIndex = acDisplay.GetPositionInHand();
+            cardPlayingIndex = acDisplay.GetPositionInParent();
 
         }
     }

@@ -194,7 +194,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         this.agentCard = card;
         this.hasAgent = true;
 
-        agentIcon.color = CardDisplay.GetFactionColor(agentCard.GetFaction());
+        agentIcon.color = BattleManager.GetFactionColor(agentCard.GetFaction());
         agentImage.texture = agentCard.GetImageTexture();
 
         agentIcon.transform.SetAsLastSibling();

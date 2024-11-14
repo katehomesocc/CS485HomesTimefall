@@ -122,17 +122,18 @@ public class ParadoxEssenceAction : EssenceAction
     {
         BoardSpace target = boardTargets[0];
 
-        EventCard eventToDiscard = target.eventCard;
-        AgentCard agentToDiscard = target.agentCard;
-        
-        target.RemoveEventCard();
-        target.RemoveAgentCard();
-
         //send event to timeline discard
+        EventCard eventToDiscard = target.eventCard;
+        target.RemoveEventCard();
         BattleManager.Instance.DiscardToDeck(eventToDiscard, Faction.NONE);
 
-        //send agent to its factions discard pile
-        BattleManager.Instance.DiscardToDeck(agentToDiscard, agentToDiscard.GetFaction());
+        if(target.hasAgent)
+        {
+            //send agent to its factions discard pile
+            AgentCard agentToDiscard = target.agentCard;
+            target.RemoveAgentCard();
+            BattleManager.Instance.DiscardToDeck(agentToDiscard, agentToDiscard.GetFaction());
+        }
         
         EndAction(boardTargets, null);
     }

@@ -37,7 +37,7 @@ public class EventCardDisplay : CardDisplay
         //victory points
         SetVictoryPoints(eventData.victoryPoints);
     
-        SetFactionColors(GetFactionColor(eventData.faction));
+        SetFactionColors(BattleManager.GetFactionColor(eventData.faction));
         
     }
 

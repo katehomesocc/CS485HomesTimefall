@@ -33,7 +33,12 @@ public class DeckDisplay : MonoBehaviour
     public void SetPlayerDeck(Faction faction, Deck playerDeck)
     {
         this.deck = playerDeck;
-        border.color = CardDisplay.GetFactionColor(faction);
+        border.color = BattleManager.GetFactionColor(faction);
         UpdateCountText();
+    }
+
+    public void ViewDiscardPile()
+    {
+        deck.ShowDiscardInventory();
     }
 }

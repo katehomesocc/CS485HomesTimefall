@@ -34,7 +34,7 @@ public class AgentCardDisplay : CardDisplay
         diceCostText.text = cardData.diceCost.ToString();
     
         SetFactionText(cardData.faction);
-        SetFactionColors(GetFactionColor(cardData.faction));
+        SetFactionColors(BattleManager.GetFactionColor(cardData.faction));
         
     }
 

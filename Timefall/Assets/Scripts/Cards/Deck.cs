@@ -12,6 +12,8 @@ public class Deck : MonoBehaviour
 
     public List<Card> discardPile = new List<Card>();
 
+    BattleManager battleManager;
+
 
     private void Awake() {
 
@@ -25,7 +27,11 @@ public class Deck : MonoBehaviour
             cardList.Add(card);
         }
         Shuffle();
-        // UpdateCountText(); 
+    }
+
+    private void Start()
+    {
+        battleManager = BattleManager.Instance;
     }
 
     private Card GetCardFromCardData(CardData cardData)
@@ -48,20 +54,6 @@ public class Deck : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        // cardList.AddRange(cardDB.cardList);
-        // Shuffle();
-        // UpdateCountText(); 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     // Fisher-Yates shuffle: http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
     public void Shuffle()
     {
@@ -81,7 +73,6 @@ public class Deck : MonoBehaviour
         if(cardList.Count < 1) { return null;}
         Card drawnCard = cardList[0];
         cardList.RemoveAt(0);
-        // UpdateCountText();
 
         return drawnCard;
     }
@@ -94,22 +85,20 @@ public class Deck : MonoBehaviour
         return drawnCard;
     }
 
-    // void UpdateCountText()
-    // {
-    //     deckCountTMP.text = cardList.Count.ToString();
-    //     discardCountTMP.text = discardPile.Count.ToString();
-    // }
-
     public void Discard(Card card)
     {
         discardPile.Add(card);
-        // UpdateCountText();
     }
 
     public void ShuffleHandBackIn(List<Card> hand)
     {
         cardList.AddRange(hand);
         Shuffle();
+    }
+
+    public void ShowDiscardInventory()
+    {
+        battleManager.SetAndShowInventory(discardPile);
     }
 
 }

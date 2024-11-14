@@ -53,7 +53,7 @@ public class ScoreboardRow : MonoBehaviour
 
     public void ShowWinner(Faction faction)
     {
-        gemImage.color = CardDisplay.GetFactionColor(faction);
+        gemImage.color = BattleManager.GetFactionColor(faction);
         // winnerText.text = "+5";
         winnerBox.SetActive(true);
     }

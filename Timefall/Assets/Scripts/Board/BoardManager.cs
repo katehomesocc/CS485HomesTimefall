@@ -31,7 +31,7 @@ public class BoardManager : MonoBehaviour
     public void UnlockSpace(int _round, Faction faction)
     {
         round = _round;
-        Color color = CardDisplay.GetFactionColor(faction);
+        Color color = BattleManager.GetFactionColor(faction);
         spaces[round-1].Unlock(color);
     }
 

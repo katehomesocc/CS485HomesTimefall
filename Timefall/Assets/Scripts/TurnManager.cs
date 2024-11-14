@@ -331,6 +331,8 @@ public class TurnManager : MonoBehaviour
 
         DisableEndTurnButton();
 
+        battleManager.SetSkybox(currentFaction);
+
         StartFactionTurn();
 
         yield break;
