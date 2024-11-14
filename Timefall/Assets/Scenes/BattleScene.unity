@@ -3157,6 +3157,7 @@ GameObject:
   - component: {fileID: 370364225}
   - component: {fileID: 370364227}
   - component: {fileID: 370364226}
+  - component: {fileID: 370364228}
   m_Layer: 0
   m_Name: Sovereigns
   m_TagString: Untagged
@@ -3221,6 +3222,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 370364224}
   m_CullTransparentMesh: 1
+--- !u!114 &370364228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370364224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cd237673db7cb5438bf4048ab47d80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 752113216}
 --- !u!224 &384481822 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4167534855153046144, guid: 03f8233dc777f4447bbc54d288b61dd6,
@@ -4533,6 +4547,7 @@ GameObject:
   - component: {fileID: 463558553}
   - component: {fileID: 463558555}
   - component: {fileID: 463558554}
+  - component: {fileID: 463558556}
   m_Layer: 0
   m_Name: Seekers
   m_TagString: Untagged
@@ -4597,6 +4612,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 463558552}
   m_CullTransparentMesh: 1
+--- !u!114 &463558556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463558552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cd237673db7cb5438bf4048ab47d80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 745033238}
 --- !u!1 &471557763
 GameObject:
   m_ObjectHideFlags: 0
@@ -6946,6 +6974,7 @@ GameObject:
   - component: {fileID: 696070028}
   - component: {fileID: 696070030}
   - component: {fileID: 696070029}
+  - component: {fileID: 696070031}
   m_Layer: 0
   m_Name: Weavers
   m_TagString: Untagged
@@ -7010,6 +7039,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 696070027}
   m_CullTransparentMesh: 1
+--- !u!114 &696070031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696070027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cd237673db7cb5438bf4048ab47d80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1378618516}
 --- !u!1 &700815710
 GameObject:
   m_ObjectHideFlags: 0
@@ -15529,6 +15571,7 @@ GameObject:
   - component: {fileID: 1495272124}
   - component: {fileID: 1495272126}
   - component: {fileID: 1495272125}
+  - component: {fileID: 1495272127}
   m_Layer: 0
   m_Name: Stewards
   m_TagString: Untagged
@@ -15593,6 +15636,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1495272123}
   m_CullTransparentMesh: 1
+--- !u!114 &1495272127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495272123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cd237673db7cb5438bf4048ab47d80a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 504536985}
 --- !u!224 &1495960974 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6543511027430123864, guid: 70d42c402e3d1b64f8435f4a9efe06b0,
