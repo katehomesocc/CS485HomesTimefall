@@ -9,14 +9,17 @@ public class AgentIcon : MonoBehaviour
     public RawImage border;
     public RawImage agentImage;
     public GameObject shieldIcon;
+    
+    public AgentCard agentCard;
 
-    public void SetAgent(AgentCard agentCard)
+    public void SetAgent(AgentCard agent)
     {
-        Debug.Log(string.Format("before set : [{0}]", transform.GetSiblingIndex()));
-        border.color = BattleManager.GetFactionColor(agentCard.GetFaction());
-        agentImage.texture = agentCard.GetImageTexture();
+        this.agentCard = agent;
+
+        this.border.color = BattleManager.GetFactionColor(agentCard.GetFaction());
+        this.agentImage.texture = agentCard.GetImageTexture();
+
         this.transform.SetAsLastSibling(); 
-        Debug.Log(string.Format("after set : [{0}]", transform.GetSiblingIndex()));
     }
 
     public void EquipShield()
@@ -26,6 +29,11 @@ public class AgentIcon : MonoBehaviour
     public void ShieldExpired()
     {
         shieldIcon.SetActive(false);
+    }
+
+    public void ResolveStartOfTurn()
+    {
+        agentCard.ResolveShieldEffect();
     }
         
 }

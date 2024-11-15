@@ -326,6 +326,8 @@ public class CardDisplay : MonoBehaviour,
             RemoveChannelEffect();
         }
 
+        displayCard.ResolveShieldEffect();
+
         //TODO handle visual effects
     }
 

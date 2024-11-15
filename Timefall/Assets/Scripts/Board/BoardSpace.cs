@@ -269,7 +269,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
         if(hasAgent)
         {
-            //TODO: handle agent start of turn
+            agentIcon.ResolveStartOfTurn();
         }
     }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shield : MonoBehaviour
+public class Shield
 {
     Player owner;
     Expiration expiration = Expiration.NONE;
@@ -30,6 +30,7 @@ public class Shield : MonoBehaviour
     {
         if(agentTargeted)
         {
+            Debug.Log("SHIELD: agent targeted");
             targetSpace.AgentShieldExpired();
         }
 
@@ -38,7 +39,7 @@ public class Shield : MonoBehaviour
             
         // }
         //TODO: animation
-        Destroy(this);
+        //Destroy(this);
     }
 
     public void StartOfTurn()
@@ -46,10 +47,16 @@ public class Shield : MonoBehaviour
         switch (expiration)
         {
             case Expiration.NONE:
+                Debug.Log("SHIELD: Expiration.NONE");
                 return;
             case Expiration.NEXT_TURN:
+                if(owner != TurnManager.Instance.GetCurrentPlayer()){
+                    Debug.Log("SHIELD: Expiration.NEXT_TURN");
+                    return;
+                }   
+                Debug.Log("SHIELD: Expiring now :(");
                 Expire();
-            break;
+                break;
             default:
                 return;
         }

@@ -544,9 +544,10 @@ public class TurnManager : MonoBehaviour
         return currentPlayer;
     }
 
-    void ResolveStartOfTurn()
+    public void ResolveStartOfTurn()
     {
-        
+        hand.ResolveStartOfTurnInHand();
+        boardManager.ResolveStartOfTurnOnBoard();
     }
 
     

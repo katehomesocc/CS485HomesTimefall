@@ -280,8 +280,7 @@ public class Hand : MonoBehaviour
 
         staticCards.RemoveAt(0);
 
-        //handle start of turn card effects
-        ResolveCardStartOfTurn();
+        turnManager.ResolveStartOfTurn();
 
         SetHandState(HandState.CHOOSING);
     }
@@ -294,7 +293,7 @@ public class Hand : MonoBehaviour
         }
     }
 
-    void ResolveCardStartOfTurn()
+    public void ResolveStartOfTurnInHand()
     {
         foreach (CardDisplay display in displaysInHand)
         {

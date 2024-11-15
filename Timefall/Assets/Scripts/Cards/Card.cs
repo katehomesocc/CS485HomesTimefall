@@ -88,4 +88,14 @@ public class Card
         shield = null;
         shielded = false;
     }
+
+    public void ResolveShieldEffect()
+    {
+        if(!shielded)
+        {
+            return;
+        }
+
+        shield.StartOfTurn();
+    }
 }
