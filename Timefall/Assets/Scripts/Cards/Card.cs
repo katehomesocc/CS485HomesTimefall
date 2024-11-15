@@ -13,6 +13,8 @@ public class Card
     public bool channeling = false;
     public bool shielded = false;
 
+    public Shield shield;
+
     public Card()
     {
 
@@ -38,12 +40,12 @@ public class Card
         return data.image;
     }
 
-    public virtual void SelectTarget(BoardSpace boardSpace)
+    public virtual void SelectTarget(BoardSpace boardSpace, Player player)
     {
         return; //override
     }
 
-    public virtual void SelectTarget(CardDisplay handTarget)
+    public virtual void SelectTarget(CardDisplay handTarget, Player player)
     {
         return; //override
     }
@@ -73,5 +75,17 @@ public class Card
         EndChannel();
 
         return true;
+    }
+
+    public void EquipShield(Shield equip)
+    {
+        shield = equip;
+        shielded = true;
+    }
+
+    public void ShieldExpired()
+    {
+        shield = null;
+        shielded = false;
     }
 }

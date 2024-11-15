@@ -69,12 +69,12 @@ public class ChannelEssenceAction : EssenceAction
         return null;
     }
 
-    public override void SelectTarget(BoardSpace boardSpace, List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+    public override void SelectTarget(BoardSpace boardSpace, List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
     {
         return;
     }
 
-    public override void SelectTarget(CardDisplay handTarget, List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+    public override void SelectTarget(CardDisplay handTarget, List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
     {
         if(handTargets.Count != 0)
         {
@@ -85,14 +85,14 @@ public class ChannelEssenceAction : EssenceAction
 
         Cursor.SetCursor(GetCursorTexture(null, handTargets), Vector2.zero, CursorMode.Auto);
 
-        Channel(handTarget, handTargets);
+        Channel(handTarget, handTargets, player);
 
         return;
     }
 
 
 
-    public override void StartAction(List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+    public override void StartAction(List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
     {
         Cursor.SetCursor(GetCursorTexture(null, handTargets), Vector2.zero, CursorMode.Auto);
     }
@@ -115,12 +115,10 @@ public class ChannelEssenceAction : EssenceAction
         hand.RemoveCardAfterPlaying();
     }
 
-    private void Channel(CardDisplay handTarget, List<CardDisplay> handTargets)
+    private void Channel(CardDisplay handTarget, List<CardDisplay> handTargets, Player player)
     {
 
-        Player currentPlayer = TurnManager.Instance.GetCurrentPlayer();
-
-        currentPlayer.ChannelCard(handTarget);
+        player.ChannelCard(handTarget);
 
         //end of action
         EndAction(null, handTargets);

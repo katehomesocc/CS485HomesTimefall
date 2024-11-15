@@ -38,15 +38,14 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     public bool shielded = false;
 
     public EventCardDisplay eventDisplay;
-    public AgentCardDisplay agentDisplay;
+    // public AgentCardDisplay agentDisplay;
 
     [Header("Event")]
     public EventCard eventCard;
 
     [Header("Agent")]
     public AgentCard agentCard;
-    public RawImage agentImage;
-    public RawImage agentIcon;
+    public AgentIcon agentIcon;
 
     void Start()
     {
@@ -74,7 +73,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
             {
                 EssenceCard essenceCard = (EssenceCard) card;
                 
-                essenceCard.SelectTarget(this);  
+                essenceCard.SelectTarget(this, turnManager.GetCurrentPlayer());  
             }
             
 
@@ -194,10 +193,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         this.agentCard = card;
         this.hasAgent = true;
 
-        agentIcon.color = BattleManager.GetFactionColor(agentCard.GetFaction());
-        agentImage.texture = agentCard.GetImageTexture();
-
-        agentIcon.transform.SetAsLastSibling();
+        agentIcon.SetAgent(agentCard);
     }
 
     public void RemoveAgentCard()
@@ -273,8 +269,20 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
         if(hasAgent)
         {
-            agentDisplay.ResolveStartOfTurn();
+            //TODO: handle agent start of turn
         }
+    }
+
+    public void AgentEquiptShield(Shield shield)
+    {
+        agentCard.EquipShield(shield);
+        agentIcon.EquipShield();
+    }
+
+    public void AgentShieldExpired()
+    {
+        agentCard.ShieldExpired();
+        agentIcon.ShieldExpired();
     }
     
 }

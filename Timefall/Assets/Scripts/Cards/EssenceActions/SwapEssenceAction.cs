@@ -90,7 +90,7 @@ public class SwapEssenceAction : EssenceAction
         return null;
     }
 
-    public override void SelectTarget(BoardSpace boardSpace, List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+    public override void SelectTarget(BoardSpace boardSpace, List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
     {
         if(boardTargets.Count < 2)
         {
@@ -110,12 +110,12 @@ public class SwapEssenceAction : EssenceAction
         }
     }
 
-    public override void SelectTarget(CardDisplay handTarget, List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+    public override void SelectTarget(CardDisplay handTarget, List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
     {
         return;
     }
 
-    public override void StartAction(List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+    public override void StartAction(List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
     {
         Cursor.SetCursor(GetCursorTexture(boardTargets), Vector2.zero, CursorMode.Auto);
     }

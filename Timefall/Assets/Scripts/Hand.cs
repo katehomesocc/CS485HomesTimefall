@@ -414,7 +414,7 @@ public class Hand : MonoBehaviour
             battleManager.SetPossibleTargetHighlights(ecDisplay.displayCard);
 
             //start essence action
-            EssenceCard essenceCard = ecDisplay.PlayFromHand();
+            EssenceCard essenceCard = ecDisplay.PlayFromHand(turnManager.GetCurrentPlayer());
 
             cardPlaying = essenceCard;
             cardPlayingIndex = ecDisplay.GetPositionInParent();
@@ -442,12 +442,12 @@ public class Hand : MonoBehaviour
 
     public void SelectTarget(BoardSpace boardSpace)
     {
-        cardPlaying.SelectTarget(boardSpace);
+        cardPlaying.SelectTarget(boardSpace, turnManager.GetCurrentPlayer());
     }
 
     public void SelectTarget(CardDisplay handDisplay)
     {
-        cardPlaying.SelectTarget(handDisplay);
+        cardPlaying.SelectTarget(handDisplay, turnManager.GetCurrentPlayer());
     }
 
     public void SetHandState(HandState newHandState)

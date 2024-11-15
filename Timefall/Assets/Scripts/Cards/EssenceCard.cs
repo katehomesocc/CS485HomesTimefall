@@ -40,19 +40,19 @@ public class EssenceCard : Card
         return essenceCardData.GetTargatableHandDisplays(handDisplays, handTargets);
     }
 
-    public override void SelectTarget(BoardSpace boardSpace)
+    public override void SelectTarget(BoardSpace boardSpace, Player player)
     {
-        GetEssenceAction().SelectTarget(boardSpace, boardTargets, handTargets);
+        GetEssenceAction().SelectTarget(boardSpace, boardTargets, handTargets, player);
     }
 
-    public override void SelectTarget(CardDisplay handDisplay)
+    public override void SelectTarget(CardDisplay handDisplay, Player player)
     {
-        GetEssenceAction().SelectTarget(handDisplay, boardTargets, handTargets);
+        GetEssenceAction().SelectTarget(handDisplay, boardTargets, handTargets, player);
     }
 
-    public void StartAction()
+    public void StartAction(Player player)
     {
-        GetEssenceAction().StartAction(boardTargets, handTargets);
+        GetEssenceAction().StartAction(boardTargets, handTargets, player);
     }
 
     

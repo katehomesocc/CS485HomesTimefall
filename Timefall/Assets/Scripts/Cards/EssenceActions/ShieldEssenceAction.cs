@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "New PARADOX Essence Action", menuName = "Essence Action/PARADOX")]
+[CreateAssetMenu(fileName = "New SHIELD Essence Action", menuName = "Essence Action/SHIELD")]
 [System.Serializable]
-public class ParadoxEssenceAction : EssenceAction
+public class ShieldEssenceAction : EssenceAction
 {
-    public Texture PARADOX_TEX;
+    public Texture SHIELD_TEX;
 
-    public Texture2D CURSOR_PARADOX_TEX;
+    public Texture2D CURSOR_SHIELD_TEX;
 
     public override bool CanBePlayed(List<BoardSpace> potentialBoardTargets, List<CardDisplay> potentialHandTargets)
     {
@@ -18,8 +18,8 @@ public class ParadoxEssenceAction : EssenceAction
 
     public override bool CanTargetSpace(BoardSpace boardSpace, List<BoardSpace> boardTargets)
     {   
-        //must have an event & not being shielded 
-        if(!boardSpace.hasEvent || boardSpace.shielded) { return false ;}
+        //must have an agent & agent must not be sheilded
+        if(!boardSpace.hasAgent || boardSpace.agentCard.shielded) { return false ;}
 
         return true;
     }
@@ -54,7 +54,7 @@ public class ParadoxEssenceAction : EssenceAction
     {
         if(boardTargets.Count == 0)
         {
-            return PARADOX_TEX;
+            return SHIELD_TEX;
         }
 
         return null;
@@ -64,7 +64,7 @@ public class ParadoxEssenceAction : EssenceAction
     {
         if(boardTargets.Count == 0)
         {
-            return CURSOR_PARADOX_TEX;
+            return CURSOR_SHIELD_TEX;
         }
 
         return null;
@@ -86,7 +86,7 @@ public class ParadoxEssenceAction : EssenceAction
 
         if(boardTargets.Count == 1)
         {
-            Paradox(boardTargets);
+            Shield(boardTargets, player);
         }
     }
 
@@ -118,22 +118,13 @@ public class ParadoxEssenceAction : EssenceAction
         hand.RemoveCardAfterPlaying();
     }
 
-    private void Paradox(List<BoardSpace> boardTargets)
+    private void Shield(List<BoardSpace> boardTargets, Player owner)
     {
         BoardSpace target = boardTargets[0];
 
-        //send event to timeline discard
-        EventCard eventToDiscard = target.eventCard;
-        target.RemoveEventCard();
-        BattleManager.Instance.DiscardToDeck(eventToDiscard, Faction.NONE);
-
-        if(target.hasAgent)
-        {
-            //send agent to its factions discard pile
-            AgentCard agentToDiscard = target.agentCard;
-            target.RemoveAgentCard();
-            BattleManager.Instance.DiscardToDeck(agentToDiscard, agentToDiscard.GetFaction());
-        }
+        Shield shield = new Shield(owner, Expiration.NEXT_TURN, target, false, true);
+        
+        target.AgentEquiptShield(shield);
         
         EndAction(boardTargets, null);
     }

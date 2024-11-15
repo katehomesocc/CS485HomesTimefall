@@ -18,7 +18,7 @@ public class AgentCard : Card
         agentCardData = (AgentCardData) data;
     }
 
-    public override void SelectTarget(BoardSpace boardSpace)
+    public override void SelectTarget(BoardSpace boardSpace, Player player)
     {
         isOnBoard = true;
         boardSpace.SetAgentCard(this);

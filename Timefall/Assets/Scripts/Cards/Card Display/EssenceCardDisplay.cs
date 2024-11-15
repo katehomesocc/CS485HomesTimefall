@@ -30,11 +30,11 @@ public class EssenceCardDisplay : CardDisplay
         return (EssenceCard) displayCard;
     }
 
-    public EssenceCard PlayFromHand()
+    public EssenceCard PlayFromHand(Player player)
     {
         Vector3 newPosition = this.transform.position + new Vector3(0, 50, 0);
         StartCoroutine(this.MoveToPosition(newPosition, 0.25f));
-        GetEssenceCard().StartAction();
+        GetEssenceCard().StartAction(player);
         return GetEssenceCard();
     }
 
