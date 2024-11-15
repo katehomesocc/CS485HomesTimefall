@@ -544,5 +544,10 @@ public class TurnManager : MonoBehaviour
         return currentPlayer;
     }
 
+    void ResolveStartOfTurn()
+    {
+        
+    }
+
     
 }

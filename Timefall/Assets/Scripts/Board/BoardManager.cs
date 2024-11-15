@@ -181,4 +181,12 @@ public class BoardManager : MonoBehaviour
         targetsAvailable.Clear();
     }
 
+    public void ResolveStartOfTurnOnBoard()
+    {
+        foreach (BoardSpace boardSpace in spaces)
+        {
+            boardSpace.ResolveStartOfTurn();
+        }
+    }
+
 }

@@ -308,7 +308,6 @@ public class CardDisplay : MonoBehaviour,
 
     public void RemoveChannelEffect()
     {
-        displayCard.EndChannel();
         channelEffect.SetActive(false);
     }
 
@@ -316,6 +315,18 @@ public class CardDisplay : MonoBehaviour,
     {
 
         return this.transform.GetSiblingIndex();
+    }
+
+    public void ResolveStartOfTurn()
+    {
+        bool resolveChannelEffect = displayCard.ResolveChannelEffect();
+
+        if(resolveChannelEffect)
+        {
+            RemoveChannelEffect();
+        }
+
+        //TODO handle visual effects
     }
 
 }

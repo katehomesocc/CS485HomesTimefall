@@ -263,5 +263,18 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         }
 
     }
+
+    public void ResolveStartOfTurn()
+    {
+        if(hasEvent)
+        {
+            eventDisplay.ResolveStartOfTurn();
+        }
+
+        if(hasAgent)
+        {
+            agentDisplay.ResolveStartOfTurn();
+        }
+    }
     
 }

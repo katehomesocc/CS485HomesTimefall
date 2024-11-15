@@ -280,8 +280,8 @@ public class Hand : MonoBehaviour
 
         staticCards.RemoveAt(0);
 
-        //handle pre turn card effects
-        PreTurnCardEffects();
+        //handle start of turn card effects
+        ResolveCardStartOfTurn();
 
         SetHandState(HandState.CHOOSING);
     }
@@ -294,19 +294,11 @@ public class Hand : MonoBehaviour
         }
     }
 
-    void PreTurnCardEffects()
-    {
-        ResolveChannelEffects();
-    }
-
-    void ResolveChannelEffects()
+    void ResolveCardStartOfTurn()
     {
         foreach (CardDisplay display in displaysInHand)
         {
-            if(display.displayCard.channeling)
-            {
-                display.RemoveChannelEffect();
-            }
+            display.ResolveStartOfTurn();
         }
     }
 

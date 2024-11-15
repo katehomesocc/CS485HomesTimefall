@@ -62,4 +62,16 @@ public class Card
     {
         channeling = false;
     }
+
+    public bool ResolveChannelEffect()
+    {
+        if(!channeling)
+        {
+            return false;
+        }
+
+        EndChannel();
+
+        return true;
+    }
 }
