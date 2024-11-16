@@ -41,6 +41,7 @@ public class Hand : MonoBehaviour
     public HandState handState = HandState.NONE;
     public Card cardPlaying;
     public int cardPlayingIndex;
+    public ActionRequest currentActionRequest;
 
     void Awake()
     {
@@ -301,11 +302,6 @@ public class Hand : MonoBehaviour
         }
     }
 
-    public bool CanPlayCard(Card card)
-    {
-        return turnManager.CanPlayCard(card) && card.CanBePlayed();
-    }
-
     public void DrawStartOfTurnHand(Player player)
     {
         SetHandState(HandState.START_TURN_DRAW_HAND);
@@ -367,34 +363,42 @@ public class Hand : MonoBehaviour
         playerDeckDisplay.SetPlayerDeck(faction, deck);
     }
 
+
     public void BeginDragCard(CardDisplay cardDisplay)
     {
-        // Debug.Log("Hand: beginDragCard");
-        Card card = cardDisplay.displayCard;
+        // // Debug.Log("Hand: beginDragCard");
+        // Card card = cardDisplay.displayCard;
 
-        //check if enough essence to play card
-        bool haveEnoughEssence = CanPlayCard(card);
+        // //check if enough essence to play card
+        // bool haveEnoughEssence = turnManager.HasEssenceToPlayCard(card);
 
-        // Debug.Log("haveEnoughEssence = " + haveEnoughEssence);
+        // // Debug.Log("haveEnoughEssence = " + haveEnoughEssence);
 
-        if(!haveEnoughEssence) {return;}
+        // if(!haveEnoughEssence) {return;}
 
-        // Debug.Log("Hand: beginDragCard enough essence");
+        // // Debug.Log("Hand: beginDragCard enough essence");
 
-        //set card possibilities
-        battleManager.SetPossibleTargetHighlights(card);
+        // //set card possibilities
+        // battleManager.SetPossibleTargetHighlights(card);
     }
 
     public void EndDragCard()
     {
-        battleManager.ClearPossibleTargetHighlights();
+        // battleManager.ClearPossibleTargetHighlights();
     }
 
     public void PlayCard(CardDisplay cardDisplay)
     {
-        if(!CanPlayCard(cardDisplay.displayCard))
+        if(!turnManager.HasEssenceToPlayCard(cardDisplay.displayCard))
         {
-            Debug.Log("cannot play card");
+            Debug.Log("not enough essence to play card");
+            return;
+        }
+
+        if(!cardDisplay.CanBePlayed(turnManager.GetCurrentPlayer()))
+        {
+            Debug.Log(currentActionRequest.ToString());
+            Debug.Log("cannot play display");
             return;
         }
 
@@ -408,12 +412,11 @@ public class Hand : MonoBehaviour
             SetHandState(HandState.TARGET_SELECTION);
 
             EssenceCardDisplay ecDisplay = (EssenceCardDisplay) cardDisplay;
-            
-            //set card possibilities
-            battleManager.SetPossibleTargetHighlights(ecDisplay.displayCard);
 
             //start essence action
             EssenceCard essenceCard = ecDisplay.PlayFromHand(turnManager.GetCurrentPlayer());
+
+            currentActionRequest = ecDisplay.actionRequest;
 
             cardPlaying = essenceCard;
             cardPlayingIndex = ecDisplay.GetPositionInParent();
@@ -427,11 +430,10 @@ public class Hand : MonoBehaviour
 
             AgentCardDisplay acDisplay = (AgentCardDisplay) cardDisplay;
             
-            //set card possibilities
-            battleManager.SetPossibleTargetHighlights(acDisplay.displayCard);
-
-            //start essence action
+            //start agent action
             AgentCard agentCard = acDisplay.PlayFromHand();
+
+            currentActionRequest = acDisplay.actionRequest;
 
             cardPlaying = agentCard;
             cardPlayingIndex = acDisplay.GetPositionInParent();
@@ -439,14 +441,23 @@ public class Hand : MonoBehaviour
         }
     }
 
-    public void SelectTarget(BoardSpace boardSpace)
+    public void SelectBoardTarget(BoardSpace boardSpace)
     {
-        cardPlaying.SelectTarget(boardSpace, turnManager.GetCurrentPlayer());
+        currentActionRequest.boardTarget = boardSpace;
+        Debug.Log("Hand.SelectBoardTarget: " + currentActionRequest.ToString());
+        cardPlaying.SelectBoardTarget(currentActionRequest);
     }
 
-    public void SelectTarget(CardDisplay handDisplay)
+    public void SelectHandTarget(CardDisplay handDisplay)
     {
-        cardPlaying.SelectTarget(handDisplay, turnManager.GetCurrentPlayer());
+        currentActionRequest.handTarget = handDisplay;
+        cardPlaying.SelectHandTarget(currentActionRequest);
+    }
+
+        public void SelectDiscardTarget(Card discardedCard)
+    {
+        currentActionRequest.discardedTarget = discardedCard;
+        cardPlaying.SelectDiscardTarget(currentActionRequest);
     }
 
     public void SetHandState(HandState newHandState)
@@ -466,7 +477,8 @@ public class Hand : MonoBehaviour
             case HandState.TARGET_SELECTION: 
                 break;
             case HandState.ACTION_END:
-                battleManager.ClearPossibleTargetHighlights();
+                currentActionRequest = null;
+                battleManager.ClearPossibleTargetHighlights(null);
                 turnManager.SetVictoryPointUI();
                 break;
             default:
@@ -490,22 +502,15 @@ public class Hand : MonoBehaviour
         SetHandState(HandState.CHOOSING);
     }
 
-    public void UpdatePossibilities()
+    public void UpdatePossibilities(ActionRequest actionRequest)
     {
-        battleManager.ClearPossibleTargetHighlights();
+        Debug.Log("Hand.UpdatePossibilities: " + actionRequest.ToString());
+        battleManager.ClearPossibleTargetHighlights(actionRequest);
 
-        if(cardPlaying.data == null)
-        {
-            Debug.LogError("card.data playing is null");
-        }
-
-        //Debug.Log("UpdatePossibilities + " + cardPlaying.data.ToString());
-
-        battleManager.SetPossibleTargetHighlights(cardPlaying);
-
+        battleManager.SetPossibleTargetHighlights(cardPlaying, actionRequest);
     }
 
-    public void SetPossibleTargetHighlight(Card card)
+    public void SetPossibleTargetHighlight(Card card, ActionRequest actionRequest)
     {
             switch(card.GetCardType()) 
             {
@@ -513,10 +518,9 @@ public class Hand : MonoBehaviour
                     // SetAgentPossibilities((AgentCard) card);
                     break;
                 case CardType.ESSENCE:
-                    SetEssencePossibilities((EssenceCard) card);
+                    SetEssencePossibilities((EssenceCard) card, actionRequest);
                     break;
                 case CardType.EVENT:
-
 
                     break;
                 default:
@@ -538,7 +542,7 @@ public class Hand : MonoBehaviour
         targetsAvailable.Clear();
     }
 
-    public List<CardDisplay> GetPossibleTargets(Card card)
+    public List<CardDisplay> GetPossibleTargets(Card card, ActionRequest actionRequest)
     {
         switch(card.GetCardType()) 
         {
@@ -546,7 +550,7 @@ public class Hand : MonoBehaviour
                 //return GetAgentPossibilities((AgentCard) card);
                 break;
             case CardType.ESSENCE:
-                return GetEssencePossibilities((EssenceCard) card);
+                return GetEssencePossibilities((EssenceCard) card, actionRequest);
             case CardType.EVENT:
                 break;
             default:
@@ -554,17 +558,18 @@ public class Hand : MonoBehaviour
                 Debug.LogError("Invalid Card Type: " + card.data.cardType);
                 break;
         }
-        return null;
+        return new List<CardDisplay>();
     }
 
-    public List<CardDisplay> GetEssencePossibilities(EssenceCard essenceCard)
+    public List<CardDisplay> GetEssencePossibilities(EssenceCard essenceCard, ActionRequest actionRequest)
     {   
-        return essenceCard.GetTargatableHandDisplays(displaysInHand, essenceCard.handTargets);
+        actionRequest.potentialHandTargets = new List<CardDisplay>(displaysInHand);
+        return essenceCard.GetTargatableHandDisplays(actionRequest);
     }
 
-    void SetEssencePossibilities(EssenceCard essenceCard)
+    void SetEssencePossibilities(EssenceCard essenceCard, ActionRequest actionRequest)
     {
-        List<CardDisplay> targetable = GetEssencePossibilities(essenceCard);
+        List<CardDisplay> targetable = GetEssencePossibilities(essenceCard, actionRequest);
 
         foreach (CardDisplay cardDisplay in targetable)
         {

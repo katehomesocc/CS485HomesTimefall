@@ -153,7 +153,7 @@ public class TurnManager : MonoBehaviour
         endTurnButton.interactable = false;
     }
 
-    public bool CanPlayCard(Card card)
+    public bool HasEssenceToPlayCard(Card card)
     {
         if(card == null)
         { 

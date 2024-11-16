@@ -36,6 +36,9 @@ public class CardDisplay : MonoBehaviour,
     [Header("Effects")]
     public GameObject channelEffect;
 
+    [Header("Targets")]
+    public ActionRequest actionRequest = new ActionRequest();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -236,7 +239,7 @@ public class CardDisplay : MonoBehaviour,
             case HandState.TARGET_SELECTION:
                 if(inHand && isTargetable)
                 {
-                    hand.SelectTarget(this);
+                    hand.SelectHandTarget(this);
                 }
                 break;
             default:    
@@ -329,6 +332,19 @@ public class CardDisplay : MonoBehaviour,
         displayCard.ResolveShieldEffect();
 
         //TODO handle visual effects
+    }
+
+    public bool CanBePlayed(Player player)
+    {
+        actionRequest.player = player;
+
+        Debug.Log(string.Format("CardDisplay.CanBePlayed before: {0}", actionRequest.ToString()));
+
+        actionRequest = BattleManager.Instance.GetPotentialTargets(displayCard, actionRequest);
+
+        Debug.Log(string.Format("CardDisplay.CanBePlayed after: {0}", actionRequest.ToString()));
+
+        return displayCard.CanBePlayed(actionRequest);
     }
 
 }

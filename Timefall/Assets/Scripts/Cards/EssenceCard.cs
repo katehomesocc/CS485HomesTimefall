@@ -22,45 +22,48 @@ public class EssenceCard : Card
         return essenceCardData.essenceAction;
     }
 
-    public bool CanTargetSpace(BoardSpace boardSpaces)
+    public List<BoardSpace> GetTargatableSpaces(ActionRequest actionRequest)
     {
         //TODO: add functionality
-        return essenceCardData.CanTargetSpace(boardSpaces, boardTargets);
+        return essenceCardData.GetTargatableSpaces(actionRequest);
     }
 
-    public List<BoardSpace> GetTargatableSpaces(List<BoardSpace> board)
+    public List<CardDisplay> GetTargatableHandDisplays(ActionRequest actionRequest)
     {
         //TODO: add functionality
-        return essenceCardData.GetTargatableSpaces(board, boardTargets);
+        return essenceCardData.GetTargatableHandDisplays(actionRequest);
     }
 
-    public List<CardDisplay> GetTargatableHandDisplays(List<CardDisplay> handDisplays, List<CardDisplay> handTargets)
+    public List<Card> GetTargatableDiscardedCards(ActionRequest actionRequest)
     {
         //TODO: add functionality
-        return essenceCardData.GetTargatableHandDisplays(handDisplays, handTargets);
+        return essenceCardData.GetTargatableDiscardedCards(actionRequest);
     }
 
-    public override void SelectTarget(BoardSpace boardSpace, Player player)
+    public override void SelectBoardTarget(ActionRequest actionRequest)
     {
-        GetEssenceAction().SelectTarget(boardSpace, boardTargets, handTargets, player);
+        GetEssenceAction().SelectBoardTarget(actionRequest);
     }
 
-    public override void SelectTarget(CardDisplay handDisplay, Player player)
+    public override void SelectHandTarget(ActionRequest actionRequest)
     {
-        GetEssenceAction().SelectTarget(handDisplay, boardTargets, handTargets, player);
+        GetEssenceAction().SelectHandTarget(actionRequest);
     }
 
-    public void StartAction(Player player)
+        public override void SelectDiscardTarget(ActionRequest actionRequest)
     {
-        GetEssenceAction().StartAction(boardTargets, handTargets, player);
+        GetEssenceAction().SelectDiscardedTarget(actionRequest);
+    }
+
+    public void StartAction(ActionRequest actionRequest)
+    {
+        GetEssenceAction().StartAction(actionRequest);
     }
 
     
-    public override bool CanBePlayed()
+    public override bool CanBePlayed(ActionRequest potentialTargetsRequest)
     {
-        List<BoardSpace> potentialBoardTargets = BoardManager.Instance.GetPossibleTargets(this);
-        List<CardDisplay> potentialHandTargets = Hand.Instance.GetPossibleTargets(this);
-        return GetEssenceAction().CanBePlayed(potentialBoardTargets, potentialHandTargets);
+        return GetEssenceAction().CanBePlayed(potentialTargetsRequest);
     }
 
 }

@@ -93,7 +93,7 @@ public class BoardManager : MonoBehaviour
         return CalculateVPInList(spacesToCalc);
     }
 
-    public void SetPossibleTargetHighlight(Card card)
+    public void SetPossibleTargetHighlight(Card card, ActionRequest actionRequest)
     {
         //For each space
             //Can card be played
@@ -101,10 +101,10 @@ public class BoardManager : MonoBehaviour
             switch(card.GetCardType()) 
             {
                 case CardType.AGENT:
-                    SetAgentPossibilities((AgentCard) card);
+                    SetAgentPossibilities((AgentCard) card, actionRequest);
                     break;
                 case CardType.ESSENCE:
-                    SetEssencePossibilities((EssenceCard) card);
+                    SetEssencePossibilities((EssenceCard) card, actionRequest);
                     break;
                 case CardType.EVENT:
 
@@ -118,14 +118,15 @@ public class BoardManager : MonoBehaviour
 
     }
 
-    public List<BoardSpace> GetPossibleTargets(Card card)
+    public List<BoardSpace> GetPossibleTargets(Card card, ActionRequest actionRequest)
     {
+        Debug.Log(string.Format("BM GPT: {0}", actionRequest));
         switch(card.GetCardType()) 
         {
             case CardType.AGENT:
-                return GetAgentPossibilities((AgentCard) card);
+                return GetAgentPossibilities((AgentCard) card, actionRequest);
             case CardType.ESSENCE:
-                return GetEssencePossibilities((EssenceCard) card);
+                return GetEssencePossibilities((EssenceCard) card, actionRequest);
             case CardType.EVENT:
                 break;
             default:
@@ -136,14 +137,15 @@ public class BoardManager : MonoBehaviour
         return null;
     }
 
-    public List<BoardSpace> GetEssencePossibilities(EssenceCard essenceCard)
+    public List<BoardSpace> GetEssencePossibilities(EssenceCard essenceCard, ActionRequest actionRequest)
     {   
-        return essenceCard.GetTargatableSpaces(new List<BoardSpace>(spaces));
+        actionRequest.potentialBoardTargets = new List<BoardSpace>(spaces);
+        return essenceCard.GetTargatableSpaces(actionRequest);
     }
 
-    void SetEssencePossibilities(EssenceCard essenceCard)
+    void SetEssencePossibilities(EssenceCard essenceCard, ActionRequest actionRequest)
     {
-        List<BoardSpace> targetable = GetEssencePossibilities(essenceCard);
+        List<BoardSpace> targetable = GetEssencePossibilities(essenceCard, actionRequest);
 
         foreach (BoardSpace boardSpace in targetable)
         {
@@ -153,14 +155,15 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public List<BoardSpace> GetAgentPossibilities(AgentCard agentCard)
+    public List<BoardSpace> GetAgentPossibilities(AgentCard agentCard, ActionRequest actionRequest)
     {
-        return agentCard.GetTargatableSpaces(new List<BoardSpace>(spaces));
+        actionRequest.potentialBoardTargets = new List<BoardSpace>(spaces);
+        return agentCard.GetTargatableSpaces(actionRequest);
     }
 
-    void SetAgentPossibilities(AgentCard agentCard)
+    void SetAgentPossibilities(AgentCard agentCard, ActionRequest actionRequest)
     {
-        List<BoardSpace> targetable = GetAgentPossibilities(agentCard);
+        List<BoardSpace> targetable = GetAgentPossibilities(agentCard, actionRequest);
 
         foreach (BoardSpace boardSpace in targetable)
         {

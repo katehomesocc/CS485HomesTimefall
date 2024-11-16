@@ -57,29 +57,29 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
     public void OnDrop(PointerEventData eventData)
     {
-        if (isUnlocked && isTargetable && !isBeingTargeted)
-        {
-            Debug.Log(eventData.pointerDrag.name + " was dropped on " + gameObject.name);
+        // if (isUnlocked && isTargetable && !isBeingTargeted)
+        // {
+        //     Debug.Log(eventData.pointerDrag.name + " was dropped on " + gameObject.name);
 
-            CardDisplay display = eventData.pointerDrag.GetComponent<CardDisplay>();
+        //     CardDisplay display = eventData.pointerDrag.GetComponent<CardDisplay>();
 
-            if (display == null) {return;}
+        //     if (display == null) {return;}
 
-            if (display.onBoard) {return;}
+        //     if (display.onBoard) {return;}
 
-            Card card = display.displayCard;
+        //     Card card = display.displayCard;
 
-            if(card.data.cardType == CardType.ESSENCE)
-            {
-                EssenceCard essenceCard = (EssenceCard) card;
+        //     if(card.data.cardType == CardType.ESSENCE)
+        //     {
+        //         EssenceCard essenceCard = (EssenceCard) card;
                 
-                essenceCard.SelectTarget(this, turnManager.GetCurrentPlayer());  
-            }
+        //         essenceCard.SelectBoardTarget(this, turnManager.GetCurrentPlayer());  
+        //     }
             
 
-            // display.inPlaceAnimation = true;
-            // PlaceCard(display);
-        }
+        //     // display.inPlaceAnimation = true;
+        //     // PlaceCard(display);
+        // }
     }
 
     void PlaceCard(CardDisplay cardDisplay) 
@@ -166,7 +166,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
     bool CanPlayCardOnThisSpace(Card card)
     {
-        bool turnManagerApproved = turnManager.CanPlayCard(card);
+        bool turnManagerApproved = turnManager.HasEssenceToPlayCard(card);
 
         return turnManagerApproved;
         
@@ -251,7 +251,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
             case HandState.TARGET_SELECTION:
                 if(isTargetable)
                 {
-                    hand.SelectTarget(this);
+                    hand.SelectBoardTarget(this);
                 }
                 break;
             default:

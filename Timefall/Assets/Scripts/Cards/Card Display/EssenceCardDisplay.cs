@@ -34,7 +34,11 @@ public class EssenceCardDisplay : CardDisplay
     {
         Vector3 newPosition = this.transform.position + new Vector3(0, 50, 0);
         StartCoroutine(this.MoveToPosition(newPosition, 0.25f));
-        GetEssenceCard().StartAction(player);
+
+        actionRequest.player = player;
+                    
+        BattleManager.Instance.SetPossibleTargetHighlights(displayCard, actionRequest);
+        GetEssenceCard().StartAction(actionRequest);
         return GetEssenceCard();
     }
 

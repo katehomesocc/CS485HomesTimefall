@@ -18,19 +18,25 @@ public class AgentCard : Card
         agentCardData = (AgentCardData) data;
     }
 
-    public override void SelectTarget(BoardSpace boardSpace, Player player)
+    public override void SelectBoardTarget(ActionRequest actionRequest)
     {
         isOnBoard = true;
-        boardSpace.SetAgentCard(this);
-        BattleManager.Instance.ClearPossibleTargetHighlights();
+        actionRequest.boardTarget.SetAgentCard(this);
+        BattleManager.Instance.ClearPossibleTargetHighlights(actionRequest);
         Hand.Instance.RemoveCardAfterPlaying();
     }
 
-    public List<BoardSpace> GetTargatableSpaces(List<BoardSpace> spacesToTest)
+    public List<BoardSpace> GetTargatableSpaces(ActionRequest actionRequest)
     {
+        
         List<BoardSpace> targetableSpaces = new List<BoardSpace>();
 
-        foreach (BoardSpace boardSpace in spacesToTest)
+        if(actionRequest.potentialBoardTargets == null)
+        {
+            return targetableSpaces;
+        }
+
+        foreach (BoardSpace boardSpace in actionRequest.potentialBoardTargets)
         {
             if(!CanTargetSpace(boardSpace)) { continue;}
 
@@ -40,7 +46,7 @@ public class AgentCard : Card
         return targetableSpaces;
     }
 
-    public bool CanTargetSpace(BoardSpace boardSpace)
+    bool CanTargetSpace(BoardSpace boardSpace)
     {
         
         //must have an event & not have an agent
@@ -49,15 +55,14 @@ public class AgentCard : Card
         return true;
     }
 
-    public override bool CanBePlayed()
+
+    public override bool CanBePlayed(ActionRequest potentialTargetsRequest)
     {
         if(isOnBoard)
         {
             return false;
         }
 
-        int potentialTargets = BoardManager.Instance.GetAgentPossibilities(this).Count;
-
-        return potentialTargets > 0; 
+        return potentialTargetsRequest.potentialBoardTargets.Count > 0; 
     }
 }

@@ -10,18 +10,12 @@ public class ChannelEssenceAction : EssenceAction
     public Texture CHANNEL_TEX;
     public Texture2D CURSOR_CHANNEL_TEX;
 
-    public override bool CanBePlayed(List<BoardSpace> potentialBoardTargets, List<CardDisplay> potentialHandTargets)
+    public override bool CanBePlayed(ActionRequest actionRequest)
     {
-        Debug.Log(string.Format("potentialHandTargets.Count: [{0}]", potentialHandTargets.Count));
-        return potentialHandTargets.Count >= 1; 
+        return actionRequest.potentialHandTargets.Count >= 1; 
     }
 
-    public override bool CanTargetSpace(BoardSpace boardSpace, List<BoardSpace> boardTargets)
-    {   
-        return false;
-    }
-
-    public override bool CanTargetHandDisplay(CardDisplay handDisplay, List<CardDisplay> handTargets)
+    bool CanTargetHandDisplay(CardDisplay handDisplay)
     { 
         //can target card if not already channeling  
         if(!handDisplay.displayCard.channeling)
@@ -31,19 +25,18 @@ public class ChannelEssenceAction : EssenceAction
 
         return false;
     }
-
-    public override List<BoardSpace> GetTargatableSpaces(List<BoardSpace> spacesToTest, List<BoardSpace> boardTargets)
+    public override List<BoardSpace> GetTargatableSpaces(ActionRequest actionRequest)
     {
         return new List<BoardSpace>();
     }
 
-    public override List<CardDisplay> GetTargatableHandDisplays(List<CardDisplay> handDisplaysToTest, List<CardDisplay> handTargets)
+    public override List<CardDisplay> GetTargatableHandDisplays(ActionRequest actionRequest)
     {
         List<CardDisplay> targetableDisplays = new List<CardDisplay>();
 
-        foreach (CardDisplay display in handDisplaysToTest)
+        foreach (CardDisplay display in actionRequest.potentialHandTargets)
         {
-            if(!CanTargetHandDisplay(display, handTargets)) { continue;}
+            if(!CanTargetHandDisplay(display)) { continue;}
 
             targetableDisplays.Add(display);
         }
@@ -51,53 +44,66 @@ public class ChannelEssenceAction : EssenceAction
         return targetableDisplays;
     }
 
-    public override Texture GetSelectionTexture(List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+    public override List<Card> GetTargatableDiscardedCards(ActionRequest actionRequest)
     {
-        if(handTargets.Count == 0)
+        return new List<Card>();
+    }
+
+    public override Texture GetSelectionTexture(ActionRequest actionRequest)
+    {
+        if(actionRequest.activeHandTargets.Count == 0)
         {
             return CHANNEL_TEX;
         } 
         return null;
     }
 
-    public Texture2D GetCursorTexture(List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+    Texture2D GetCursorTexture(ActionRequest actionRequest)
     {
-        if(handTargets.Count == 0)
+        if(actionRequest.activeHandTargets.Count == 0)
         {
             return CURSOR_CHANNEL_TEX;
         } 
         return null;
     }
 
-    public override void SelectTarget(BoardSpace boardSpace, List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
+    public override void SelectBoardTarget(ActionRequest actionRequest)
     {
         return;
     }
 
-    public override void SelectTarget(CardDisplay handTarget, List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
+    public override void SelectHandTarget(ActionRequest actionRequest)
     {
-        if(handTargets.Count != 0)
+        List<CardDisplay> activeHandTargets = actionRequest.activeHandTargets;
+
+        if(activeHandTargets.Count != 0)
         {
             return;
         } 
 
-        handTargets.Add(handTarget);
+        CardDisplay handTarget = actionRequest.handTarget;
 
-        Cursor.SetCursor(GetCursorTexture(null, handTargets), Vector2.zero, CursorMode.Auto);
+        activeHandTargets.Add(handTarget);
 
-        Channel(handTarget, handTargets, player);
+        Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
+
+        Channel(handTarget, activeHandTargets, actionRequest.player, actionRequest);
 
         return;
     }
 
-
-
-    public override void StartAction(List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
+    public override void SelectDiscardedTarget(ActionRequest actionRequest)
     {
-        Cursor.SetCursor(GetCursorTexture(null, handTargets), Vector2.zero, CursorMode.Auto);
+        return;
     }
 
-    public override void EndAction(List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+
+    public override void StartAction(ActionRequest actionRequest)
+    {
+        Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
+    }
+
+    public override void EndAction(ActionRequest actionRequest)
     {
         //set handstate
         Hand hand = Hand.Instance;
@@ -107,7 +113,7 @@ public class ChannelEssenceAction : EssenceAction
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
         //reset targets
-        foreach (CardDisplay targetCard in handTargets)
+        foreach (CardDisplay targetCard in actionRequest.activeHandTargets)
         {
             targetCard.DeselectAsTarget();
         }
@@ -115,12 +121,12 @@ public class ChannelEssenceAction : EssenceAction
         hand.RemoveCardAfterPlaying();
     }
 
-    private void Channel(CardDisplay handTarget, List<CardDisplay> handTargets, Player player)
+    private void Channel(CardDisplay handTarget, List<CardDisplay> handTargets, Player player, ActionRequest actionRequest)
     {
 
         player.ChannelCard(handTarget);
 
         //end of action
-        EndAction(null, handTargets);
+        EndAction(actionRequest);
     }
 }

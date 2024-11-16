@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardInventoryDisplay : MonoBehaviour
+public class DiscardPileDisplay : MonoBehaviour
 {
     public GameObject inventoryGameObject;
     public GameObject inventoryPanel;
@@ -13,6 +13,10 @@ public class CardInventoryDisplay : MonoBehaviour
     GameObject agentCardDisplay;
     GameObject essenceCardDisplay;
     GameObject eventCardDisplay;
+
+    public Player player;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -128,5 +132,30 @@ public class CardInventoryDisplay : MonoBehaviour
         displaysShowing.Add(eventDC);
 
         return eventDC;
+    }
+
+    public List<Card> GetPossibleTargets(Card card, ActionRequest actionRequest)
+    {
+        switch(card.GetCardType()) 
+        {
+            case CardType.AGENT:
+                // return GetAgentPossibilities((AgentCard) card);
+                break;
+            case CardType.ESSENCE:
+                return GetEssencePossibilities((EssenceCard) card, actionRequest);
+            case CardType.EVENT:
+                break;
+            default:
+            //Error handling
+                Debug.LogError("Invalid Card Type: " + card.data.cardType);
+                break;
+        }
+        return new List<Card>();
+    }
+
+    public List<Card> GetEssencePossibilities(EssenceCard essenceCard, ActionRequest actionRequest)
+    {   
+        actionRequest.potentialDiscardedTargets = player.deck.discardPile;
+        return essenceCard.GetTargatableDiscardedCards(actionRequest);
     }
 }

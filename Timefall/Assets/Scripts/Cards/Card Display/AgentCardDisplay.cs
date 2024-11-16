@@ -87,9 +87,10 @@ public class AgentCardDisplay : CardDisplay
     {
         Vector3 newPosition = this.transform.position + new Vector3(0, 50, 0);
         StartCoroutine(this.MoveToPosition(newPosition, 0.25f));
-        
-        //TODO: set selection cursor
 
+        BattleManager.Instance.SetPossibleTargetHighlights(displayCard, actionRequest);
+
+        //TODO: set selection cursor
         return GetAgentCard();
     }
 

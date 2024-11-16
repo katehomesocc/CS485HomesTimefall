@@ -13,22 +13,21 @@ public class SwapEssenceAction : EssenceAction
     public Texture2D CURSOR_CARD_TAP_UP_TEX;
     public Texture2D CURSOR_CARD_TAP_DOWN_TEX;
 
-    public override bool CanBePlayed(List<BoardSpace> potentialBoardTargets, List<CardDisplay> potentialHandTargets)
+    public override bool CanBePlayed(ActionRequest actionRequest)
     {
-        return potentialBoardTargets.Count >= 2; 
+        Debug.Log(string.Format("CanBePlayed: {0}", actionRequest.ToString()));
+        return actionRequest.potentialBoardTargets.Count >= 2; 
     }
 
-    public override bool CanTargetSpace(BoardSpace boardSpace, List<BoardSpace> boardTargets)
+   bool CanTargetSpace(BoardSpace boardSpace)
     {   
+        Debug.Log(string.Format("CanTargetSpace hasEvent = {0} hasAgent = {1} isBeingTargeted = {2}",
+        boardSpace.hasEvent, boardSpace.hasAgent, boardSpace.isBeingTargeted));
         //must have an event & not have an agent & not already targeted
         if(!boardSpace.hasEvent || boardSpace.hasAgent|| boardSpace.isBeingTargeted) { return false ;}
 
+        Debug.Log("canTargetSpace!");
         return true;
-    }
-
-    public override bool CanTargetHandDisplay(CardDisplay handDisplay, List<CardDisplay> handTargets)
-    { 
-        return false;
     }
 
     /* [SWAP]
@@ -38,89 +37,105 @@ public class SwapEssenceAction : EssenceAction
      * 2. Atleast 2 Targetable Spaces
      *      - if not, return empty list
     */
-    public override List<BoardSpace> GetTargatableSpaces(List<BoardSpace> spacesToTest, List<BoardSpace> boardTargets)
+    public override List<BoardSpace> GetTargatableSpaces(ActionRequest actionRequest)
     {
+        Debug.Log("SwapEA GPS: " + actionRequest.ToString());
         List<BoardSpace> targetableSpaces = new List<BoardSpace>();
 
-        if(boardTargets.Count == 2){ return targetableSpaces;}
+        List<BoardSpace> activeBoardTargets = actionRequest.activeBoardTargets;
 
-        foreach (BoardSpace boardSpace in spacesToTest)
+        if(activeBoardTargets.Count == 2){ return targetableSpaces;}
+
+        foreach (BoardSpace boardSpace in actionRequest.potentialBoardTargets)
         {
-            if(!CanTargetSpace(boardSpace, boardTargets)) { continue;}
+            if(!CanTargetSpace(boardSpace)) { continue;}
 
             targetableSpaces.Add(boardSpace);
         }
 
         //Must have atleast 2 targetable spaces on board to swap
-        if(targetableSpaces.Count + boardTargets.Count < 2)
+        if(targetableSpaces.Count + activeBoardTargets.Count < 2)
         {
-            Debug.Log("SwapEA: not enough boardTargets");
+            Debug.Log("SwapEA GPS: not enough boardTargets");
             targetableSpaces.Clear();
         }
 
         return targetableSpaces;
     }
 
-    public override List<CardDisplay> GetTargatableHandDisplays(List<CardDisplay> handDisplays, List<CardDisplay> handTargets)
+    public override List<CardDisplay> GetTargatableHandDisplays(ActionRequest actionRequest)
     {
         return new List<CardDisplay>();
     }
 
-    public override Texture GetSelectionTexture(List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+    public override List<Card> GetTargatableDiscardedCards(ActionRequest actionRequest)
     {
-        if(boardTargets.Count == 0)
+        return new List<Card>();
+    }
+
+    public override Texture GetSelectionTexture(ActionRequest actionRequest)
+    {
+        if(actionRequest.activeBoardTargets.Count == 0)
         {
             return CARD_TAP_UP_TEX;
-        } else if (boardTargets.Count == 1) {
+        } else if (actionRequest.activeBoardTargets.Count == 1) {
             return CARD_TAP_DOWN_TEX;
         }
 
         return null;
     }
 
-    public Texture2D GetCursorTexture(List<BoardSpace> boardTargets)
+    Texture2D GetCursorTexture(ActionRequest actionRequest)
     {
-        if(boardTargets.Count == 0)
+        if(actionRequest.activeBoardTargets.Count == 0)
         {
             return CURSOR_CARD_TAP_UP_TEX;
-        } else if (boardTargets.Count == 1) {
+        } else if (actionRequest.activeBoardTargets.Count == 1) {
             return CURSOR_CARD_TAP_DOWN_TEX;
         }
 
         return null;
     }
-
-    public override void SelectTarget(BoardSpace boardSpace, List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
+    public override void SelectBoardTarget(ActionRequest actionRequest)
     {
-        if(boardTargets.Count < 2)
+        List<BoardSpace> activeBoardTargets = actionRequest.activeBoardTargets;
+        if(activeBoardTargets.Count < 2)
         {
-            boardTargets.Add(boardSpace);
+            BoardSpace boardTarget =  actionRequest.boardTarget;
+            activeBoardTargets.Add(boardTarget);
 
-            Cursor.SetCursor(GetCursorTexture(boardTargets), Vector2.zero, CursorMode.Auto);
+            Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
 
-            Texture selectionTexture = GetSelectionTexture(boardTargets, handTargets);
-            boardSpace.SelectAsTarget(selectionTexture);
+            Texture selectionTexture = GetSelectionTexture(actionRequest);
+            boardTarget.SelectAsTarget(selectionTexture);
         }
+        Debug.Log("-----------");
         
-        Hand.Instance.UpdatePossibilities();
+        Hand.Instance.UpdatePossibilities(actionRequest);
 
-        if(boardTargets.Count == 2)
+        if(activeBoardTargets.Count == 2)
         {
-            Swap(boardTargets);
+            Swap(actionRequest);
         }
     }
 
-    public override void SelectTarget(CardDisplay handTarget, List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
+    public override void SelectHandTarget(ActionRequest actionRequest)
     {
         return;
     }
 
-    public override void StartAction(List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
+    public override void SelectDiscardedTarget(ActionRequest actionRequest)
     {
-        Cursor.SetCursor(GetCursorTexture(boardTargets), Vector2.zero, CursorMode.Auto);
+        return;
     }
 
-    public override void EndAction(List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+
+    public override void StartAction(ActionRequest actionRequest)
+    {
+        Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
+    }
+
+    public override void EndAction(ActionRequest actionRequest)
     {
         //set handstate
         Hand hand = Hand.Instance;
@@ -130,7 +145,7 @@ public class SwapEssenceAction : EssenceAction
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
         //reset boardTargets
-        foreach (var targetedSpace in boardTargets)
+        foreach (var targetedSpace in actionRequest.activeBoardTargets)
         {
             targetedSpace.DeselectAsTarget();
         }
@@ -138,8 +153,10 @@ public class SwapEssenceAction : EssenceAction
         hand.RemoveCardAfterPlaying();
     }
 
-    private void Swap(List<BoardSpace> boardTargets)
+    private void Swap(ActionRequest actionRequest)
     {
+        List<BoardSpace> boardTargets = actionRequest.activeBoardTargets;
+
         //Get both target eventDisplays
         EventCardDisplay target1 = boardTargets[0].eventDisplay;
         EventCardDisplay target2 = boardTargets[1].eventDisplay;
@@ -164,6 +181,6 @@ public class SwapEssenceAction : EssenceAction
         boardTargets[0].SetEventCard(target2);
 
         //end of action
-        EndAction(boardTargets, null);
+        EndAction(actionRequest);
     }
 }

@@ -12,22 +12,19 @@ public class EssenceCardData : CardData
         cardType = CardType.ESSENCE;
     }
 
-    public bool CanTargetSpace(BoardSpace boardSpaces, List<BoardSpace> boardTargets)
+    public List<BoardSpace> GetTargatableSpaces(ActionRequest actionRequest)
     {
-        //TODO: add functionality
-        return essenceAction.CanTargetSpace(boardSpaces, boardTargets);
+        return essenceAction.GetTargatableSpaces(actionRequest);
     }
 
-    public List<BoardSpace> GetTargatableSpaces(List<BoardSpace> board, List<BoardSpace> boardTargets)
+    public List<CardDisplay> GetTargatableHandDisplays(ActionRequest actionRequest)
     {
-        //TODO: add functionality
-        return essenceAction.GetTargatableSpaces(board, boardTargets);
+        return essenceAction.GetTargatableHandDisplays(actionRequest);
     }
 
-    public List<CardDisplay> GetTargatableHandDisplays(List<CardDisplay> handDisplays, List<CardDisplay> handTargets)
+    public List<Card> GetTargatableDiscardedCards(ActionRequest actionRequest)
     {
-        //TODO: add functionality
-        return essenceAction.GetTargatableHandDisplays(handDisplays, handTargets);
+        return essenceAction.GetTargatableDiscardedCards(actionRequest);
     }
 
 }

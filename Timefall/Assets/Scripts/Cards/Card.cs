@@ -6,8 +6,6 @@ using UnityEngine;
 public class Card
 {
     public CardData data;
-    public List<BoardSpace> boardTargets = new List<BoardSpace>();
-    public List<CardDisplay> handTargets = new List<CardDisplay>();
 
     [Header("Effects")]
     public bool channeling = false;
@@ -40,17 +38,22 @@ public class Card
         return data.image;
     }
 
-    public virtual void SelectTarget(BoardSpace boardSpace, Player player)
+    public virtual void SelectBoardTarget(ActionRequest actionRequest)
     {
         return; //override
     }
 
-    public virtual void SelectTarget(CardDisplay handTarget, Player player)
+    public virtual void SelectHandTarget(ActionRequest actionRequest)
     {
         return; //override
     }
 
-    public virtual bool CanBePlayed()
+    public virtual void SelectDiscardTarget(ActionRequest actionRequest)
+    {
+        return; //override
+    }
+
+    public virtual bool CanBePlayed(ActionRequest potentialTargetsRequest)
     {
         return false; //override
     }

@@ -11,12 +11,12 @@ public class CosmicBlastEssenceAction : EssenceAction
 
     public Texture2D CURSOR_COSMIC_BLAST_TEX;
 
-    public override bool CanBePlayed(List<BoardSpace> potentialBoardTargets, List<CardDisplay> potentialHandTargets)
+    public override bool CanBePlayed(ActionRequest actionRequest)
     {
-        return potentialBoardTargets.Count >= 1; 
+        return actionRequest.potentialBoardTargets.Count >= 1; 
     }
 
-    public override bool CanTargetSpace(BoardSpace boardSpace, List<BoardSpace> boardTargets)
+    bool CanTargetSpace(BoardSpace boardSpace)
     {   
         //must have an agent & agent must not be sheilded
         if(!boardSpace.hasAgent || boardSpace.agentCard.shielded) { return false ;}
@@ -24,20 +24,15 @@ public class CosmicBlastEssenceAction : EssenceAction
         return true;
     }
 
-    public override bool CanTargetHandDisplay(CardDisplay handDisplay, List<CardDisplay> handTargets)
-    { 
-        return false;
-    }
-
-    public override List<BoardSpace> GetTargatableSpaces(List<BoardSpace> spacesToTest, List<BoardSpace> boardTargets)
+    public override List<BoardSpace> GetTargatableSpaces(ActionRequest actionRequest)
     {
         List<BoardSpace> targetableSpaces = new List<BoardSpace>();
 
-        if(boardTargets.Count == 1){ return targetableSpaces;}
+        if(actionRequest.activeBoardTargets.Count == 1){ return targetableSpaces;}
 
-        foreach (BoardSpace boardSpace in spacesToTest)
+        foreach (BoardSpace boardSpace in actionRequest.potentialBoardTargets)
         {
-            if(!CanTargetSpace(boardSpace, boardTargets)) { continue;}
+            if(!CanTargetSpace(boardSpace)) { continue;}
 
             targetableSpaces.Add(boardSpace);
         }
@@ -45,14 +40,19 @@ public class CosmicBlastEssenceAction : EssenceAction
         return targetableSpaces;
     }
 
-    public override List<CardDisplay> GetTargatableHandDisplays(List<CardDisplay> handDisplays, List<CardDisplay> handTargets)
+    public override List<CardDisplay> GetTargatableHandDisplays(ActionRequest actionRequest)
     {
         return new List<CardDisplay>();
     }
 
-    public override Texture GetSelectionTexture(List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+    public override List<Card> GetTargatableDiscardedCards(ActionRequest actionRequest)
     {
-        if(boardTargets.Count == 0)
+        return new List<Card>();
+    }
+
+    public override Texture GetSelectionTexture(ActionRequest actionRequest)
+    {
+        if(actionRequest.activeBoardTargets.Count == 0)
         {
             return COSMIC_BLAST_TEX;
         }
@@ -60,9 +60,9 @@ public class CosmicBlastEssenceAction : EssenceAction
         return null;
     }
 
-    public Texture2D GetCursorTexture(List<BoardSpace> boardTargets)
+    Texture2D GetCursorTexture(ActionRequest actionRequest)
     {
-        if(boardTargets.Count == 0)
+        if(actionRequest.activeBoardTargets.Count == 0)
         {
             return CURSOR_COSMIC_BLAST_TEX;
         }
@@ -70,37 +70,44 @@ public class CosmicBlastEssenceAction : EssenceAction
         return null;
     }
 
-    public override void SelectTarget(BoardSpace boardSpace, List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
+    public override void SelectBoardTarget(ActionRequest actionRequest)
     {
-        if(boardTargets.Count == 0)
+        List<BoardSpace> activeBoardTargets = actionRequest.activeBoardTargets;
+        if(activeBoardTargets.Count == 0)
         {
-            boardTargets.Add(boardSpace);
+            BoardSpace boardTarget =  actionRequest.boardTarget;
+            activeBoardTargets.Add(boardTarget);
 
-            Cursor.SetCursor(GetCursorTexture(boardTargets), Vector2.zero, CursorMode.Auto);
+            Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
 
-            Texture selectionTexture = GetSelectionTexture(boardTargets, handTargets);
-            boardSpace.SelectAsTarget(selectionTexture);
+            Texture selectionTexture = GetSelectionTexture(actionRequest);
+            boardTarget.SelectAsTarget(selectionTexture);
         }
         
-        Hand.Instance.UpdatePossibilities();
+        Hand.Instance.UpdatePossibilities(actionRequest);
 
-        if(boardTargets.Count == 1)
+        if(activeBoardTargets.Count == 1)
         {
-            CosmicBlast(boardTargets);
+            CosmicBlast(activeBoardTargets, actionRequest);
         }
     }
 
-    public override void SelectTarget(CardDisplay handTarget, List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
+    public override void SelectHandTarget(ActionRequest actionRequest)
     {
         return;
     }
 
-    public override void StartAction(List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player)
+    public override void SelectDiscardedTarget(ActionRequest actionRequest)
     {
-        Cursor.SetCursor(GetCursorTexture(boardTargets), Vector2.zero, CursorMode.Auto);
+        return;
     }
 
-    public override void EndAction(List<BoardSpace> boardTargets, List<CardDisplay> handTargets)
+    public override void StartAction(ActionRequest actionRequest)
+    {
+        Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
+    }
+
+    public override void EndAction(ActionRequest actionRequest)
     {
         //set handstate
         Hand hand = Hand.Instance;
@@ -110,7 +117,7 @@ public class CosmicBlastEssenceAction : EssenceAction
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
         //reset boardTargets
-        foreach (var targetedSpace in boardTargets)
+        foreach (var targetedSpace in actionRequest.activeBoardTargets)
         {
             targetedSpace.DeselectAsTarget();
         }
@@ -118,7 +125,7 @@ public class CosmicBlastEssenceAction : EssenceAction
         hand.RemoveCardAfterPlaying();
     }
 
-    private void CosmicBlast(List<BoardSpace> boardTargets)
+    private void CosmicBlast(List<BoardSpace> boardTargets, ActionRequest actionRequest)
     {
         BoardSpace target = boardTargets[0];
 
@@ -129,6 +136,6 @@ public class CosmicBlastEssenceAction : EssenceAction
         //send agent to its factions discard pile
         BattleManager.Instance.DiscardToDeck(agentToDiscard, agentToDiscard.GetFaction());
         
-        EndAction(boardTargets, null);
+        EndAction(actionRequest);
     }
 }

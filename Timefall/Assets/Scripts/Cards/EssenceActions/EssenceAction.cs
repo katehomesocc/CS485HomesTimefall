@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class EssenceAction : ScriptableObject {
-        public abstract bool CanBePlayed(List<BoardSpace> potentialBoardTargets, List<CardDisplay> potentialHandTargets);
-    public abstract void SelectTarget(BoardSpace boardSpace, List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player);
-    public abstract void SelectTarget(CardDisplay handTarget, List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player);
-    public abstract Texture GetSelectionTexture(List<BoardSpace> boardTargets, List<CardDisplay> handTargets);
-    public abstract List<BoardSpace> GetTargatableSpaces(List<BoardSpace> boardSpaces, List<BoardSpace> boardTargets);
+    public abstract bool CanBePlayed(ActionRequest ActionRequest);
+    public abstract Texture GetSelectionTexture(ActionRequest ActionRequest);
 
-    public abstract List<CardDisplay> GetTargatableHandDisplays(List<CardDisplay> handDisplays, List<CardDisplay> handTargets);
+    public abstract void SelectBoardTarget(ActionRequest ActionRequest);
+    public abstract void SelectHandTarget(ActionRequest ActionRequest);
+    public abstract void SelectDiscardedTarget(ActionRequest ActionRequest);
+    
+    public abstract List<BoardSpace> GetTargatableSpaces(ActionRequest ActionRequest);
+    public abstract List<CardDisplay> GetTargatableHandDisplays(ActionRequest ActionRequest);
+    public abstract List<Card> GetTargatableDiscardedCards(ActionRequest ActionRequest);
 
-    public abstract bool CanTargetSpace(BoardSpace boardSpaces, List<BoardSpace> boardTargets);
-    public abstract bool CanTargetHandDisplay(CardDisplay handDisplay, List<CardDisplay> handTargets);
-
-    public abstract void StartAction(List<BoardSpace> boardTargets, List<CardDisplay> handTargets, Player player);
-    public abstract void EndAction(List<BoardSpace> boardTargets, List<CardDisplay> handTargets);
+    public abstract void StartAction(ActionRequest ActionRequest);
+    public abstract void EndAction(ActionRequest ActionRequest);
 
 }

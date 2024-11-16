@@ -13,7 +13,8 @@ public class BattleManager : MonoBehaviour
     int turn = 1;
 
     public Deck timelineDeck;
-    public CardInventoryDisplay inventory;
+    public DiscardPileDisplay inventory;
+    public DiscardPileManager discardPileManager;
 
     [Header("Autoplay (Development Testing)")]
     public bool autoplay = false;
@@ -78,7 +79,15 @@ public class BattleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            ShowDiscardPiles();
+        }
+
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+            HideDiscardPiles();
+        }
     }
 
     IEnumerator QueueFirstAutoplay()
@@ -131,14 +140,29 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void SetPossibleTargetHighlights(Card card)
+    public ActionRequest GetPotentialTargets(Card card, ActionRequest request)
     {
-        boardManager.SetPossibleTargetHighlight(card);
-        hand.SetPossibleTargetHighlight(card);
+        request.potentialBoardTargets = boardManager.GetPossibleTargets(card, request);
+
+        request.potentialHandTargets = hand.GetPossibleTargets(card, request);
+        
+        request.potentialDiscardedTargets = discardPileManager.GetPossibleTargets(card, request);
+                
+        return request;
     }
 
-    public void ClearPossibleTargetHighlights()
+    public void SetPossibleTargetHighlights(Card card, ActionRequest actionRequest)
     {
+        boardManager.SetPossibleTargetHighlight(card, actionRequest);
+        hand.SetPossibleTargetHighlight(card, actionRequest);
+    }
+
+    public void ClearPossibleTargetHighlights(ActionRequest actionRequest)
+    {
+        if(actionRequest != null)
+        {
+            actionRequest.ClearPossibleTargets();
+        }
         boardManager.ClearPossibleTargetHighlights();
         hand.ClearPossibleTargetHighlights();
     }
@@ -222,5 +246,15 @@ public class BattleManager : MonoBehaviour
     {
         inventory.ClearInventory();
         inventory.CloseInventory();
+    }
+
+    void ShowDiscardPiles()
+    {
+        discardPileManager.ShowDisplays();
+    }
+
+    void HideDiscardPiles()
+    {
+        discardPileManager.HideDisplays();
     }
 }
