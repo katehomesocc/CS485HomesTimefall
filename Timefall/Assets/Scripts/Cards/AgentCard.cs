@@ -23,7 +23,7 @@ public class AgentCard : Card
         isOnBoard = true;
         actionRequest.boardTarget.SetAgentCard(this);
         BattleManager.Instance.ClearPossibleTargetHighlights(actionRequest);
-        Hand.Instance.RemoveCardAfterPlaying();
+        Hand.Instance.RemoveCardAfterPlaying(false);
     }
 
     public List<BoardSpace> GetTargatableSpaces(ActionRequest actionRequest)

@@ -118,7 +118,7 @@ public class ChannelEssenceAction : EssenceAction
             targetCard.DeselectAsTarget();
         }
 
-        hand.RemoveCardAfterPlaying();
+        hand.RemoveCardAfterPlaying(true);
     }
 
     private void Channel(CardDisplay handTarget, List<CardDisplay> handTargets, Player player, ActionRequest actionRequest)

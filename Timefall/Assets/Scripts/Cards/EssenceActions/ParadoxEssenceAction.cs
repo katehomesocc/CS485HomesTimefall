@@ -123,7 +123,7 @@ public class ParadoxEssenceAction : EssenceAction
             targetedSpace.DeselectAsTarget();
         }
 
-        hand.RemoveCardAfterPlaying();
+        hand.RemoveCardAfterPlaying(true);
     }
 
     private void Paradox(List<BoardSpace> boardTargets, ActionRequest actionRequest)

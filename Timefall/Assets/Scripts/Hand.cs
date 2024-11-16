@@ -395,6 +395,8 @@ public class Hand : MonoBehaviour
             return;
         }
 
+        currentActionRequest = cardDisplay.actionRequest;
+
         if(!cardDisplay.CanBePlayed(turnManager.GetCurrentPlayer()))
         {
             Debug.Log(currentActionRequest.ToString());
@@ -486,17 +488,21 @@ public class Hand : MonoBehaviour
         }
     }
 
-    public void RemoveCardAfterPlaying()
+    public void RemoveCardAfterPlaying(bool discard)
     {
         //TODO: Implement animation effects
 
         Debug.Log(string.Format("# of cardsInHand: {0}, removing index: {1}", cardsInHand.Count, cardPlayingIndex));
-    
+        
         cardsInHand.RemoveAt(cardPlayingIndex);
         displaysInHand.RemoveAt(cardPlayingIndex);
 
         DestroyImmediate(this.transform.GetChild(cardPlayingIndex).gameObject);
 
+        if(discard){
+            turnManager.GetCurrentPlayer().deck.Discard(cardPlaying);
+        }
+    
         cardPlaying = null;
 
         SetHandState(HandState.CHOOSING);
