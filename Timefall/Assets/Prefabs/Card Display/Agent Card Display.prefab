@@ -726,8 +726,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayCard:
     data: {fileID: 0}
-    boardTargets: []
-    handTargets: []
     channeling: 0
     shielded: 0
   returnParent: {fileID: 0}
@@ -739,11 +737,11 @@ MonoBehaviour:
   playState: 0
   inHand: 0
   onBoard: 0
+  onInventory: 0
   isExpanded: 0
   inPlaceAnimation: 0
   isTargetable: 0
   isBeingTargeted: 0
-  onInventory: 0
   channelEffect: {fileID: 4349072201132833201}
   factionText: {fileID: 2483684380081832322}
   diceTypeText: {fileID: 96241212314246200}

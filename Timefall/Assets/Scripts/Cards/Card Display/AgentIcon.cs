@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler 
 {
     Hand hand;
+    BattleManager battleManager;
     public RawImage border;
     public RawImage agentImage;
     public GameObject shieldIcon;
@@ -17,6 +18,7 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     void Start()
     {
         hand = Hand.Instance;
+        battleManager = BattleManager.Instance;
     }
 
     public void SetAgent(AgentCard agent)
@@ -48,7 +50,7 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         //HighlightOn();
 
-        //hand.ExpandCardView(displayCard, true);
+        battleManager.ExpandCardView(agentCard, true);
         this.isExpanded = true;
     }
 
@@ -56,7 +58,7 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         //HighlightOff();
 
-        //hand.CloseExpandCardView();
+        battleManager.CloseExpandCardView();
         this.isExpanded = false;
     }
 

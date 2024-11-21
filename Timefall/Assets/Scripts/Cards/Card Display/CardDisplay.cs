@@ -150,7 +150,7 @@ public class CardDisplay : MonoBehaviour,
     {
         transform.SetParent(expandParent, false);
 
-        // transform.localScale =  new Vector3(0.55f, 0.55f, 0.55f);
+        transform.localScale =  new Vector3(1.5f, 1.5f, 1.5f);
 
         Place(expandParent, "EXPAND");
     }
