@@ -309,4 +309,9 @@ public class BattleManager : MonoBehaviour
     {
         expandDisplay.CloseExpandCardView();
     }
+
+    public Player GetCurrentPlayer()
+    {
+        return turnManager.GetCurrentPlayer();
+    }
 }

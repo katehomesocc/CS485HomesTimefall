@@ -273,6 +273,19 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         }
     }
 
+    public void ResolveEndOfTurn()
+    {
+        if(hasEvent)
+        {
+            eventDisplay.ResolveEndOfTurn();
+        }
+
+        if(hasAgent)
+        {
+            agentIcon.ResolveEndOfTurn();
+        }
+    }
+
     public void AgentEquiptShield(Shield shield)
     {
         agentCard.EquipShield(shield);

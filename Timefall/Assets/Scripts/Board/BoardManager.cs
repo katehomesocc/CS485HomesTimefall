@@ -192,4 +192,12 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public void ResolveEndOfTurnOnBoard()
+    {
+        foreach (BoardSpace boardSpace in spaces)
+        {
+            boardSpace.ResolveEndOfTurn();
+        }
+    }
+
 }

@@ -123,6 +123,8 @@ public class TurnManager : MonoBehaviour
     public IEnumerator EndTurn(){
         turnState = TurnState.END_OF_TURN;
 
+        ResolveEndOfTurn();
+        
         hand.ShuffleHandBackIntoDeck(currentPlayer);
 
         int mod = currentTurn % 4;
@@ -548,6 +550,11 @@ public class TurnManager : MonoBehaviour
     {
         hand.ResolveStartOfTurnInHand();
         boardManager.ResolveStartOfTurnOnBoard();
+    }
+
+    public void ResolveEndOfTurn()
+    {
+        boardManager.ResolveEndOfTurnOnBoard();
     }
 
     

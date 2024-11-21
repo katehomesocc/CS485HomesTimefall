@@ -348,6 +348,11 @@ public class CardDisplay : MonoBehaviour,
         //TODO handle visual effects
     }
 
+    public void ResolveEndOfTurn()
+    {
+        
+    }
+
     public bool CanBePlayed(Player player)
     {
         actionRequest.player = player;
