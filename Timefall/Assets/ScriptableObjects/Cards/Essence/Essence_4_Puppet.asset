@@ -17,5 +17,5 @@ MonoBehaviour:
   description: Choose a faction. On that factions next turn, you play as them.
   image: {fileID: 2800000, guid: 5f418bc2ac318e0428e85adaddf36320, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 1
+  essenceAction: {fileID: 11400000, guid: e4de1cc38f486fd469b5752186624b70, type: 2}

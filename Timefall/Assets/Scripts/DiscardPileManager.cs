@@ -60,7 +60,7 @@ public class DiscardPileManager : MonoBehaviour
         return null;
     }
 
-        public List<Card> GetPossibleTargets(Card card, ActionRequest request)
+     public List<Card> GetPossibleTargets(Card card, ActionRequest request)
     {
         switch(card.GetCardType()) 
         {
@@ -76,11 +76,13 @@ public class DiscardPileManager : MonoBehaviour
                 Debug.LogError("Invalid Card Type: " + card.data.cardType);
                 break;
         }
+        Debug.LogError("how did you get here???");
         return new List<Card>();
     }
 
     public List<Card> GetEssencePossibilities(EssenceCard essenceCard, ActionRequest request)
     {   
+        Debug.Log(string.Format("getting essence possibilities for {0}", essenceCard.GetCardName()));
         List<Card> possibleTargets = new List<Card>();
 
         possibleTargets.AddRange(stewardDisplay.GetPossibleTargets(essenceCard, request));
@@ -88,5 +90,22 @@ public class DiscardPileManager : MonoBehaviour
         possibleTargets.AddRange(sovereignDisplay.GetPossibleTargets(essenceCard, request));
         possibleTargets.AddRange(weaverDisplay.GetPossibleTargets(essenceCard, request));
         return possibleTargets;
+    }
+
+    public void SetPossibleTargets(Card card, ActionRequest actionRequest)
+    {
+        stewardDisplay.SetPossibleTargets(card, actionRequest);
+        seekerDisplay.SetPossibleTargets(card, actionRequest);
+        sovereignDisplay.SetPossibleTargets(card, actionRequest);
+        weaverDisplay.SetPossibleTargets(card, actionRequest);
+
+    }
+
+    public void ClearAndClosePossibleTargets()
+    {
+        stewardDisplay.ClearAndCloseInventory();
+        seekerDisplay.ClearAndCloseInventory();
+        sovereignDisplay.ClearAndCloseInventory();
+        weaverDisplay.ClearAndCloseInventory();
     }
 }

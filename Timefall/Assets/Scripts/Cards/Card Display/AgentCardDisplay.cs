@@ -42,6 +42,8 @@ public class AgentCardDisplay : CardDisplay
     {
         displayCard = agentCard;
         ResetDisplay(agentCard);
+        actionRequest.actionCard = agentCard;
+        actionRequest.doBoard = true;
     }
 
     // public void SetCard(Card agentCard)
@@ -88,7 +90,7 @@ public class AgentCardDisplay : CardDisplay
         Vector3 newPosition = this.transform.position + new Vector3(0, 50, 0);
         StartCoroutine(this.MoveToPosition(newPosition, 0.25f));
 
-        BattleManager.Instance.SetPossibleTargetHighlights(displayCard, actionRequest);
+        BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
 
         //TODO: set selection cursor
         return GetAgentCard();

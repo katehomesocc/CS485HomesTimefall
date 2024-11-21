@@ -55,6 +55,16 @@ public class EssenceCard : Card
         GetEssenceAction().SelectDiscardedTarget(actionRequest);
     }
 
+    public void SetActionRequest(ActionRequest actionRequest)
+    {
+        actionRequest.actionCard = this;
+        if(GetEssenceAction() == null) 
+        {
+            Debug.Log("EC.SAR essence action === null");
+        }
+        GetEssenceAction().SetActionRequest(actionRequest);
+    }
+
     public void StartAction(ActionRequest actionRequest)
     {
         GetEssenceAction().StartAction(actionRequest);

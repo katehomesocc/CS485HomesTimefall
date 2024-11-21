@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class ActionRequest
 {
+    public Card actionCard;
+
+    public bool doBoard = false;
+    public bool doHand = false;
+    public bool doDiscard = false;
+
     public List<BoardSpace> potentialBoardTargets = new List<BoardSpace>();
     public List<CardDisplay> potentialHandTargets = new List<CardDisplay>();
     public List<Card> potentialDiscardedTargets = new List<Card>();
@@ -34,7 +40,7 @@ public class ActionRequest
         string activeHand = activeHandTargets == null ? "null" : activeHandTargets.Count.ToString();
         string activeDiscard = activeDiscardedTargets == null ? "null" : activeDiscardedTargets.Count.ToString();
 
-        return string.Format("potentialBoardTargets:{0}, potentialHandTargets:{1}, potentialDiscardedTargets:{2}, activeBoardTargets:{3}, activeHandTargets:{4}, activeDiscardedTargets:{5}",
-        potentialBoard,potentialHand,potentialDiscard,activeBoard,activeHand,activeDiscard);
+        return string.Format("doBoard:{0}, doHand:{1}, doDiscard:{2},\npotentialBoardTargets:{3}, potentialHandTargets:{4}, potentialDiscardedTargets:{5},\nactiveBoardTargets:{6}, activeHandTargets:{7}, activeDiscardedTargets:{8}",
+        doBoard, doHand, doDiscard, potentialBoard,potentialHand,potentialDiscard,activeBoard,activeHand,activeDiscard);
     }
 }

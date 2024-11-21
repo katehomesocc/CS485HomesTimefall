@@ -415,10 +415,11 @@ public class Hand : MonoBehaviour
 
             EssenceCardDisplay ecDisplay = (EssenceCardDisplay) cardDisplay;
 
-            //start essence action
-            EssenceCard essenceCard = ecDisplay.PlayFromHand(turnManager.GetCurrentPlayer());
-
             currentActionRequest = ecDisplay.actionRequest;
+            currentActionRequest.player = turnManager.GetCurrentPlayer();
+
+            //start essence action
+            EssenceCard essenceCard = ecDisplay.PlayFromHand();
 
             cardPlaying = essenceCard;
             cardPlayingIndex = ecDisplay.GetPositionInParent();
@@ -432,10 +433,11 @@ public class Hand : MonoBehaviour
 
             AgentCardDisplay acDisplay = (AgentCardDisplay) cardDisplay;
             
+            currentActionRequest = acDisplay.actionRequest;
+            currentActionRequest.player = turnManager.GetCurrentPlayer();
+
             //start agent action
             AgentCard agentCard = acDisplay.PlayFromHand();
-
-            currentActionRequest = acDisplay.actionRequest;
 
             cardPlaying = agentCard;
             cardPlayingIndex = acDisplay.GetPositionInParent();
@@ -456,7 +458,7 @@ public class Hand : MonoBehaviour
         cardPlaying.SelectHandTarget(currentActionRequest);
     }
 
-        public void SelectDiscardTarget(Card discardedCard)
+    public void SelectDiscardTarget(Card discardedCard)
     {
         currentActionRequest.discardedTarget = discardedCard;
         cardPlaying.SelectDiscardTarget(currentActionRequest);
@@ -583,6 +585,11 @@ public class Hand : MonoBehaviour
             targetsAvailable.Add(cardDisplay);
             cardDisplay.isTargetable = true;
         }
+    }
+
+    public void AddCardToHand(Card card)
+    {
+        InstantiateCardInHand(card);
     }
 
     

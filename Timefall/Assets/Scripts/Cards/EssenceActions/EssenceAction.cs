@@ -14,6 +14,7 @@ public abstract class EssenceAction : ScriptableObject {
     public abstract List<CardDisplay> GetTargatableHandDisplays(ActionRequest ActionRequest);
     public abstract List<Card> GetTargatableDiscardedCards(ActionRequest ActionRequest);
 
+    public abstract void SetActionRequest(ActionRequest actionRequest);
     public abstract void StartAction(ActionRequest ActionRequest);
     public abstract void EndAction(ActionRequest ActionRequest);
 

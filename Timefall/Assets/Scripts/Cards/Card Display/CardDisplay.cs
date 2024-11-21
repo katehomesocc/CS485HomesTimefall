@@ -27,11 +27,11 @@ public class CardDisplay : MonoBehaviour,
     public CardPlayState playState = CardPlayState.IDK;
     public bool inHand = false;
     public bool onBoard = false;
+    public bool onInventory = false;
     public bool isExpanded = false;
     public bool inPlaceAnimation = false;
     public bool isTargetable = false;
     public bool isBeingTargeted = false;
-    public bool onInventory = false;
 
     [Header("Effects")]
     public GameObject channelEffect;
@@ -240,6 +240,9 @@ public class CardDisplay : MonoBehaviour,
                 if(inHand && isTargetable)
                 {
                     hand.SelectHandTarget(this);
+                } else if(onInventory && isTargetable)
+                {
+                    hand.SelectDiscardTarget(this.displayCard);
                 }
                 break;
             default:    

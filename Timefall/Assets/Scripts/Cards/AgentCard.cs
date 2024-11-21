@@ -46,6 +46,26 @@ public class AgentCard : Card
         return targetableSpaces;
     }
 
+    public List<Card> GetTargatableDiscardedCards(ActionRequest actionRequest)
+    {
+        
+        List<Card> argatableDiscardedCards = new List<Card>();
+
+        if(actionRequest.potentialDiscardedTargets == null)
+        {
+            return argatableDiscardedCards;
+        }
+
+        foreach (Card card in actionRequest.potentialDiscardedTargets)
+        {
+            if(!CanTargetDiscardedCard(card)) { continue;}
+
+            argatableDiscardedCards.Add(card);
+        }
+
+        return argatableDiscardedCards;
+    }
+
     bool CanTargetSpace(BoardSpace boardSpace)
     {
         
@@ -53,6 +73,12 @@ public class AgentCard : Card
         if(!boardSpace.hasEvent || boardSpace.hasAgent) { return false ;}
 
         return true;
+    }
+
+    bool CanTargetDiscardedCard(Card card)
+    {
+        
+        return false;
     }
 
 

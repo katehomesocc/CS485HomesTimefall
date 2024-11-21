@@ -245,7 +245,7 @@ public class TurnManager : MonoBehaviour
 
     public void AttemptToSpendTest()
     {
-        SpendEssence(1);
+        SpendEssence(-1);
     }
 
     public bool SpendEssence(int cost)

@@ -17,5 +17,5 @@ MonoBehaviour:
   description: Return an Agent in your faction discard pile to your hand
   image: {fileID: 2800000, guid: 2c4ddedd360894f499fcf1e0ef00c506, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 1
+  essenceAction: {fileID: 11400000, guid: f6b8a7ad581a51b4587568a1fb6e44a6, type: 2}

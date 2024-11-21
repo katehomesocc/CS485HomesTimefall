@@ -23,6 +23,20 @@ public class EssenceCardDisplay : CardDisplay
     {
         displayCard = essenceCard;
         ResetDisplay(essenceCard.essenceCardData);
+
+        if(actionRequest == null)
+        {
+            Debug.Log("ECDisplay.SetCard: actionRequest is null");
+            return;
+        }
+
+        if(essenceCard == null)
+        {
+            Debug.Log("ECDisplay.SetCard: essenceCard  is null");
+            return;
+        }
+
+        essenceCard.SetActionRequest(actionRequest);
     }
 
     public EssenceCard GetEssenceCard()
@@ -30,14 +44,11 @@ public class EssenceCardDisplay : CardDisplay
         return (EssenceCard) displayCard;
     }
 
-    public EssenceCard PlayFromHand(Player player)
+    public EssenceCard PlayFromHand()
     {
         Vector3 newPosition = this.transform.position + new Vector3(0, 50, 0);
         StartCoroutine(this.MoveToPosition(newPosition, 0.25f));
-
-        actionRequest.player = player;
                     
-        BattleManager.Instance.SetPossibleTargetHighlights(displayCard, actionRequest);
         GetEssenceCard().StartAction(actionRequest);
         return GetEssenceCard();
     }

@@ -17,4 +17,18 @@ public class Player : MonoBehaviour
 
         channelList.Add(cardDisplay.displayCard);
     }
+
+    public void ConvertAgent(AgentCard agentToConvert)
+    {
+        //TODO: convert
+    }
+
+    public void ReviveAgent(AgentCard agentToRevive)
+    {
+        //TODO: revive
+        Debug.Log("ReviveAgent: " + agentToRevive.GetCardName());
+
+        Hand.Instance.AddCardToHand(agentToRevive);
+        deck.discardPile.Remove(agentToRevive);
+    }
 }

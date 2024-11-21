@@ -142,19 +142,42 @@ public class BattleManager : MonoBehaviour
 
     public ActionRequest GetPotentialTargets(Card card, ActionRequest request)
     {
-        request.potentialBoardTargets = boardManager.GetPossibleTargets(card, request);
+        if(request.doBoard)
+        {
+            request.potentialBoardTargets = boardManager.GetPossibleTargets(card, request);
+        }
 
-        request.potentialHandTargets = hand.GetPossibleTargets(card, request);
-        
-        request.potentialDiscardedTargets = discardPileManager.GetPossibleTargets(card, request);
-                
+        if(request.doHand)
+        {
+            request.potentialHandTargets = hand.GetPossibleTargets(card, request);
+        }
+
+        if(request.doDiscard)
+        {
+            request.potentialDiscardedTargets = discardPileManager.GetPossibleTargets(card, request);
+        }
+           
         return request;
     }
 
     public void SetPossibleTargetHighlights(Card card, ActionRequest actionRequest)
     {
-        boardManager.SetPossibleTargetHighlight(card, actionRequest);
-        hand.SetPossibleTargetHighlight(card, actionRequest);
+        if(actionRequest.doBoard)
+        {
+            boardManager.SetPossibleTargetHighlight(card, actionRequest);
+        }
+
+        if(actionRequest.doHand)
+        {
+            hand.SetPossibleTargetHighlight(card, actionRequest);
+        }
+
+        if(actionRequest.doDiscard)
+        {
+            discardPileManager.SetPossibleTargets(card, actionRequest);
+        }
+        
+        
     }
 
     public void ClearPossibleTargetHighlights(ActionRequest actionRequest)
@@ -165,6 +188,7 @@ public class BattleManager : MonoBehaviour
         }
         boardManager.ClearPossibleTargetHighlights();
         hand.ClearPossibleTargetHighlights();
+        discardPileManager.ClearAndClosePossibleTargets();
     }
 
     public Player GetFactionPlayer(Faction faction)

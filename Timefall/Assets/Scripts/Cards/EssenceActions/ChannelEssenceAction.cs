@@ -98,8 +98,15 @@ public class ChannelEssenceAction : EssenceAction
     }
 
 
+    public override void SetActionRequest(ActionRequest actionRequest)
+    {
+        actionRequest.doHand = true;
+    }
+    
     public override void StartAction(ActionRequest actionRequest)
     {
+        actionRequest.doHand = true;
+        BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
         Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
     }
 

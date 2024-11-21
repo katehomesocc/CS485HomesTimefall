@@ -8,11 +8,11 @@ public class DiscardPileDisplay : MonoBehaviour
     public GameObject inventoryPanel;
     public List<CardDisplay> displaysShowing = new List<CardDisplay>();
     
-    BattleManager battleManager;
+    public BattleManager battleManager;
 
-    GameObject agentCardDisplay;
-    GameObject essenceCardDisplay;
-    GameObject eventCardDisplay;
+    public GameObject agentCardDisplay;
+    public GameObject essenceCardDisplay;
+    public GameObject eventCardDisplay;
 
     public Player player;
 
@@ -58,6 +58,12 @@ public class DiscardPileDisplay : MonoBehaviour
     public void CloseInventory()
     {
         inventoryGameObject.SetActive(false);
+    }
+
+    public void ClearAndCloseInventory()
+    {
+        ClearInventory();
+        CloseInventory();
     }
 
     CardDisplay InstantiateCard(Card card)
@@ -139,8 +145,7 @@ public class DiscardPileDisplay : MonoBehaviour
         switch(card.GetCardType()) 
         {
             case CardType.AGENT:
-                // return GetAgentPossibilities((AgentCard) card);
-                break;
+                return GetAgentPossibilities((AgentCard) card, actionRequest);
             case CardType.ESSENCE:
                 return GetEssencePossibilities((EssenceCard) card, actionRequest);
             case CardType.EVENT:
@@ -155,7 +160,68 @@ public class DiscardPileDisplay : MonoBehaviour
 
     public List<Card> GetEssencePossibilities(EssenceCard essenceCard, ActionRequest actionRequest)
     {   
+        Debug.Log(string.Format("{0} Display: [{1}] possible targets", this.player, actionRequest.player.deck.discardPile.Count));
         actionRequest.potentialDiscardedTargets = player.deck.discardPile;
         return essenceCard.GetTargatableDiscardedCards(actionRequest);
+    }
+
+    public List<Card> GetAgentPossibilities(AgentCard agentCard, ActionRequest actionRequest)
+    {
+        actionRequest.potentialDiscardedTargets = player.deck.discardPile;
+        return agentCard.GetTargatableDiscardedCards(actionRequest);
+    }
+
+    public void SetPossibleTargets(Card card, ActionRequest actionRequest)
+    {
+            switch(card.GetCardType()) 
+            {
+                case CardType.AGENT:
+                    SetAgentPossibilities((AgentCard) card, actionRequest);
+                    break;
+                case CardType.ESSENCE:
+                    SetEssencePossibilities((EssenceCard) card, actionRequest);
+                    break;
+                case CardType.EVENT:
+                    break;
+                default:
+                //Error handling
+                    Debug.LogError("Invalid Card Type: " + card.data.cardType);
+                    return;
+            }
+
+    }
+
+    void SetEssencePossibilities(EssenceCard essenceCard, ActionRequest actionRequest)
+    {
+        List<Card> targetable = GetEssencePossibilities(essenceCard, actionRequest);
+
+        if(targetable.Count == 0){return;}
+
+        SetInventory(targetable);
+
+        foreach (CardDisplay cardDisplay in displaysShowing)
+        {
+            cardDisplay.HighlightOn();
+            cardDisplay.isTargetable = true;
+        }
+
+        OpenInventory();
+    }
+
+    void SetAgentPossibilities(AgentCard agentCard, ActionRequest actionRequest)
+    {
+        List<Card> targetable = GetAgentPossibilities(agentCard, actionRequest);
+
+        if(targetable.Count == 0){return;}
+
+        SetInventory(targetable);
+
+        foreach (CardDisplay cardDisplay in displaysShowing)
+        {
+            cardDisplay.HighlightOn();
+            cardDisplay.isTargetable = true;
+        }
+        
+        OpenInventory();
     }
 }

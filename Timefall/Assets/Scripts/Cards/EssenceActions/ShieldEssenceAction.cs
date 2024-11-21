@@ -102,10 +102,14 @@ public class ShieldEssenceAction : EssenceAction
         return;
     }
     
-
+    public override void SetActionRequest(ActionRequest actionRequest)
+    {
+        actionRequest.doBoard = true;
+    }
 
     public override void StartAction(ActionRequest actionRequest)
     {
+        BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
         Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
     }
 

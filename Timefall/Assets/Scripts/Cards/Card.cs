@@ -38,6 +38,11 @@ public class Card
         return data.image;
     }
 
+    public string GetCardName()
+    {
+        return data.cardName;
+    }
+
     public virtual void SelectBoardTarget(ActionRequest actionRequest)
     {
         return; //override
