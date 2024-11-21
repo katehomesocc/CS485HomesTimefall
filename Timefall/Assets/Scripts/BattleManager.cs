@@ -281,4 +281,15 @@ public class BattleManager : MonoBehaviour
     {
         discardPileManager.HideDisplays();
     }
+
+    public void ConvertAgent(AgentCard agentToConvert, Faction newFaction)
+    {
+        Faction oldFaction = agentToConvert.GetFaction();
+        Player oldOwner = GetFactionPlayer(oldFaction);
+        
+        oldOwner.deck.discardPile.Remove(agentToConvert);
+
+        Player newOwner = GetFactionPlayer(newFaction);
+        newOwner.ConvertAgent(agentToConvert);
+    }
 }

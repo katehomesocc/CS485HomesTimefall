@@ -118,7 +118,7 @@ public class ReviveEssenceAction : EssenceAction
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
         //close discard display
-        BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
+        BattleManager.Instance.ClearPossibleTargetHighlights(actionRequest);
 
         hand.RemoveCardAfterPlaying(true);
     }

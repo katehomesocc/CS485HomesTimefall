@@ -20,15 +20,13 @@ public class Player : MonoBehaviour
 
     public void ConvertAgent(AgentCard agentToConvert)
     {
-        //TODO: convert
+        Hand.Instance.AddCardToHand(agentToConvert);
+        //TODO: change ui?
     }
 
     public void ReviveAgent(AgentCard agentToRevive)
     {
-        //TODO: revive
-        Debug.Log("ReviveAgent: " + agentToRevive.GetCardName());
-
-        Hand.Instance.AddCardToHand(agentToRevive);
         deck.discardPile.Remove(agentToRevive);
+        Hand.Instance.AddCardToHand(agentToRevive);
     }
 }

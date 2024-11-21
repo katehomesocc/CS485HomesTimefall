@@ -17,7 +17,7 @@ public class ConvertEssenceAction : EssenceAction
 
     bool CanTargetDiscardedCard(Card discardCard, Faction requestFaction)
     { 
-        //must be an agent & only target other facations
+        //must be an agent & a different factions
         if(discardCard.GetCardType() != CardType.AGENT || discardCard.GetFaction() == requestFaction)
         {
             return false;
@@ -101,10 +101,9 @@ public class ConvertEssenceAction : EssenceAction
     {
         actionRequest.doDiscard = true;
     }
-    
+
     public override void StartAction(ActionRequest actionRequest)
     {
-        actionRequest.doDiscard = true;
         BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
         Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
     }
@@ -118,19 +117,16 @@ public class ConvertEssenceAction : EssenceAction
         //reset cursor
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
-        //reset targets
-        foreach (Card discardTarget in actionRequest.activeDiscardedTargets)
-        {
-            // discardTarget.DeselectAsTarget();
-        }
+        //close discard display
+        BattleManager.Instance.ClearPossibleTargetHighlights(actionRequest);
 
         hand.RemoveCardAfterPlaying(true);
     }
 
-    private void Convert(Card discardTarget, Player player, ActionRequest actionRequest)
+    private void Convert(Card discardTarget, Player requestPlayer, ActionRequest actionRequest)
     {
-
-        player.ConvertAgent((AgentCard) discardTarget);
+        AgentCard agent = (AgentCard) discardTarget;
+        BattleManager.Instance.ConvertAgent(agent, requestPlayer.faction);
 
         //end of action
         EndAction(actionRequest);
