@@ -2,15 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class AgentIcon : MonoBehaviour
+using UnityEngine.EventSystems;
+public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler 
 {
-
+    Hand hand;
     public RawImage border;
     public RawImage agentImage;
     public GameObject shieldIcon;
     
     public AgentCard agentCard;
+
+    bool isExpanded = false;
+
+    void Start()
+    {
+        hand = Hand.Instance;
+    }
 
     public void SetAgent(AgentCard agent)
     {
@@ -33,7 +40,53 @@ public class AgentIcon : MonoBehaviour
 
     public void ResolveStartOfTurn()
     {
+        agentCard.attempted = false;
         agentCard.ResolveShieldEffect();
+    }
+
+    public void OnPointerEnter(PointerEventData pointerEventData)
+    {
+        //HighlightOn();
+
+        //hand.ExpandCardView(displayCard, true);
+        this.isExpanded = true;
+    }
+
+    public void OnPointerExit(PointerEventData pointerEventData)
+    {
+        //HighlightOff();
+
+        //hand.CloseExpandCardView();
+        this.isExpanded = false;
+    }
+
+    public void OnPointerClick(PointerEventData pointerEventData)
+    {
+        switch (hand.handState)
+        {
+            case HandState.CHOOSING:
+                int clickCount = pointerEventData.clickCount;
+
+                if(clickCount == 2)
+                {
+                    DoubleClickToRollForAction();
+                }
+
+                break;
+            default:    
+                return;
+        }
+    }
+
+    void DoubleClickToRollForAction()
+    {
+        if(agentCard.attempted)
+        {
+            Debug.Log(string.Format("already attempted {0} this turn", agentCard.GetCardName()));
+            return;
+        }
+        Debug.LogError("//TODO: roll for action");
+        //TODO: roll for action
     }
         
 }

@@ -11,6 +11,7 @@ public class CardDisplay : MonoBehaviour,
 {
     public Card displayCard;
     Hand hand;
+    BattleManager battleManager;
     
     [Header("Return Info")]
     public Transform returnParent = null;
@@ -43,6 +44,7 @@ public class CardDisplay : MonoBehaviour,
     void Start()
     {
         hand = Hand.Instance;
+        battleManager = BattleManager.Instance;
         if(displayCard != null)
         {
             nameText.text = displayCard.data.cardName;
@@ -76,7 +78,7 @@ public class CardDisplay : MonoBehaviour,
 
         if(isExpanded)
         {
-            hand.CloseExpandCardView();
+            battleManager.CloseExpandCardView();
             isExpanded = false;
         }
 
@@ -121,7 +123,7 @@ public class CardDisplay : MonoBehaviour,
             }
 
             hand = Hand.Instance;
-
+            battleManager = BattleManager.Instance;
             //Debug.Log (string.Format("Placing At: {0} | inHand = {1} | onBoard = {2} ", location, inHand, onBoard));
         }
     }
@@ -135,13 +137,22 @@ public class CardDisplay : MonoBehaviour,
         Place(handParent, "HAND");
     }
 
-    public void InstantiateInInventory(Transform handParent)
+    public void InstantiateInInventory(Transform inventoryParent)
     {
-        transform.SetParent(handParent, false);
+        transform.SetParent(inventoryParent, false);
 
         // transform.localScale =  new Vector3(0.55f, 0.55f, 0.55f);
 
-        Place(handParent, "INVENTORY");
+        Place(inventoryParent, "INVENTORY");
+    }
+
+        public void InstantiateInExpand(Transform expandParent)
+    {
+        transform.SetParent(expandParent, false);
+
+        // transform.localScale =  new Vector3(0.55f, 0.55f, 0.55f);
+
+        Place(expandParent, "EXPAND");
     }
 
     //Detect if the Cursor starts to pass over the GameObject
@@ -151,7 +162,7 @@ public class CardDisplay : MonoBehaviour,
 
         HighlightOn();
 
-        hand.ExpandCardView(displayCard, true);
+        battleManager.ExpandCardView(displayCard, true);
         isExpanded = true;
     }
 
@@ -162,7 +173,7 @@ public class CardDisplay : MonoBehaviour,
         
         HighlightOff();
 
-        hand.CloseExpandCardView();
+        battleManager.CloseExpandCardView();
         isExpanded = false;
     }
 
@@ -222,7 +233,7 @@ public class CardDisplay : MonoBehaviour,
             case HandState.START_TURN_DRAW_TIMELINE:
                 if(playState == CardPlayState.START_TURN_DRAW_TIMELINE)
                 {
-                    hand.PlayInitialTimelineCard(this);
+                    battleManager.PlayInitialTimelineCard(this);
                 }
                 break;
             case HandState.CHOOSING:

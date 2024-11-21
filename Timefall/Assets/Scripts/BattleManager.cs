@@ -16,6 +16,8 @@ public class BattleManager : MonoBehaviour
     public DiscardPileDisplay inventory;
     public DiscardPileManager discardPileManager;
 
+    public ExpandDisplay expandDisplay;
+
     [Header("Autoplay (Development Testing)")]
     public bool autoplay = false;
     public int autoplayUntilTurn = 32;
@@ -99,7 +101,7 @@ public class BattleManager : MonoBehaviour
 
     IEnumerator AutoplayRound()
     {
-        hand.AutoPlayTimelineCard();
+        expandDisplay.AutoPlayInitialTimelineCard();
         
         yield return turnManager.EndTurn();
 
@@ -111,6 +113,11 @@ public class BattleManager : MonoBehaviour
             StartCoroutine(AutoplayRound());
         }
         
+    }
+
+    public void PlayInitialTimelineCard(CardDisplay display)
+    {
+        expandDisplay.PlayInitialTimelineCard(display);
     }
 
     IEnumerator StartOfGame()
@@ -291,5 +298,15 @@ public class BattleManager : MonoBehaviour
 
         Player newOwner = GetFactionPlayer(newFaction);
         newOwner.ConvertAgent(agentToConvert);
+    }
+
+    public CardDisplay ExpandCardView(Card card, bool hoverClear)
+    {
+        return expandDisplay.ExpandCardView(card, hoverClear);
+    }
+
+    public void CloseExpandCardView()
+    {
+        expandDisplay.CloseExpandCardView();
     }
 }

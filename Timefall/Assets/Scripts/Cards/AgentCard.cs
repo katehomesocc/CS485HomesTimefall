@@ -7,6 +7,7 @@ public class AgentCard : Card
     public AgentCardData agentCardData;
 
     public bool isOnBoard = false;
+    public bool attempted = false;
 
     public AgentCard (AgentCardData cardData)
     {

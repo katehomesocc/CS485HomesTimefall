@@ -10,9 +10,9 @@ public class DiscardPileDisplay : MonoBehaviour
     
     public BattleManager battleManager;
 
-    public GameObject agentCardDisplay;
-    public GameObject essenceCardDisplay;
-    public GameObject eventCardDisplay;
+    GameObject agentCardDisplay;
+    GameObject essenceCardDisplay;
+    GameObject eventCardDisplay;
 
     public Player player;
 

@@ -30,13 +30,6 @@ public class Hand : MonoBehaviour
     public Button drawTimelineButton;
     public Button shuffleTimelineButton;
 
-    [Header("Expanded Card View")]
-    public Transform expandedHoverTransform;
-
-    public Transform expandedStaticTransform;
-
-    public List<CardDisplay> staticCards = new List<CardDisplay>();
-
     [Header("Hand State")]
     public HandState handState = HandState.NONE;
     public Card cardPlaying;
@@ -180,80 +173,6 @@ public class Hand : MonoBehaviour
         targetDeck.Shuffle();
 	}
 
-    public CardDisplay ExpandCardView(Card card, bool hoverClear)
-    {
-        if(card == null){ return null;}
-
-        CardType cardType = card.data.cardType;
-
-        GameObject obj = null;
-
-        CardDisplay displayToReturn = null;
-
-        Transform expandedViewTransform = hoverClear ? expandedHoverTransform :  expandedStaticTransform;
-
-        switch(cardType) 
-        {
-            case CardType.AGENT:
-                obj = Instantiate(agentCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
-                AgentCardDisplay agentDC = obj.GetComponent<AgentCardDisplay>();
-
-                if(agentDC == null){return null;} 
-                AgentCard agentCard = (AgentCard) card;
-                agentDC.SetCard(agentCard);
-                agentDC.Place(expandedViewTransform, "EXPAND");
-
-                displayToReturn = agentDC;
-
-                break;
-            case CardType.ESSENCE:
-                obj = Instantiate(essenceCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
-                EssenceCardDisplay essenceDC = obj.GetComponent<EssenceCardDisplay>();
-
-                if(essenceDC == null){return null;}
-                EssenceCard essenceCard = (EssenceCard) card ;
-                essenceDC.SetCard(essenceCard);
-                essenceDC.Place(expandedViewTransform, "EXPAND");
-
-                displayToReturn = essenceDC;
-
-                break;
-            case CardType.EVENT:
-                obj = Instantiate(eventCardDisplay, new Vector3(0, 0, 0), Quaternion.identity);
-                EventCardDisplay eventDC = obj.GetComponent<EventCardDisplay>();
-
-                if(eventDC == null){return null;} 
-                EventCard eventCard = (EventCard) card;
-                eventDC.SetCard(eventCard);
-                eventDC.Place(expandedViewTransform, "EXPAND");
-
-                displayToReturn = eventDC;
-
-                break;
-            default:
-            //Error handling
-                Debug.LogError("Invalid CardData Type: " + cardType);
-                return null;
-        }
-
-        obj.transform.SetParent(expandedViewTransform, false);
-
-        if(!hoverClear)
-        {
-            staticCards.Add(displayToReturn);
-        }
-
-        return displayToReturn;
-    }
-
-    public void CloseExpandCardView()
-    {
-        while (expandedHoverTransform.childCount > 0) {
-            
-            DestroyImmediate(expandedHoverTransform.GetChild(0).gameObject);
-        }
-    }
-
     void ShuffleTimelineDeck()
     {
         ShuffleDeck(timelineDeck);
@@ -265,7 +184,7 @@ public class Hand : MonoBehaviour
 
         if(card == null){ return;}
 
-        CardDisplay display = ExpandCardView(card, false);
+        CardDisplay display = battleManager.ExpandCardView(card, false);
 
         display.playState = CardPlayState.START_TURN_DRAW_TIMELINE;
         SetHandState(HandState.START_TURN_DRAW_TIMELINE);
@@ -279,19 +198,9 @@ public class Hand : MonoBehaviour
         turnManager.SetVictoryPointUI();
         turnManager.EnableEndTurnButton();
 
-        staticCards.RemoveAt(0);
-
         turnManager.ResolveStartOfTurn();
 
         SetHandState(HandState.CHOOSING);
-    }
-
-    public void AutoPlayTimelineCard()
-    {
-        if(staticCards.Count == 1)
-        {
-            PlayInitialTimelineCard(staticCards[0]);
-        }
     }
 
     public void ResolveStartOfTurnInHand()
