@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   cardName: Fall of the Berlin Wall
-  description: 001
+  description: On November 9, 1989, the Berlin Wall fell, leading to the reunification
+    of Germany and the end of the Cold War.
   image: {fileID: 2800000, guid: a7e69eef357178b459fc73166546611d, type: 3}
   faction: 4
   cardType: 2

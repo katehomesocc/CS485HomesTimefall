@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 5
   cardName: Signing of the Treaty of Versailles
-  description: 005
+  description: On June 28, 1919, the Treaty of Versailles was signed, officially
+    ending World War I and reshaping the political landscape of Europe.
   image: {fileID: 2800000, guid: 53cb0e1a7b57b6446afb755022840f7c, type: 3}
   faction: 4
   cardType: 2

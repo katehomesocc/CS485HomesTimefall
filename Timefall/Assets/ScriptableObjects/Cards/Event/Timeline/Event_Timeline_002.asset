@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   cardName: Assassination of Archduke Franz Ferdinand
-  description: 002
+  description: On June 28, 1914, the assassination of Archduke Franz Ferdinand triggered
+    the start of World War I.
   image: {fileID: 2800000, guid: 4e431ba7e2846b842ad9faf6ffdf8d03, type: 3}
   faction: 4
   cardType: 2

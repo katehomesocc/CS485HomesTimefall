@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   cardName: Signing of the Magna Carta
-  description: 003
+  description: On June 15, 1215, King John of England signed the Magna Carta, limiting
+    the power of the monarchy and laying the foundation for modern democracy.
   image: {fileID: 2800000, guid: 5e63ac7a78f5d5948b19101985141060, type: 3}
   faction: 4
   cardType: 2
