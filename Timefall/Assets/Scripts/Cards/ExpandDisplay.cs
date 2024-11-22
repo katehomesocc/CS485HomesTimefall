@@ -60,7 +60,13 @@ public class ExpandDisplay : MonoBehaviour
         if(!hoverClear)
         {
             staticCards.Add(displayToReturn);
+        } else
+        {
+            CanvasGroup canvasGroup = displayToReturn.gameObject.GetComponent<CanvasGroup>();
+            canvasGroup.blocksRaycasts = false;
         }
+
+        //Debug.Break();
 
         return displayToReturn;
     }

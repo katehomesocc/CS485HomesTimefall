@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 42
   cardName: The Construction of the Pyramids
   description: 042
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: c2f9c4b6154742042ad24ef82a4a8152, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000000000000000000000000000

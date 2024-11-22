@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 23
   cardName: The Russian Revolution
   description: 023
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: 01e1b9c045c11dd4f82cfb7424230b64, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 0300000005000000fbffffff00000000

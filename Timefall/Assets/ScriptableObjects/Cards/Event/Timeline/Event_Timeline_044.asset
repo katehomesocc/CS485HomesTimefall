@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 44
   cardName: The Discovery of Gravity
   description: 044
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: c979e5f4fc3013b498b865904dd507a8, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000000000000000000000000000

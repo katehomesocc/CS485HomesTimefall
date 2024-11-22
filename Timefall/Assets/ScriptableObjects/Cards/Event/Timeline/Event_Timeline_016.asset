@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 16
   cardName: The Invention of the Wheel
   description: 016
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: 76d95287fbc8f364796f4223d147577e, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000000000000000000000000000

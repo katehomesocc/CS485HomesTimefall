@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 41
   cardName: The Invention of The Telephone
   description: 041
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: 67b96da757dbe544d93ae6723afd0d62, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000000000000000000000000000

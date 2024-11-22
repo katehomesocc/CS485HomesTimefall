@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 15
   cardName: The Fall of the Aztec Empire
   description: 015
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: cbc7bf1312dd91d489c9d1e0c86ec3b1, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 0300000000000000f6ffffff00000000

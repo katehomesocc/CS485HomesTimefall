@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 24
   cardName: The Construction of the Great Wall of China
   description: 024
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: 2c19292b4d7f0494bb683b1dee0f53d0, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000000000000000000000000000

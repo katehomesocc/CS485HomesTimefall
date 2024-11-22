@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 45
   cardName: The Korean War
   description: 045
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: 85ce98d9438e50a4dbdf7166665cea36, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000f6ffffff1400000000000000

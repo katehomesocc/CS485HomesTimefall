@@ -17,6 +17,5 @@ MonoBehaviour:
   description: 000
   image: {fileID: 0}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 030000000a000000f6ffffff00000000

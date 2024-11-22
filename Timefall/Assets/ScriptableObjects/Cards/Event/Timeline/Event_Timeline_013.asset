@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 13
   cardName: Women's Sufferage Movement
   description: 013
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: e2b427a9ef3a90342aca5f657c1eed8c, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 030000000a000000f6ffffff00000000

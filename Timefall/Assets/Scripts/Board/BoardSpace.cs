@@ -7,8 +7,6 @@ using System.Linq;
 
 public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler 
 {
-    public static string LOCATION = "BOARD";
-
     public RawImage border;
 
     public Color resetColor;
@@ -113,7 +111,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
                 if(eventDC == null){return;} 
                 EventCard eventCard = (EventCard) card;
                 eventDC.SetCard(eventCard);
-                eventDC.Place(this.transform, LOCATION);
+                eventDC.Place(this.transform, "BOARD");
                 SetEventCard(eventDC);
                 break;
             default:
@@ -177,6 +175,8 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         this.eventDisplay = display;
         this.eventCard = (EventCard) eventDisplay.displayCard;
         this.hasEvent = true;
+
+        display.Place(this.transform, "BOARD");
     }
 
     public void RemoveEventCard()

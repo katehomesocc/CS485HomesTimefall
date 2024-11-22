@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 14
   cardName: The French Revolution
   description: 014
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: cb6610972b8632e478f67bdf3a9ace8b, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 030000000a000000f6ffffff00000000

@@ -24,6 +24,8 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public float flashSpeed = 1.0f;
 
+    public Material attemptableMat;
+
     void Start()
     {
         hand = Hand.Instance;
@@ -31,13 +33,6 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         attemptableImage = GetComponent<RawImage>();
 
         gradient = GetGradient();
-    }
-
-    void Update()
-    {
-        if(!isAttemptable){return;}
-        
-        HighlightAttemptable();
     }
 
     static Gradient GetGradient()
@@ -88,6 +83,7 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if(agentCard.GetFaction() == battleManager.GetCurrentPlayer().faction)
         {
             isAttemptable = true;
+            HighlightAttemptable();
         }
     }
 
@@ -155,14 +151,12 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     void HighlightAttemptable()
     {
-        if(gradStep < 1.0f)
-        {
-            gradStep += 0.001f * flashSpeed;
-        } else
-        {
-            gradStep = 0.0f;
-        }
-        attemptableImage.color = GetAttemptedColor();
+        Color tempColor = attemptableImage.color;
+
+        Color newColor = new Color(tempColor.r,tempColor.g, tempColor.b, 1f);
+
+        attemptableImage.color = newColor;
+        attemptableImage.material = attemptableMat;
     }
 
     void RemoveAttemptHighlight()
@@ -172,11 +166,7 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         Color newColor = new Color(tempColor.r,tempColor.g, tempColor.b, 0f);
 
         attemptableImage.color = newColor;
-    }
-
-    Color GetAttemptedColor()
-    {
-        return gradient.Evaluate(gradStep);
+        attemptableImage.material = null;
     }
         
 }

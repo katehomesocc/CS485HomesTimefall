@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 20
   cardName: The Manhattan Project
   description: 020
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: c757449575efc4a49a28b59e9ab078bd, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000f6ffffff0000000000000000

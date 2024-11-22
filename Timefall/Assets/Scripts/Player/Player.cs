@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
 
     public int handSize = 5;
 
+    public PlayerEffect playerEffect;
+
     public void ChannelCard(CardDisplay cardDisplay)
     {
         cardDisplay.ApplyChannelEffect();
@@ -28,5 +30,19 @@ public class Player : MonoBehaviour
     {
         deck.discardPile.Remove(agentToRevive);
         Hand.Instance.AddCardToHand(agentToRevive);
+    }
+
+    public void OvertakeNextTurn(Player overtakePlayer)
+    {
+        if(playerEffect != null) {return;}
+
+        playerEffect = new PlayerEffect(PlayerEffectType.OVERTAKE, overtakePlayer);
+    }
+
+    public void PuppetNextTurn(Player puppetPlayer)
+    {
+        if(playerEffect != null) {return;}
+
+        playerEffect = new PlayerEffect(PlayerEffectType.PUPPET, puppetPlayer);
     }
 }

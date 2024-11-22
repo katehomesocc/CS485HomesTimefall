@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 10
   cardName: Formation of the United Nations
   description: 010
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: 3710dd74d4a7bea479cd24beabea4863, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 030000000a000000f6ffffff00000000

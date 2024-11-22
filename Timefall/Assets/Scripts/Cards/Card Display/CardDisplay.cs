@@ -158,7 +158,7 @@ public class CardDisplay : MonoBehaviour,
     //Detect if the Cursor starts to pass over the GameObject
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
-        if(!inHand){ return;}
+        if(!inHand && !onBoard){ return;}
 
         HighlightOn();
 
@@ -169,7 +169,7 @@ public class CardDisplay : MonoBehaviour,
     //Detect when Cursor leaves the GameObject
     public void OnPointerExit(PointerEventData pointerEventData)
     {
-        if(!inHand){ return;}
+        if(!inHand && !onBoard){ return;}
         
         HighlightOff();
 

@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 49
   cardName: The Six-Day War
   description: 049
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: 9fc71f9e0be60b24495b09d14a00f5f1, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000f6ffffff1400000000000000

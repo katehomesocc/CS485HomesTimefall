@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 37
   cardName: The Russo-Japanese War
   description: 037
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: 47bb922661526ee46bd1f463cb9c599a, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000f6ffffff1400000000000000
