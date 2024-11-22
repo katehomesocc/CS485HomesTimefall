@@ -24,6 +24,8 @@ public class CardDisplay : MonoBehaviour,
     public TMP_Text descText;
     public RawImage image;
 
+    public GameObject expandBackground;
+
     [Header("State Info")]
     public CardPlayState playState = CardPlayState.IDK;
     public bool inHand = false;
@@ -58,43 +60,43 @@ public class CardDisplay : MonoBehaviour,
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if(!inHand){ return;}
+        // if(!inHand){ return;}
 
-        returnParent = this.transform.parent;
-        returnSiblingIndex = this.transform.GetSiblingIndex();
+        // returnParent = this.transform.parent;
+        // returnSiblingIndex = this.transform.GetSiblingIndex();
 
-        this.transform.SetParent(this.transform.parent.parent); //edit layer later
+        // this.transform.SetParent(this.transform.parent.parent); //edit layer later
 
-        GetComponent<CanvasGroup>().blocksRaycasts = false;
+        // GetComponent<CanvasGroup>().blocksRaycasts = false;
 
-        hand.BeginDragCard(this);
+        // hand.BeginDragCard(this);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log(string.Format("OnDrag | inHand = {0} | onBoard = {1} ", inHand, onBoard));
+        // Debug.Log(string.Format("OnDrag | inHand = {0} | onBoard = {1} ", inHand, onBoard));
 
-        if(!inHand){ return;}
+        // if(!inHand){ return;}
 
-        if(isExpanded)
-        {
-            battleManager.CloseExpandCardView();
-            isExpanded = false;
-        }
+        // if(isExpanded)
+        // {
+        //     battleManager.CloseExpandCardView();
+        //     isExpanded = false;
+        // }
 
-        this.transform.position = eventData.position;
+        // this.transform.position = eventData.position;
 
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        hand.EndDragCard();
-        if(inPlaceAnimation){ return;}
+        // hand.EndDragCard();
+        // if(inPlaceAnimation){ return;}
 
-        this.transform.SetParent(returnParent, false);   
-        this.transform.SetSiblingIndex(returnSiblingIndex);
+        // this.transform.SetParent(returnParent, false);   
+        // this.transform.SetSiblingIndex(returnSiblingIndex);
 
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
+        // GetComponent<CanvasGroup>().blocksRaycasts = true;
     }
 
     public void Place(Transform droppedParent, string location)
@@ -146,11 +148,13 @@ public class CardDisplay : MonoBehaviour,
         Place(inventoryParent, "INVENTORY");
     }
 
-        public void InstantiateInExpand(Transform expandParent)
+    public void InstantiateInExpand(Transform expandParent)
     {
         transform.SetParent(expandParent, false);
 
         transform.localScale =  new Vector3(1.5f, 1.5f, 1.5f);
+
+        expandBackground.SetActive(true);
 
         Place(expandParent, "EXPAND");
     }
@@ -364,6 +368,28 @@ public class CardDisplay : MonoBehaviour,
         Debug.Log(string.Format("CardDisplay.CanBePlayed after: {0}", actionRequest.ToString()));
 
         return displayCard.CanBePlayed(actionRequest);
+    }
+
+
+    public void SetCardPlayState(CardPlayState newState)
+    {
+        switch (newState)
+        {
+            case CardPlayState.IDK: 
+                break;
+            case CardPlayState.START_TURN_DRAW_TIMELINE: 
+                break;
+            case CardPlayState.ON_BOARD: 
+                if(playState == CardPlayState.START_TURN_DRAW_TIMELINE)
+                {
+                    expandBackground.SetActive(false);
+                }
+                break;
+            default:
+                break;
+        }
+
+        playState = newState;
     }
 
 }

@@ -45,7 +45,7 @@ public class BoardManager : MonoBehaviour
         
         space.SetEventCard((EventCardDisplay)cardDisplay);
         
-        cardDisplay.playState = CardPlayState.IDK;
+        cardDisplay.SetCardPlayState(CardPlayState.ON_BOARD);
     }
 
     public int[] CalculateVPInList(BoardSpace[] spacesToCalc)
