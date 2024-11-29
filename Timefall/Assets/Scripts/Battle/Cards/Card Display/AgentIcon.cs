@@ -14,8 +14,6 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     
     public AgentCard agentCard;
 
-    bool isExpanded = false;
-
     Gradient gradient;
 
     public bool isAttemptable = false;
@@ -105,7 +103,6 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         //HighlightOn();
 
         battleManager.ExpandCardView(agentCard, true);
-        this.isExpanded = true;
     }
 
     public void OnPointerExit(PointerEventData pointerEventData)
@@ -113,7 +110,6 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         //HighlightOff();
 
         battleManager.CloseExpandCardView();
-        this.isExpanded = false;
     }
 
     public void OnPointerClick(PointerEventData pointerEventData)

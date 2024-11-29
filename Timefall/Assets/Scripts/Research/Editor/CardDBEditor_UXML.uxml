@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Label tabindex="-1" text="Label created in UI builder&#10;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TestLabel" />
+    <ui:TextField picking-mode="Ignore" label="DB Name" value="filler text" binding-path="dbName" name="DBName" class="unity-base-field__aligned" />
+    <ui:TextField picking-mode="Ignore" label="Total # Cards" value="filler text" binding-path="totalSize" name="CardNumTotal" readonly="true" class="unity-base-field__aligned" />
+    <uie:PropertyField binding-path="events" label="Events" name="Events" />
+    <uie:PropertyField binding-path="essence" label="Essence" name="Essence" />
+    <uie:PropertyField binding-path="agents" label="Agents" name="Agents" focusable="true" />
+</ui:UXML>
