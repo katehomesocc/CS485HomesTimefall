@@ -22,6 +22,7 @@ public class ResearchScrollableDisplay : MonoBehaviour
 
     public void SetContent(List<CardData> cardDataList)
     {
+        ClearContent();
         foreach (CardData data in cardDataList)
         {
             InstantiateCard(data);
@@ -92,5 +93,13 @@ public class ResearchScrollableDisplay : MonoBehaviour
         eventRDC.AddToContentPanel(contentPanel);
 
         return eventRDC;
+    }
+
+    void ClearContent()
+    {
+        foreach(Transform child in contentPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 }
