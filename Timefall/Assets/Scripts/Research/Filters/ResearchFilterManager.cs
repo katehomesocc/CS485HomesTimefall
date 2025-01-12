@@ -6,7 +6,10 @@ using UnityEngine.UI;
 public class ResearchFilterManager : MonoBehaviour
 {
     public static Color DEFAULT_FILTER_COLOR = new Color(188f/255,193f/255,187f/255, 1f);
+    public static Color DEFAULT_HEADER_COLOR = new Color(145f/255, 178f/255, 188f/255, 1f);
     ResearchManager researchManager;
+    ResearchCardSpawner spawner;
+    ResearchScrollableDisplay researchDisplay;
     public bool singleFactionView = false;
     public RawImage filterBackground;
 
@@ -17,29 +20,31 @@ public class ResearchFilterManager : MonoBehaviour
     public FactionToggle sovereignsToggle;
     public FactionToggle weaversToggle;
 
+    [Header("Faction Textures")]
+    public Texture STEWARDS_BACK_TEX;
+    public Texture SEEKERS_BACK_TEX;
+    public Texture SOVEREIGNS_BACK_TEX;
+    public Texture WEAVERS_BACK_TEX;
+    public Texture DEFALT_BACK_TEX;
+
     [Header("Card Type Filters")]
-    public Toggle allCardsToggle;
     public Toggle agentsToggle;
     public Toggle essenceToggle;
     public Toggle eventsToggle;
 
     public HashSet<FactionToggle> activeFactions = new HashSet<FactionToggle>();
-    public HashSet<Toggle> activeCardTypes = new HashSet<Toggle>();
     
     // Start is called before the first frame update
     void Start()
     {
         researchManager = ResearchManager.Instance;
+        spawner = researchManager.spawner;
+        researchDisplay = researchManager.researchDisplay;
 
         activeFactions.Add(stewardsToggle);
         activeFactions.Add(seekersToggle);
         activeFactions.Add(sovereignsToggle);
         activeFactions.Add(weaversToggle);
-
-        activeCardTypes.Add(agentsToggle);
-        activeCardTypes.Add(essenceToggle);
-        activeCardTypes.Add(eventsToggle);
-
 
         allFactionsToggle.onValueChanged.AddListener(delegate {
                 ToggleAllFactions();
@@ -57,9 +62,6 @@ public class ResearchFilterManager : MonoBehaviour
                 ToggleFaction(weaversToggle);
             });
 
-        allCardsToggle.onValueChanged.AddListener(delegate {
-                ToggleAllCardTypes();
-            });
         agentsToggle.onValueChanged.AddListener(delegate {
                 ToggleCardType(agentsToggle, CardType.AGENT);
             });
@@ -69,14 +71,11 @@ public class ResearchFilterManager : MonoBehaviour
         eventsToggle.onValueChanged.AddListener(delegate {
                 ToggleCardType(eventsToggle, CardType.EVENT);
             });
-
-        Debug.Log(string.Format("Start: [{0}] active toggles", activeFactions.Count));
     }
 
     void ToggleAllFactions()
     {
         if(allFactionsToggle.isOn){
-            Debug.Log("ToggleAllFactions ON");
             allFactionsToggle.interactable = false;
             stewardsToggle.toggle.isOn = true;
             seekersToggle.toggle.isOn = true;
@@ -84,7 +83,6 @@ public class ResearchFilterManager : MonoBehaviour
             weaversToggle.toggle.isOn = true;
         } else 
         {
-            Debug.Log("ToggleAllFactions OFF");
             allFactionsToggle.interactable = true;
         }
     }
@@ -94,18 +92,19 @@ public class ResearchFilterManager : MonoBehaviour
         Toggle toggle = factionToggle.toggle;
         Faction faction =  factionToggle.faction;
         if(toggle.isOn){
-            Debug.Log(string.Format("Toggle{0} ON", faction));
-            activeFactions.Add(factionToggle);
             if(singleFactionView)
             {
                 LeaveSingleFactionView();
             }
+            activeFactions.Add(factionToggle);
+            spawner.AddActiveFaction(faction);
+            
         } else 
         {
             if (activeFactions.Count == 2)
             {
-                Debug.Log(string.Format("Toggle{0} OFF", faction));
                 activeFactions.Remove(factionToggle);
+                spawner.RemoveActiveFaction(faction);
                 EnterSingleFactionView();
             }
             else if(activeFactions.Count == 1)
@@ -115,8 +114,8 @@ public class ResearchFilterManager : MonoBehaviour
             }
             else
             {
-                Debug.Log(string.Format("Toggle{0} OFF", faction));
                 activeFactions.Remove(factionToggle);
+                spawner.RemoveActiveFaction(faction);
                 allFactionsToggle.isOn = false;
             }
             
@@ -126,36 +125,10 @@ public class ResearchFilterManager : MonoBehaviour
         SetFactionToggleColor(toggle, faction);
     }
 
-    void ToggleAllCardTypes()
-    {
-        if(allCardsToggle.isOn){
-            Debug.Log("ToggleAllCardTypes ON");
-            allCardsToggle.interactable = false;
-            stewardsToggle.toggle.isOn = true;
-            seekersToggle.toggle.isOn = true;
-            sovereignsToggle.toggle.isOn = true;
-        } else 
-        {
-            Debug.Log("ToggleAllCardTypes OFF");
-            allCardsToggle.interactable = true;
-        }
-    }
-
     void ToggleCardType(Toggle toggle, CardType cardType)
     {
         if(toggle.isOn){
-            Debug.Log(string.Format("Toggle{0} ON", cardType));
-            activeCardTypes.Add(toggle);
-        } else 
-        {
-            if(activeCardTypes.Count == 1)
-            {
-                toggle.isOn = true;
-                return;
-            }
-            Debug.Log(string.Format("Toggle{0} OFF", cardType));
-            activeCardTypes.Remove(toggle);
-            allCardsToggle.isOn = false;
+            spawner.SelectCardType(cardType);
         }
     }
 
@@ -175,12 +148,15 @@ public class ResearchFilterManager : MonoBehaviour
 
     void EnterSingleFactionView()
     {
-        Debug.Log(string.Format("[{0}] active toggles", activeFactions.Count));
         foreach(FactionToggle factionToggle in activeFactions)
         {
-            Debug.Log(string.Format("Toggle{0} single faction view", factionToggle.faction));
+            Color factionColor = ResearchManager.GetFactionColor(factionToggle.faction);
 
-            filterBackground.color = ResearchManager.GetFactionColor(factionToggle.faction);
+            factionToggle.SetTextColor(factionColor);
+            factionToggle.toggle.interactable = false;
+
+            researchDisplay.SetHeaderBackgroundColor(factionColor);
+            researchDisplay.SetContentBackgroundTexture(GetFactionBackground(factionToggle.faction));
         }
         
         singleFactionView = true;
@@ -188,11 +164,33 @@ public class ResearchFilterManager : MonoBehaviour
 
     void LeaveSingleFactionView()
     {
-        Debug.Log("Leaving SingleFactionView");
         singleFactionView = false;
-        filterBackground.color = DEFAULT_FILTER_COLOR;
-    }
-    
+        
+        foreach(FactionToggle factionToggle in activeFactions)
+        {
+            factionToggle.SetTextColor(Color.black);
+            factionToggle.toggle.interactable = true;
+        }
 
+        researchDisplay.SetHeaderBackgroundColor(DEFAULT_HEADER_COLOR);
+        researchDisplay.SetContentBackgroundTexture(DEFALT_BACK_TEX);
+    }
+
+    Texture GetFactionBackground(Faction faction)
+    {
+        switch (faction)
+        {
+            case Faction.STEWARDS:
+                return STEWARDS_BACK_TEX;
+            case Faction.SEEKERS:
+                return SEEKERS_BACK_TEX;
+            case Faction.SOVEREIGNS:
+                return SOVEREIGNS_BACK_TEX;
+            case Faction.WEAVERS:
+                return WEAVERS_BACK_TEX;
+            default:
+                return DEFALT_BACK_TEX;
+        }
+    }
 
 }

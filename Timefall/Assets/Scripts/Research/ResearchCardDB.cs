@@ -26,6 +26,19 @@ public class ResearchCardDB : ScriptableObject
         cardList.AddRange(GetCalulatedEntries(agents));
     }
 
+    List<CardData> GetSingleEntries(List<CardDBEntry> entries)
+    {
+        Debug.Log(string.Format("[{0}] single entries", entries.Count));
+        List<CardData> returnList = new List<CardData>();
+
+        foreach (CardDBEntry entry in entries)
+        {
+            returnList.Add(entry.card);
+        }
+
+        return returnList;
+    }
+
     List<CardData> GetCalulatedEntries(List<CardDBEntry> entries)
     {
         List<CardData> returnList = new List<CardData>();
@@ -71,18 +84,18 @@ public class ResearchCardDB : ScriptableObject
         return cardList;
     }
 
-    // public List<CardData> GetAgents()
-    // {
-    //     return agents;
-    // }
+    public List<CardData> GetAgents()
+    {
+        return GetSingleEntries(agents);
+    }
 
-    // public List<CardData> GetEvents()
-    // {
-    //     return events;
-    // }
+    public List<CardData> GetEvents()
+    {
+        return GetSingleEntries(events);
+    }
 
-    // public List<CardData> GetEssence()
-    // {
-    //     return essence;
-    // }
+    public List<CardData> GetEssence()
+    {
+        return GetSingleEntries(essence);
+    }
 }

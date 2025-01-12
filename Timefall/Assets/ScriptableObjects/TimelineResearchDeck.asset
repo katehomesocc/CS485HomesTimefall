@@ -10,12 +10,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acbdeb1ae13731e4985d718c8ff349e2, type: 3}
-  m_Name: TimelineDeck
+  m_Name: TimelineResearchDeck
   m_EditorClassIdentifier: 
   dbName: Timeline
-  totalSize: 50
+  totalSize: 61
   agents: []
-  essence: []
+  essence:
+  - card: {fileID: 11400000, guid: 4125457a5e3a4fb488c6b122ae09897e, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 414e284c3f46cac4394e20ba7e3d59d0, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 85dff3b0b528c1f47a81c2b0cee9b8b3, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 52386636b8d50034b8296fa0cfdcfbb3, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 04866dec98b65884683e66e2e2fae5a7, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: abe618856698fd340a6f31ee736e926e, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: b7201c8eb13f5304fa82814d9832fd1c, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: cae35f76dd37d2a409580a80897bd704, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: cae35f76dd37d2a409580a80897bd704, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 0424b6091d8dcf34399ddeae814a1a01, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 0424b6091d8dcf34399ddeae814a1a01, type: 2}
+    amount: 1
   events:
   - card: {fileID: 11400000, guid: 7cd32f84b7524fb4e989f3a8450cdbe4, type: 2}
     amount: 1

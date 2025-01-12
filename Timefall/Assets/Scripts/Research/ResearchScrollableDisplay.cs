@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class ResearchScrollableDisplay : MonoBehaviour
 {
@@ -10,6 +12,12 @@ public class ResearchScrollableDisplay : MonoBehaviour
     GameObject agentCardDisplay;
     GameObject essenceCardDisplay;
     GameObject eventCardDisplay;
+
+    public RawImage contentBackground;
+
+    public RawImage headerBackground;
+    public RawImage headerIcon;
+    public TMP_Text headerText;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +30,7 @@ public class ResearchScrollableDisplay : MonoBehaviour
 
     public void SetContent(List<CardData> cardDataList)
     {
+        Debug.Log(string.Format("cardDataList [{0}]", cardDataList.Count));
         ClearContent();
         foreach (CardData data in cardDataList)
         {
@@ -102,4 +111,37 @@ public class ResearchScrollableDisplay : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
+
+    public void SetHeaderIcon(Texture texture)
+    {
+        headerIcon.texture = texture;
+    }
+
+    public void SetHeaderText(string text)
+    {
+        headerText.text = text;
+    }
+
+    public void SetHeaderBackgroundColor(Color color)
+    {
+        headerBackground.color = color;
+    }
+
+    public void SetHeaderBackgroundTexture(Texture texture)
+    {
+        headerBackground.texture = texture;
+    }
+
+    public void SetContentBackgroundColor(Color color)
+    {
+        contentBackground.color = color;
+    }
+
+    public void SetContentBackgroundTexture(Texture texture)
+    {
+        contentBackground.texture = texture;
+    }
+
+    
+
 }

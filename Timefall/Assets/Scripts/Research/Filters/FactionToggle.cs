@@ -8,15 +8,10 @@ public class FactionToggle : MonoBehaviour
 {
     public Toggle toggle;
     public Faction faction;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Text toggleText;
 
-    // Update is called once per frame
-    void Update()
+    public void SetTextColor(Color color)
     {
-        
+        toggleText.color = color;
     }
 }

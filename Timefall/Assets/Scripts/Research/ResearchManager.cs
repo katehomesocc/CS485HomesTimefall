@@ -35,7 +35,7 @@ public class ResearchManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        researchDisplay.SetContent(spawner.GetInitial());
+        spawner.SpawnInitialLayout();
     }
 
     // Update is called once per frame
