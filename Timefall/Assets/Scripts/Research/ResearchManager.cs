@@ -60,4 +60,10 @@ public class ResearchManager : MonoBehaviour
 
         return Color.black;
     }
+
+    public void LoadTitleScene()
+    {
+        GameManager.Instance.LoadTitleScene();
+    }
+
 }

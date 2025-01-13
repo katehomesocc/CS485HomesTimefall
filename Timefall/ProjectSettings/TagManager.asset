@@ -6,6 +6,9 @@ TagManager:
   tags:
   - AgentDB
   - EventDB
+  - Door left
+  - Door right
+  - LoadingBar
   layers:
   - Default
   - TransparentFX

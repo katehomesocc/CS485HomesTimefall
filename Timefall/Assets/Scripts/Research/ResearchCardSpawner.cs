@@ -102,25 +102,21 @@ public class ResearchCardSpawner : MonoBehaviour
 
         if(activeFactions.Contains(Faction.STEWARDS))
         {
-            Debug.Log("STEWARDS AGENTS");
             agentCardData.AddRange(StewardDB.GetEvents());
         }
 
         if(activeFactions.Contains(Faction.SEEKERS))
         {
-            Debug.Log("SEEKERS AGENTS");
             agentCardData.AddRange(SeekerDB.GetEvents());
         }
 
         if(activeFactions.Contains(Faction.SOVEREIGNS))
         {
-            Debug.Log("SOVEREIGNS AGENTS");
             agentCardData.AddRange(SovereignDB.GetEvents());
         }
 
         if(activeFactions.Contains(Faction.WEAVERS))
         {
-            Debug.Log("WEAVERS AGENTS");
             agentCardData.AddRange(WeaverDB.GetEvents());
         }
         return agentCardData;
@@ -132,25 +128,21 @@ public class ResearchCardSpawner : MonoBehaviour
 
         if(activeFactions.Contains(Faction.STEWARDS))
         {
-            Debug.Log("STEWARDS EVENTS");
             eventCardData.AddRange(StewardDB.GetEvents());
         }
 
         if(activeFactions.Contains(Faction.SEEKERS))
         {
-            Debug.Log("SEEKERS EVENTS");
             eventCardData.AddRange(SeekerDB.GetEvents());
         }
 
         if(activeFactions.Contains(Faction.SOVEREIGNS))
         {
-            Debug.Log("SOVEREIGNS EVENTS");
             eventCardData.AddRange(SovereignDB.GetEvents());
         }
 
         if(activeFactions.Contains(Faction.WEAVERS))
         {
-            Debug.Log("WEAVERS EVENTS");
             eventCardData.AddRange(WeaverDB.GetEvents());
         }
 
