@@ -7,18 +7,30 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
+    public static string TITLE_SCENE = "TitleScene";
+    public static string ACADEMY_SCENE = "AcademyScene";
+    public static string BATTLE_SCENE = "BattleScene";
+    public static string RESEARCH_SCENE = "ResearchScene";
     public string currentScene = "Title";
 
     public GameObject settingsPanel;
 
     public bool isSettingsOpen = false;
 
+    
     [Header("Scene Transitions")]
-    public Transform researchDoorLeft;
-    public Transform researchDoorRight;
+    public RawImage researchDoorLeft;
+    public RawImage researchDoorRight;
     public float doorClosingTime = .75f;
     public bool doorIsOpen = true;
     public Slider sceneLoadingBar;
+
+    [Header("Door Textures")]
+    public Texture DOOR_LEFT_OPEN_TEX;
+    public Texture DOOR_LEFT_CLOSED_TEX;
+    public Texture DOOR_RIGHT_OPEN_TEX;
+    public Texture DOOR_RIGHT_CLOSED_TEX;
 
     // Awake is called when the script instance is being loaded.
     void Awake()
@@ -33,36 +45,39 @@ public class GameManager : MonoBehaviour
         { 
             Instance = this; 
             DontDestroyOnLoad(transform.gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         } 
+    }
 
-        sceneLoadingBar = GameObject.FindWithTag("LoadingBar").GetComponent<Slider>();
+    // called third
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("OnSceneLoaded: " + scene.name);
+        this.currentScene = scene.name;
 
-        sceneLoadingBar.gameObject.SetActive(false);
-
-        researchDoorLeft = GameObject.FindWithTag("Door left").transform;
-        researchDoorRight = GameObject.FindWithTag("Door right").transform;
-
-        if(currentScene == "Research")
-        {
-            OpenResearchDoors();
-        }
+        StartCoroutine(OpenDoors());
+        
     }
 
     IEnumerator LoadNextScene(string sceneName)
     {
-        yield return StartCoroutine(CloseResearchDoors());
+        yield return StartCoroutine(CloseDoors());
 
         sceneLoadingBar.gameObject.SetActive(true);
+        sceneLoadingBar.value = 1f;
 
         Debug.Log(string.Format("Async loading [{0}]", sceneName));
         AsyncOperation sceneLoad = SceneManager.LoadSceneAsync(sceneName);
 
         while(!sceneLoad.isDone)
         {
-            float progress = Mathf.Clamp01(sceneLoad.progress / .9f);
+            float progress = Mathf.Clamp01(.9f - (sceneLoad.progress / .9f));
+            // Debug.Log(string.Format("progress [{0}]", progress));
             sceneLoadingBar.value = progress;
             yield return null;
         }
+
+        sceneLoadingBar.gameObject.SetActive(false);
     }
 
     // Start is called before the first frame update
@@ -83,26 +98,23 @@ public class GameManager : MonoBehaviour
 
     public void LoadTitleScene()
     {
-        SceneManager.LoadScene("TitleScene", LoadSceneMode.Single);
-        this.currentScene = "Title";
+        StartCoroutine(LoadNextScene(TITLE_SCENE));
     }
 
     public void LoadBattleScene()
     {
-        SceneManager.LoadScene("BattleScene", LoadSceneMode.Single);
-        this.currentScene = "Battle";
+        StartCoroutine(LoadNextScene(BATTLE_SCENE));
     }
 
     public void LoadAcademyScene()
     {
         
-        // SceneManager.LoadScene("AcademyScene", LoadSceneMode.Single);
-        // this.currentScene = "Academy";
+        // StartCoroutine(LoadNextScene(ACADEMY_SCENE));
     }
 
     public void LoadResearchScene()
     {
-        StartCoroutine(LoadNextScene("ResearchScene"));
+        StartCoroutine(LoadNextScene(RESEARCH_SCENE));
     }
 
     public void ToggleBattleSettingsMenu()
@@ -118,33 +130,43 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public IEnumerator OpenResearchDoors()
+    public IEnumerator OpenDoors()
     {
         if(doorIsOpen) {yield break;}
         Debug.Log("Opening research doors");
 
-        Vector3 openLeftPos = new Vector3(researchDoorLeft.position.x - 960, researchDoorLeft.position.y, researchDoorLeft.position.z);
-        Vector3 openRightPos = new Vector3(researchDoorRight.position.x + 960, researchDoorRight.position.y, researchDoorRight.position.z);
+        researchDoorLeft.texture = DOOR_LEFT_OPEN_TEX;
+        researchDoorRight.texture = DOOR_RIGHT_OPEN_TEX;
 
-        StartCoroutine(MoveToPosition(researchDoorLeft, openLeftPos, doorClosingTime));
-        yield return StartCoroutine(MoveToPosition(researchDoorRight, openRightPos, doorClosingTime));
+        Vector3 leftPos = researchDoorLeft.transform.position;
+        Vector3 rightPos = researchDoorRight.transform.position;
 
+        Vector3 openLeftPos = new Vector3(leftPos.x - 960, leftPos.y, leftPos.z);
+        Vector3 openRightPos = new Vector3(rightPos.x + 960, rightPos.y, rightPos.z);
 
+        StartCoroutine(MoveToPosition(researchDoorLeft.transform, openLeftPos, doorClosingTime));
+        yield return StartCoroutine(MoveToPosition(researchDoorRight.transform, openRightPos, doorClosingTime));
+
+        doorIsOpen = true;
     }
 
-    public IEnumerator CloseResearchDoors()
+    public IEnumerator CloseDoors()
     {
         if(!doorIsOpen) {yield break;}
         Debug.Log("Closing research doors");
+
+        Vector3 leftPos = researchDoorLeft.transform.position;
+        Vector3 rightPos = researchDoorRight.transform.position;
         
-        Vector3 closedLeftPos = new Vector3(researchDoorLeft.position.x + 960, researchDoorLeft.position.y, researchDoorLeft.position.z);
-        Vector3 closedRightPos = new Vector3(researchDoorRight.position.x - 960, researchDoorRight.position.y, researchDoorRight.position.z);
+        Vector3 closedLeftPos = new Vector3(leftPos.x + 960, leftPos.y, leftPos.z);
+        Vector3 closedRightPos = new Vector3(rightPos.x - 960, rightPos.y, rightPos.z);
 
-        StartCoroutine(MoveToPosition(researchDoorLeft, closedLeftPos, doorClosingTime));
-        yield return StartCoroutine(MoveToPosition(researchDoorRight, closedRightPos, doorClosingTime));
+        StartCoroutine(MoveToPosition(researchDoorLeft.transform, closedLeftPos, doorClosingTime));
+        yield return StartCoroutine(MoveToPosition(researchDoorRight.transform, closedRightPos, doorClosingTime));
 
-        // SceneManager.LoadScene("ResearchScene", LoadSceneMode.Single);
-        // this.currentScene = "Research";
+        researchDoorLeft.texture = DOOR_LEFT_CLOSED_TEX;
+        researchDoorRight.texture = DOOR_RIGHT_CLOSED_TEX;
+        doorIsOpen = false;
     }
 
     public IEnumerator MoveToPosition(Transform transform, Vector3 position, float timeToMove)

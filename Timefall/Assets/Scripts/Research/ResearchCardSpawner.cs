@@ -102,22 +102,22 @@ public class ResearchCardSpawner : MonoBehaviour
 
         if(activeFactions.Contains(Faction.STEWARDS))
         {
-            agentCardData.AddRange(StewardDB.GetEvents());
+            agentCardData.AddRange(StewardDB.GetAgents());
         }
 
         if(activeFactions.Contains(Faction.SEEKERS))
         {
-            agentCardData.AddRange(SeekerDB.GetEvents());
+            agentCardData.AddRange(SeekerDB.GetAgents());
         }
 
         if(activeFactions.Contains(Faction.SOVEREIGNS))
         {
-            agentCardData.AddRange(SovereignDB.GetEvents());
+            agentCardData.AddRange(SovereignDB.GetAgents());
         }
 
         if(activeFactions.Contains(Faction.WEAVERS))
         {
-            agentCardData.AddRange(WeaverDB.GetEvents());
+            agentCardData.AddRange(WeaverDB.GetAgents());
         }
         return agentCardData;
     }

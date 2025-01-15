@@ -6,6 +6,11 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance = null;
 
+	[Header("Volume Levels")]
+	public float masterVolume = 1.0f;
+	public float musicVolume = 0.75f;
+	public float effectVolume = 0.75f;
+
 	[Header("Audio Sources")]
 	public AudioSource EffectsSource;
 	public AudioSource MusicSource;
@@ -27,6 +32,10 @@ public class AudioManager : MonoBehaviour
             Instance = this; 
             DontDestroyOnLoad(transform.gameObject);
         } 
+
+		UpdateMasterVolume(masterVolume);
+		UpdateMusicVolume(musicVolume);
+		UpdateEffectVolume(effectVolume);
 	}
 
 	// Play a single clip through the sound effects source.
@@ -52,6 +61,30 @@ public class AudioManager : MonoBehaviour
 		EffectsSource.pitch = randomPitch;
 		EffectsSource.clip = clips[randomIndex];
 		EffectsSource.Play();
+	}
+
+	void UpdateVolume()
+	{
+		EffectsSource.volume = effectVolume * masterVolume;
+		MusicSource.volume = musicVolume * masterVolume;
+	}
+
+	public void UpdateMasterVolume(float volume)
+	{
+		masterVolume = volume;
+		UpdateVolume();
+	}
+
+	public void UpdateEffectVolume(float volume)
+	{
+		effectVolume = volume;
+		UpdateVolume();
+	}
+
+	public void UpdateMusicVolume(float volume)
+	{
+		effectVolume = volume;
+		UpdateVolume();
 	}
 	
 }

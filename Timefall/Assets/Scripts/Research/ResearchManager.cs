@@ -1,16 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ResearchManager : MonoBehaviour
 {
     public static ResearchManager Instance;
 
-    [Header("Colors")]
-    public static Color COLOUR_SEEKERS = new Color(33f/255,197f/255,104f/255, 1f);
-    public static Color COLOUR_SOVEREIGNS = new Color(255f/255,35f/255,147f/255, 1f);
-    public static Color COLOUR_STEWARDS = new Color(24f/255,147f/255,248f/255, 1f);
-    public static Color COLOUR_WEAVERS = new Color(97f/255,65f/255,172f/255, 1f);
+    
 
     public GameObject agentCardDisplay;
     public GameObject essenceCardDisplay;
@@ -18,6 +15,20 @@ public class ResearchManager : MonoBehaviour
 
     public ResearchScrollableDisplay researchDisplay;
     public ResearchCardSpawner spawner;
+
+    [Header("Settings Panel")]
+    public bool isSettingsOpen = false;
+    public GameObject settingsPanel;
+    public Slider masterSlider;
+    public Slider musicSlider;
+    public Slider effectsSlider;
+    public AudioClip UI_EFFECT_SOUND;
+
+    [Header("Colors")]
+    public static Color COLOUR_SEEKERS = new Color(33f/255,197f/255,104f/255, 1f);
+    public static Color COLOUR_SOVEREIGNS = new Color(255f/255,35f/255,147f/255, 1f);
+    public static Color COLOUR_STEWARDS = new Color(24f/255,147f/255,248f/255, 1f);
+    public static Color COLOUR_WEAVERS = new Color(97f/255,65f/255,172f/255, 1f);
 
     void Awake()
     {
@@ -29,6 +40,18 @@ public class ResearchManager : MonoBehaviour
         else 
         { 
             Instance = this; 
+
+            masterSlider.onValueChanged.AddListener(delegate {
+                UpdateMasterVolume(masterSlider.value);
+            });
+            
+            musicSlider.onValueChanged.AddListener(delegate {
+                UpdateMusicVolume(musicSlider.value);
+            });
+            
+            effectsSlider.onValueChanged.AddListener(delegate {
+                UpdateEffectVolume(effectsSlider.value);
+            });
         } 
     }
 
@@ -63,7 +86,43 @@ public class ResearchManager : MonoBehaviour
 
     public void LoadTitleScene()
     {
+        PlayUIEffect();
         GameManager.Instance.LoadTitleScene();
+    }
+
+    public void ToggleSettingPanel()
+    {
+        PlayUIEffect();
+
+        if(isSettingsOpen)
+        {
+            settingsPanel.SetActive(false);
+            isSettingsOpen = false;
+        } else 
+        {
+            settingsPanel.SetActive(true);
+            isSettingsOpen = true;
+        }
+    }
+
+	public void UpdateMasterVolume(float volume)
+	{
+		AudioManager.Instance.UpdateMasterVolume(volume);
+	}
+
+	public void UpdateEffectVolume(float volume)
+	{
+		AudioManager.Instance.UpdateEffectVolume(volume);
+	}
+
+	public void UpdateMusicVolume(float volume)
+	{
+		AudioManager.Instance.UpdateMusicVolume(volume);
+	}
+
+    void PlayUIEffect()
+    {
+        AudioManager.Instance.Play(UI_EFFECT_SOUND);
     }
 
 }
