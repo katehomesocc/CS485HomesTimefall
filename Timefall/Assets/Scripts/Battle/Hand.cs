@@ -15,6 +15,8 @@ public class Hand : MonoBehaviour
     BoardManager boardManager;
     TurnManager turnManager;
     BattleManager battleManager;
+
+    public DiceRoller diceRoller;
     public Deck timelineDeck;
     public DeckDisplay playerDeckDisplay;
     public List<CardDisplay> targetsAvailable = new List<CardDisplay>();
@@ -501,5 +503,5 @@ public class Hand : MonoBehaviour
         InstantiateCardInHand(card);
     }
 
-    
+        
 }

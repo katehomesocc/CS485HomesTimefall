@@ -24,19 +24,16 @@ public class EssenceCard : Card
 
     public List<BoardSpace> GetTargatableSpaces(ActionRequest actionRequest)
     {
-        //TODO: add functionality
         return essenceCardData.GetTargatableSpaces(actionRequest);
     }
 
     public List<CardDisplay> GetTargatableHandDisplays(ActionRequest actionRequest)
     {
-        //TODO: add functionality
         return essenceCardData.GetTargatableHandDisplays(actionRequest);
     }
 
     public List<Card> GetTargatableDiscardedCards(ActionRequest actionRequest)
     {
-        //TODO: add functionality
         return essenceCardData.GetTargatableDiscardedCards(actionRequest);
     }
 

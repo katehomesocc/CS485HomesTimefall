@@ -19,77 +19,60 @@ public class AgentCard : Card
         agentCardData = (AgentCardData) data;
     }
 
-    public override void SelectBoardTarget(ActionRequest actionRequest)
+    public AgentAction GetAgentAction()
     {
-        isOnBoard = true;
-        actionRequest.boardTarget.SetAgentCard(this);
-        BattleManager.Instance.ClearPossibleTargetHighlights(actionRequest);
-        Hand.Instance.RemoveCardAfterPlaying(false);
+        return agentCardData.GetAgentAction(isOnBoard);
     }
 
     public List<BoardSpace> GetTargatableSpaces(ActionRequest actionRequest)
     {
-        
-        List<BoardSpace> targetableSpaces = new List<BoardSpace>();
+        return GetAgentAction().GetTargatableSpaces(actionRequest);
+    }
 
-        if(actionRequest.potentialBoardTargets == null)
-        {
-            return targetableSpaces;
-        }
-
-        foreach (BoardSpace boardSpace in actionRequest.potentialBoardTargets)
-        {
-            if(!CanTargetSpace(boardSpace)) { continue;}
-
-            targetableSpaces.Add(boardSpace);
-        }
-
-        return targetableSpaces;
+    public List<CardDisplay> GetTargatableHandDisplays(ActionRequest actionRequest)
+    {
+        return GetAgentAction().GetTargatableHandDisplays(actionRequest);
     }
 
     public List<Card> GetTargatableDiscardedCards(ActionRequest actionRequest)
     {
-        
-        List<Card> argatableDiscardedCards = new List<Card>();
-
-        if(actionRequest.potentialDiscardedTargets == null)
-        {
-            return argatableDiscardedCards;
-        }
-
-        foreach (Card card in actionRequest.potentialDiscardedTargets)
-        {
-            if(!CanTargetDiscardedCard(card)) { continue;}
-
-            argatableDiscardedCards.Add(card);
-        }
-
-        return argatableDiscardedCards;
+        return GetAgentAction().GetTargatableDiscardedCards(actionRequest);
     }
 
-    bool CanTargetSpace(BoardSpace boardSpace)
+    public override void SelectBoardTarget(ActionRequest actionRequest)
     {
-        
-        //must have an event & not have an agent
-        if(!boardSpace.hasEvent || boardSpace.hasAgent) { return false ;}
-
-        return true;
+        GetAgentAction().SelectBoardTarget(actionRequest);
     }
 
-    bool CanTargetDiscardedCard(Card card)
+    public override void SelectHandTarget(ActionRequest actionRequest)
     {
-        
-        return false;
+        GetAgentAction().SelectHandTarget(actionRequest);
     }
 
+    public override void SelectDiscardTarget(ActionRequest actionRequest)
+    {
+        GetAgentAction().SelectDiscardedTarget(actionRequest);
+    }
 
+    public void SetActionRequest(ActionRequest actionRequest)
+    {
+        actionRequest.actionCard = this;
+        if(GetAgentAction() == null) 
+        {
+            Debug.Log("AgentCard.SetActionRequest essence action === null");
+        }
+        GetAgentAction().SetActionRequest(actionRequest);
+    }
+
+    public void StartAction(ActionRequest actionRequest)
+    {
+        GetAgentAction().StartAction(actionRequest);
+    }
+
+    
     public override bool CanBePlayed(ActionRequest potentialTargetsRequest)
     {
-        if(isOnBoard)
-        {
-            return false;
-        }
-
-        return potentialTargetsRequest.potentialBoardTargets.Count > 0; 
+        return GetAgentAction().CanBePlayed(potentialTargetsRequest);
     }
+
 }
