@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(LoadNextScene(RESEARCH_SCENE));
     }
 
-    public void ToggleBattleSettingsMenu()
+    public void ToggleSettingsMenu()
     {
         if(isSettingsOpen)
         {

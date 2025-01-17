@@ -138,11 +138,12 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             return;
         }
         Debug.Log("//TODO: roll for action");
-        //TODO: roll for action
 
         isAttemptable = false;
         RemoveAttemptHighlight();
         agentCard.attempted = true;
+
+        agentCard.RollForAction();
     }
 
     void HighlightAttemptable()

@@ -21,3 +21,5 @@ MonoBehaviour:
   cardType: 0
   diceType: D4
   diceCost: 3
+  defaultAgentAction: {fileID: 11400000, guid: 1c3ff39182ba112438b8eaf0dd651c22, type: 2}
+  agentAction: {fileID: 0}

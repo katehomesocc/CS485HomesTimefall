@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class BattleManager : MonoBehaviour
@@ -17,6 +18,8 @@ public class BattleManager : MonoBehaviour
     public DiscardPileManager discardPileManager;
 
     public ExpandDisplay expandDisplay;
+
+    public DiceRoller diceRoller;
 
     [Header("Autoplay (Development Testing)")]
     public bool autoplay = false;
@@ -53,6 +56,13 @@ public class BattleManager : MonoBehaviour
     public static Color COLOUR_STEWARDS = new Color(24f/255,147f/255,248f/255, 1f);
     public static Color COLOUR_WEAVERS = new Color(97f/255,65f/255,172f/255, 1f);
 
+    [Header("Settings Panel")]
+    public GameObject settingsPanel;
+    public bool isSettingsOpen = false;
+    public Slider masterSlider;
+    public Slider musicSlider;
+    public Slider effectsSlider;
+    public AudioClip UI_EFFECT_SOUND;
 
     void Awake()
     {
@@ -65,6 +75,21 @@ public class BattleManager : MonoBehaviour
         { 
             Instance = this; 
         } 
+
+        masterSlider.onValueChanged.AddListener(delegate {
+            UpdateMasterVolume(masterSlider.value);
+            PlaySliderEffect();
+        });
+        
+        musicSlider.onValueChanged.AddListener(delegate {
+            UpdateMusicVolume(musicSlider.value);
+            PlaySliderEffect();
+        });
+        
+        effectsSlider.onValueChanged.AddListener(delegate {
+            UpdateEffectVolume(effectsSlider.value);
+            PlaySliderEffect();
+        });
     }
 
     // Start is called before the first frame update
@@ -89,6 +114,11 @@ public class BattleManager : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.D))
         {
             HideDiscardPiles();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ToggleSettingsMenu();
         }
     }
 
@@ -314,4 +344,46 @@ public class BattleManager : MonoBehaviour
     {
         return turnManager.GetCurrentPlayer();
     }
+
+    public void ToggleSettingsMenu()
+    {
+        if(isSettingsOpen)
+        {
+            AudioManager.Instance.PlayUIExitMenu();
+            settingsPanel.SetActive(false);
+            isSettingsOpen = false;
+        } else {
+            AudioManager.Instance.PlayUIOpenMenu();
+            settingsPanel.SetActive(true);
+            isSettingsOpen = true;
+        }
+        
+    }
+
+    public void ExitToTitle()
+    {
+        GameManager.Instance.LoadTitleScene();
+    }
+
+    void PlaySliderEffect()
+    {
+        AudioManager.Instance.PlayUISliderUpdate();
+    }
+
+    public void UpdateMasterVolume(float volume)
+	{
+		AudioManager.Instance.UpdateMasterVolume(volume);
+	}
+
+	public void UpdateEffectVolume(float volume)
+	{
+		AudioManager.Instance.UpdateEffectVolume(volume);
+	}
+
+	public void UpdateMusicVolume(float volume)
+	{
+		AudioManager.Instance.UpdateMusicVolume(volume);
+	}
+
+    
 }

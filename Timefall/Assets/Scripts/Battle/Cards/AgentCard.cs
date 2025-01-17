@@ -75,4 +75,39 @@ public class AgentCard : Card
         return GetAgentAction().CanBePlayed(potentialTargetsRequest);
     }
 
+    public void RollForAction()
+    {
+        int cost = agentCardData.diceCost;
+        DoDiceRoll(cost);
+    }
+
+    public void SuccessCallback()
+    {
+
+        Debug.Log("AgentCard callback ... success!");
+    
+    }
+    public void FailureCallback()
+    {
+        Debug.Log("AgentCard callback ... failure");
+    }
+
+    void DoDiceRoll(int cost)
+    {
+        switch (agentCardData.diceType)
+        {
+            case "D4":
+                BattleManager.Instance.diceRoller.RollD4(cost, this);
+                break;
+            case "D6":
+                BattleManager.Instance.diceRoller.RollD6(cost, this);
+                break;
+            case "D8":
+                BattleManager.Instance.diceRoller.RollD8(cost, this);
+                break;
+            default:
+                return;
+        }
+    }
+
 }

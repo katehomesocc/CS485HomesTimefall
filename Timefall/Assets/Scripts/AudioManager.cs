@@ -20,6 +20,11 @@ public class AudioManager : MonoBehaviour
 	public float LowPitchRange = .95f;
 	public float HighPitchRange = 1.05f;
 
+	[Header("UI Clips")]
+	public AudioClip UI_OPEN_MENU_CLIP;
+	public AudioClip UI_EXIT_MENU_CLIP;
+	public AudioClip UI_SLIDER_UPDATE_CLIP;
+
 	private void Awake()
 	{
         // If there is an instance, and it's not me, delete myself.
@@ -83,8 +88,22 @@ public class AudioManager : MonoBehaviour
 
 	public void UpdateMusicVolume(float volume)
 	{
-		effectVolume = volume;
+		musicVolume = volume;
 		UpdateVolume();
 	}
+
+	public void PlayUIOpenMenu()
+	{
+		Play(UI_OPEN_MENU_CLIP);
+	}
 	
+	public void PlayUIExitMenu()
+	{
+		Play(UI_EXIT_MENU_CLIP);
+	}
+
+	public void PlayUISliderUpdate()
+	{
+		Play(UI_SLIDER_UPDATE_CLIP);
+	}
 }
