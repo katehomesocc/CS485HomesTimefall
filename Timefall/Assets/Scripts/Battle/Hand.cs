@@ -38,6 +38,8 @@ public class Hand : MonoBehaviour
     public int cardPlayingIndex;
     public ActionRequest currentActionRequest;
 
+    public AgentIcon agentIconActing;
+
     void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -356,6 +358,43 @@ public class Hand : MonoBehaviour
         }
     }
 
+    public void AttemptAgentAction(AgentIcon agentIcon)
+    {
+        if(!turnManager.HasEssenceToRollAgentEffect(agentIcon))
+        {
+            Debug.Log("not enough essence to play card");
+            return;
+        }
+     
+        cardPlaying = agentIcon.agentCard;
+        agentIconActing = agentIcon;
+        currentActionRequest = agentIcon.actionRequest;
+        currentActionRequest.player = turnManager.GetCurrentPlayer();
+
+        Debug.Log("attempt agent");
+
+        SetHandState(HandState.DICE_ROLL);
+        
+        turnManager.RollAgentEffect(agentIcon);     
+
+        agentIcon.AttemptAction();
+    }
+
+    public void StartAgentAction()
+    {
+        SetHandState(HandState.TARGET_SELECTION);
+    }
+
+    public void EndAgentAction()
+    {
+        //TODO: Implement animation effects
+        agentIconActing = null;
+    
+        cardPlaying = null;
+
+        SetHandState(HandState.CHOOSING);
+    }
+
     public void SelectBoardTarget(BoardSpace boardSpace)
     {
         currentActionRequest.boardTarget = boardSpace;
@@ -395,6 +434,8 @@ public class Hand : MonoBehaviour
                 currentActionRequest = null;
                 battleManager.ClearPossibleTargetHighlights(null);
                 turnManager.SetVictoryPointUI();
+                break;
+            case HandState.DICE_ROLL:
                 break;
             default:
                 break;

@@ -191,6 +191,17 @@ public class TurnManager : MonoBehaviour
         return false;
     }
 
+    public bool HasEssenceToRollAgentEffect(AgentIcon agent)
+    {
+        if(agent.placedThisTurn) { return true;}
+        if(essenceCount >= ROLL_AGENT_EFFECT)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public bool PlayEssenceCard()
     {
         Debug.Log("Play essence card");
@@ -201,8 +212,9 @@ public class TurnManager : MonoBehaviour
         return true;
     }
 
-    public bool UseAgentEffect(AgentCard agentCard)
+    public bool RollAgentEffect(AgentIcon agent)
     {
+        if(agent.placedThisTurn) { return true;}
         if(essenceCount >= ROLL_AGENT_EFFECT) {return false;}
 
         SpendEssence(ROLL_AGENT_EFFECT);

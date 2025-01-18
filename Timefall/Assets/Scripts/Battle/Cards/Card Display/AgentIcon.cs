@@ -17,12 +17,16 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     Gradient gradient;
 
     public bool isAttemptable = false;
+    public bool placedThisTurn = false;
 
     public float gradStep = 0.0f;
 
     public float flashSpeed = 1.0f;
 
     public Material attemptableMat;
+
+    [Header("Targets")]
+    public ActionRequest actionRequest = new ActionRequest();
 
     void Start()
     {
@@ -61,7 +65,15 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         this.border.color = BattleManager.GetFactionColor(agentCard.GetFaction());
         this.agentImage.texture = agentCard.GetImageTexture();
 
-        this.transform.SetAsLastSibling(); 
+        this.transform.SetAsLastSibling();
+
+        isAttemptable = true;
+
+        placedThisTurn = true;
+
+        agent.isOnBoard = true;
+
+        agentCard.SetActionRequest(actionRequest);
     }
 
     public void EquipShield()
@@ -91,11 +103,9 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             isAttemptable = false;
             RemoveAttemptHighlight();
         }
-
-        if(agentCard.attempted){
-            agentCard.attempted = false;
-        }
         
+        agentCard.attempted = false;
+        placedThisTurn = false;
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
@@ -119,7 +129,7 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             case HandState.CHOOSING:
                 int clickCount = pointerEventData.clickCount;
 
-                if(clickCount == 2)
+                if(clickCount == 2 && isAttemptable)
                 {
                     DoubleClickToRollForAction();
                 }
@@ -137,13 +147,11 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             Debug.Log(string.Format("already attempted {0} this turn", agentCard.GetCardName()));
             return;
         }
-        Debug.Log("//TODO: roll for action");
 
         isAttemptable = false;
         RemoveAttemptHighlight();
-        agentCard.attempted = true;
 
-        agentCard.RollForAction();
+        hand.AttemptAgentAction(this);
     }
 
     void HighlightAttemptable()
@@ -164,6 +172,33 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
         attemptableImage.color = newColor;
         attemptableImage.material = null;
+    }
+
+    public void AttemptAction()
+    {
+        //TODO: animation
+
+        agentCard.attempted = true;
+        agentCard.RollForAction(this);
+    }
+
+    public void SuccessCallback()
+    {
+
+        Debug.Log("AgentIcon callback ... success!");
+
+        hand.StartAgentAction();
+
+        agentCard.SuccessCallback(actionRequest);
+    
+    }
+    public void FailureCallback()
+    {
+        Debug.Log("AgentIcon callback ... failure");
+
+        agentCard.FailureCallback();
+
+        hand.EndAgentAction();
     }
         
 }

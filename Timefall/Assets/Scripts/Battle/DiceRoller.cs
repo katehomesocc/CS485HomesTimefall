@@ -58,7 +58,7 @@ public class DiceRoller : MonoBehaviour
         isPopupOpen = false;
     }
     
-    public void RollD4(int rollNeeded, AgentCard agent)
+    public void RollD4(int rollNeeded, AgentIcon agent)
     {
         int roll = Random.Range(1,5);
         Debug.Log(string.Format("Rolling D4... [{0}]", roll));
@@ -66,7 +66,7 @@ public class DiceRoller : MonoBehaviour
         StartCoroutine(RollDice("D4", rollNeeded, roll, agent));
     }
 
-    public void RollD6(int rollNeeded, AgentCard agent)
+    public void RollD6(int rollNeeded, AgentIcon agent)
     {
         int roll = Random.Range(1,7);
         Debug.Log(string.Format("Rolling D6... [{0}]", roll));
@@ -74,7 +74,7 @@ public class DiceRoller : MonoBehaviour
         StartCoroutine(RollDice("D6", rollNeeded, roll, agent));
     }
 
-    public void RollD8(int rollNeeded, AgentCard agent)
+    public void RollD8(int rollNeeded, AgentIcon agent)
     {
         int roll = Random.Range(1,9);
         Debug.Log(string.Format("Rolling D8... [{0}]", roll));
@@ -82,7 +82,7 @@ public class DiceRoller : MonoBehaviour
         StartCoroutine(RollDice("D8", rollNeeded, roll, agent));
     }
 
-    IEnumerator RollDice(string diceType, int rollNeeded, int result, AgentCard agent)
+    IEnumerator RollDice(string diceType, int rollNeeded, int result, AgentIcon agent)
     {
         OpenPopup(diceType, rollNeeded.ToString());
         yield return StartCoroutine(AnimateDice(diceType, result));

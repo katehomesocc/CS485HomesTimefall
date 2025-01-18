@@ -42,8 +42,20 @@ public class AgentCardDisplay : CardDisplay
     {
         displayCard = agentCard;
         ResetDisplay(agentCard);
-        actionRequest.actionCard = agentCard;
-        actionRequest.doBoard = true;
+
+        if(actionRequest == null)
+        {
+            Debug.Log("ACDisplay.SetCard: actionRequest is null");
+            return;
+        }
+
+        if(agentCard == null)
+        {
+            Debug.Log("ACDisplay.SetCard: agentCard  is null");
+            return;
+        }
+
+        agentCard.SetActionRequest(actionRequest);
     }
 
     // public void SetCard(Card agentCard)
