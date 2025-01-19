@@ -360,7 +360,7 @@ public class TurnManager : MonoBehaviour
         hand.DrawStartOfTurnHand(currentPlayer);
 
         //draw from timeline deck and place on next available spot
-        hand.DrawFromTimelineDeck();
+        hand.TurnStartDrawFromTimelineDeck();
 
         //spend essence
 

@@ -133,6 +133,8 @@ public class CosmicBlastEssenceAction : EssenceAction
 
     private void CosmicBlast(List<BoardSpace> boardTargets, ActionRequest actionRequest)
     {
+        Hand.Instance.SetHandState(HandState.ACTION_START);
+        
         BoardSpace target = boardTargets[0];
 
         AgentCard agentToDiscard = target.agentCard;

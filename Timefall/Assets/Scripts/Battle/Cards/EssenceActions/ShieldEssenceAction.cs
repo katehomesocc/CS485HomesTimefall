@@ -133,6 +133,8 @@ public class ShieldEssenceAction : EssenceAction
 
     private void Shield(List<BoardSpace> boardTargets, ActionRequest actionRequest)
     {
+        Hand.Instance.SetHandState(HandState.ACTION_START);
+        
         BoardSpace target = boardTargets[0];
 
         Player owner = actionRequest.player;

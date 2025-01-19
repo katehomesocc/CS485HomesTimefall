@@ -159,6 +159,8 @@ public class SwapEssenceAction : EssenceAction
 
     private void Swap(ActionRequest actionRequest)
     {
+        Hand.Instance.SetHandState(HandState.ACTION_START);
+        
         List<BoardSpace> boardTargets = actionRequest.activeBoardTargets;
 
         //Get both target eventDisplays

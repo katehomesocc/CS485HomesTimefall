@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "New DEFAULT Agent Action", menuName = "Agent Action/PARADOX")]
+[CreateAssetMenu(fileName = "New DEFAULT Agent Action", menuName = "Agent Action/PATCH")]
 [System.Serializable]
-public class ParadoxAgentAction : AgentAction
+public class PatchAgentAction : AgentAction
 {
-    public Texture PARADOX_TEX;
+    public Texture PATCH_TEX;
 
-    public Texture2D CURSOR_PARADOX_TEX;
+    public Texture2D CURSOR_PATCH_TEX;
 
     public override bool CanBePlayed(ActionRequest actionRequest)
     {
@@ -18,8 +18,7 @@ public class ParadoxAgentAction : AgentAction
 
     bool CanTargetSpace(BoardSpace boardSpace)
     {   
-        //must have an event & not being shielded 
-        if(!boardSpace.hasEvent || boardSpace.shielded) { return false ;}
+        if(!boardSpace.isHole) { return false ;}
 
         return true;
     }
@@ -54,7 +53,7 @@ public class ParadoxAgentAction : AgentAction
     {
         if(actionRequest.activeBoardTargets.Count == 0)
         {
-            return PARADOX_TEX;
+            return PATCH_TEX;
         }
 
         return null;
@@ -64,7 +63,7 @@ public class ParadoxAgentAction : AgentAction
     {
         if(actionRequest.activeBoardTargets.Count == 0)
         {
-            return CURSOR_PARADOX_TEX;
+            return CURSOR_PATCH_TEX;
         }
 
         return null;
@@ -88,7 +87,7 @@ public class ParadoxAgentAction : AgentAction
 
         if(activeBoardTargets.Count == 1)
         {
-            Paradox(activeBoardTargets, actionRequest);
+            Patch(activeBoardTargets, actionRequest);
         }
     }
 
@@ -114,8 +113,8 @@ public class ParadoxAgentAction : AgentAction
 
     public override void EndAction(ActionRequest actionRequest)
     {
-        //set handstate
         Hand hand = Hand.Instance;
+        //set handstate
         hand.SetHandState(HandState.ACTION_END);
         
         //reset cursor
@@ -130,14 +129,16 @@ public class ParadoxAgentAction : AgentAction
         hand.EndAgentAction();
     }
 
-    private void Paradox(List<BoardSpace> boardTargets, ActionRequest actionRequest)
+    private void Patch(List<BoardSpace> boardTargets, ActionRequest actionRequest)
     {
         Hand.Instance.SetHandState(HandState.ACTION_START);
-        
+    
         BoardSpace target = boardTargets[0];
 
-        target.Paradox();
+        //Draw card from timeline deck
 
+        target.Patch();
+        
         EndAction(actionRequest);
     }
 }

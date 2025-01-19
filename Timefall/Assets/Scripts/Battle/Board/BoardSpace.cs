@@ -11,14 +11,13 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
     public Color resetColor;
 
-    
-
     public GameObject highlight;
     public RawImage selectionIcon;
 
     [Header("Managers")]
     Hand hand;
     TurnManager turnManager;
+    BoardManager boardManager;
 
     [Header("Display Prefabs")]
     public GameObject agentDisplayPrefab;
@@ -35,6 +34,8 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     
     public bool shielded = false;
 
+    public bool isHole = false;
+
     public EventCardDisplay eventDisplay;
     // public AgentCardDisplay agentDisplay;
 
@@ -49,6 +50,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     {
         hand = Hand.Instance;
         turnManager = TurnManager.Instance;
+        boardManager = BoardManager.Instance;
         border.color = Color.white;
     }
 
@@ -297,5 +299,54 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         agentCard.ShieldExpired();
         agentIcon.ShieldExpired();
     }
+
+    public void PlaceEventOn(EventCardDisplay cardDisplay)
+    {
+        StartCoroutine(cardDisplay.ScaleToPositionAndSize(this.transform.position, this.transform.lossyScale, 1f, this.transform));
+        
+        SetEventCard(cardDisplay);
+        
+        cardDisplay.SetCardPlayState(CardPlayState.ON_BOARD);
+    }
+
+    public void Paradox()
+    {
+        //send event to timeline discard
+        EventCard eventToDiscard = eventCard;
+        RemoveEventCard();
+        BattleManager.Instance.DiscardToDeck(eventToDiscard, Faction.NONE);
     
+        if(hasAgent)
+        {
+            //send agent to its factions discard pile
+            AgentCard agentToDiscard = agentCard;
+            RemoveAgentCard();
+            BattleManager.Instance.DiscardToDeck(agentToDiscard, agentToDiscard.GetFaction());
+        }
+
+        isHole = true;
+    }
+
+    public void Patch()
+    {
+        EventCardDisplay display = hand.PatchDisplayFromTimelineDeck();
+
+        StartCoroutine(PatchAnimation(display));
+    }
+
+    IEnumerator PatchAnimation(EventCardDisplay display)
+    {
+        //TODO: patch audio effect
+
+        yield return new WaitForSeconds(1f);
+
+        BattleManager.Instance.expandDisplay.RemoveStaticDisplay(display);
+
+        PlaceEventOn(display);
+
+        turnManager.SetVictoryPointUI();
+
+        isHole = false;
+    }
+
 }

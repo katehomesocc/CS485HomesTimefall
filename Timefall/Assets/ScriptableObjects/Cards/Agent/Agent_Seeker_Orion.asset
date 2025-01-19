@@ -22,4 +22,4 @@ MonoBehaviour:
   diceType: D8
   diceCost: 4
   defaultAgentAction: {fileID: 11400000, guid: 1c3ff39182ba112438b8eaf0dd651c22, type: 2}
-  agentAction: {fileID: 11400000, guid: 1c3ff39182ba112438b8eaf0dd651c22, type: 2}
+  agentAction: {fileID: 11400000, guid: 83b31a18892f9844c9f0c1683f152389, type: 2}

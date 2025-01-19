@@ -117,7 +117,6 @@ public class ExpandDisplay : MonoBehaviour
 
         return eventDC;
     }
-
     public void PlayInitialTimelineCard(CardDisplay display)
     {
         if(staticCards.Count == 1)
@@ -134,6 +133,11 @@ public class ExpandDisplay : MonoBehaviour
             Hand.Instance.PlayInitialTimelineCard(staticCards[0]);
             staticCards.RemoveAt(0);
         }
+    }
+
+    public void RemoveStaticDisplay(CardDisplay display)
+    {
+        staticCards.Remove(display);
     }
 
 }

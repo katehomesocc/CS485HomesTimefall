@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "New CONVERT Essence Action", menuName = "Essence Action/CONVERT")]
+[CreateAssetMenu(fileName = "New DEFAULT Agent Action", menuName = "Agent Action/REVIVE")]
 [System.Serializable]
-public class ConvertEssenceAction : EssenceAction
+public class ReviveAgentAction : AgentAction
 {
-    public Texture CONVERT_TEX;
-    public Texture2D CURSOR_CONVERT_TEX;
+    public Texture REVIVE_TEX;
+    public Texture2D CURSOR_REVIVE_TEX;
 
     public override bool CanBePlayed(ActionRequest actionRequest)
     {
@@ -17,8 +17,8 @@ public class ConvertEssenceAction : EssenceAction
 
     bool CanTargetDiscardedCard(Card discardCard, Faction requestFaction)
     { 
-        //must be an agent & a different factions
-        if(discardCard.GetCardType() != CardType.AGENT || discardCard.GetFaction() == requestFaction)
+        //must be an agent & not other facations
+        if(discardCard.GetCardType() != CardType.AGENT || discardCard.GetFaction() != requestFaction)
         {
             return false;
         }
@@ -53,7 +53,7 @@ public class ConvertEssenceAction : EssenceAction
     {
         if(actionRequest.activeDiscardedTargets.Count == 0)
         {
-            return CONVERT_TEX;
+            return REVIVE_TEX;
         } 
         return null;
     }
@@ -62,7 +62,7 @@ public class ConvertEssenceAction : EssenceAction
     {
         if(actionRequest.activeDiscardedTargets.Count == 0)
         {
-            return CURSOR_CONVERT_TEX;
+            return CURSOR_REVIVE_TEX;
         } 
         return null;
     }
@@ -92,7 +92,7 @@ public class ConvertEssenceAction : EssenceAction
 
         Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
 
-        Convert(discardedTarget, actionRequest.player, actionRequest);
+        Revive(discardedTarget, actionRequest.player, actionRequest);
 
         return;
     }
@@ -123,12 +123,11 @@ public class ConvertEssenceAction : EssenceAction
         hand.RemoveCardAfterPlaying(true);
     }
 
-    private void Convert(Card discardTarget, Player requestPlayer, ActionRequest actionRequest)
+    private void Revive(Card discardTarget, Player player, ActionRequest actionRequest)
     {
         Hand.Instance.SetHandState(HandState.ACTION_START);
         
-        AgentCard agent = (AgentCard) discardTarget;
-        BattleManager.Instance.ConvertAgent(agent, requestPlayer.faction);
+        player.ReviveAgent((AgentCard) discardTarget);
 
         //end of action
         EndAction(actionRequest);

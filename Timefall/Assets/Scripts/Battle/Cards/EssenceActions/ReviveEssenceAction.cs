@@ -125,7 +125,8 @@ public class ReviveEssenceAction : EssenceAction
 
     private void Revive(Card discardTarget, Player player, ActionRequest actionRequest)
     {
-
+        Hand.Instance.SetHandState(HandState.ACTION_START);
+        
         player.ReviveAgent((AgentCard) discardTarget);
 
         //end of action

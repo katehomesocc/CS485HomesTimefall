@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d977c36817c3ead4da7654f2aa8bb676, type: 3}
-  m_Name: AA_Paradox
+  m_Script: {fileID: 11500000, guid: c9d919a25dcc7df48ba1ccfbb63961c0, type: 3}
+  m_Name: AA_Shield
   m_EditorClassIdentifier: 
-  PARADOX_TEX: {fileID: 2800000, guid: ef5e6eade042aff41b57761e581e4551, type: 3}
-  CURSOR_PARADOX_TEX: {fileID: 2800000, guid: 2f35c6ced74cba748abbcff0c3565472, type: 3}
+  SHIELD_TEX: {fileID: 2800000, guid: 48fa52892d48328409e64c7951746e37, type: 3}
+  CURSOR_SHIELD_TEX: {fileID: 2800000, guid: 75a270ba058119c4c9a77b536ada8865, type: 3}

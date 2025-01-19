@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "New DEFAULT Agent Action", menuName = "Agent Action/PARADOX")]
+[CreateAssetMenu(fileName = "New DEFAULT Agent Action", menuName = "Agent Action/SHIELD")]
 [System.Serializable]
-public class ParadoxAgentAction : AgentAction
+public class ShieldAgentAction : AgentAction
 {
-    public Texture PARADOX_TEX;
+    public Texture SHIELD_TEX;
 
-    public Texture2D CURSOR_PARADOX_TEX;
+    public Texture2D CURSOR_SHIELD_TEX;
 
     public override bool CanBePlayed(ActionRequest actionRequest)
     {
@@ -18,8 +18,8 @@ public class ParadoxAgentAction : AgentAction
 
     bool CanTargetSpace(BoardSpace boardSpace)
     {   
-        //must have an event & not being shielded 
-        if(!boardSpace.hasEvent || boardSpace.shielded) { return false ;}
+        //must have an agent & agent must not be sheilded
+        if(!boardSpace.hasAgent || boardSpace.agentCard.shielded) { return false ;}
 
         return true;
     }
@@ -44,7 +44,7 @@ public class ParadoxAgentAction : AgentAction
     {
         return new List<CardDisplay>();
     }
-    
+
     public override List<Card> GetTargatableDiscardedCards(ActionRequest actionRequest)
     {
         return new List<Card>();
@@ -54,7 +54,7 @@ public class ParadoxAgentAction : AgentAction
     {
         if(actionRequest.activeBoardTargets.Count == 0)
         {
-            return PARADOX_TEX;
+            return SHIELD_TEX;
         }
 
         return null;
@@ -64,7 +64,7 @@ public class ParadoxAgentAction : AgentAction
     {
         if(actionRequest.activeBoardTargets.Count == 0)
         {
-            return CURSOR_PARADOX_TEX;
+            return CURSOR_SHIELD_TEX;
         }
 
         return null;
@@ -88,7 +88,7 @@ public class ParadoxAgentAction : AgentAction
 
         if(activeBoardTargets.Count == 1)
         {
-            Paradox(activeBoardTargets, actionRequest);
+            Shield(activeBoardTargets, actionRequest);
         }
     }
 
@@ -101,11 +101,12 @@ public class ParadoxAgentAction : AgentAction
     {
         return;
     }
-
+    
     public override void SetActionRequest(ActionRequest actionRequest)
     {
         actionRequest.doBoard = true;
     }
+
     public override void StartAction(ActionRequest actionRequest)
     {
         BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
@@ -130,14 +131,19 @@ public class ParadoxAgentAction : AgentAction
         hand.EndAgentAction();
     }
 
-    private void Paradox(List<BoardSpace> boardTargets, ActionRequest actionRequest)
+    private void Shield(List<BoardSpace> boardTargets, ActionRequest actionRequest)
     {
         Hand.Instance.SetHandState(HandState.ACTION_START);
         
+        //TODO: need to account for if this agent dies, to remove the shield frome the agent
         BoardSpace target = boardTargets[0];
 
-        target.Paradox();
+        Player owner = actionRequest.player;
 
+        Shield shield = new Shield(owner, Expiration.NEXT_TURN, target, false, true);
+        
+        target.AgentEquiptShield(shield);
+        
         EndAction(actionRequest);
     }
 }

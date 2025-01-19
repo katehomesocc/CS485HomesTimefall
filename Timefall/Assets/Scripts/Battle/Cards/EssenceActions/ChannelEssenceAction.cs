@@ -130,7 +130,8 @@ public class ChannelEssenceAction : EssenceAction
 
     private void Channel(CardDisplay handTarget, List<CardDisplay> handTargets, Player player, ActionRequest actionRequest)
     {
-
+        Hand.Instance.SetHandState(HandState.ACTION_START);
+        
         player.ChannelCard(handTarget);
 
         //end of action

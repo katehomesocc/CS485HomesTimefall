@@ -41,11 +41,7 @@ public class BoardManager : MonoBehaviour
 
         BoardSpace space = spaces[round-1];
 
-        StartCoroutine(cardDisplay.ScaleToPositionAndSize(space.transform.position,space.transform.lossyScale, 1f, space.transform));
-        
-        space.SetEventCard((EventCardDisplay)cardDisplay);
-        
-        cardDisplay.SetCardPlayState(CardPlayState.ON_BOARD);
+        space.PlaceEventOn((EventCardDisplay) cardDisplay);
     }
 
     public int[] CalculateVPInList(BoardSpace[] spacesToCalc)

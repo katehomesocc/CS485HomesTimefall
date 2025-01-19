@@ -71,7 +71,7 @@ public class Hand : MonoBehaviour
 
 		shufflePlayerButton.onClick.AddListener(ShufflePlayerDeck);
 
-		drawTimelineButton.onClick.AddListener(DrawFromTimelineDeck);
+		drawTimelineButton.onClick.AddListener(TurnStartDrawFromTimelineDeck);
 
 		shuffleTimelineButton.onClick.AddListener(ShuffleTimelineDeck);
     }
@@ -182,7 +182,7 @@ public class Hand : MonoBehaviour
         ShuffleDeck(timelineDeck);
     }
 
-    public void DrawFromTimelineDeck()
+    public void TurnStartDrawFromTimelineDeck()
     {
         Card card = timelineDeck.Draw();
 
@@ -544,5 +544,17 @@ public class Hand : MonoBehaviour
         InstantiateCardInHand(card);
     }
 
+    public EventCardDisplay PatchDisplayFromTimelineDeck()
+    {
+        Card card = timelineDeck.Draw();
+
+        if(card == null){ return null;}
+
+        EventCardDisplay display = (EventCardDisplay) battleManager.ExpandCardView(card, false);
+
+        display.playState = CardPlayState.PATCH;
+
+        return display;
+    }
         
 }
