@@ -309,6 +309,16 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         cardDisplay.SetCardPlayState(CardPlayState.ON_BOARD);
     }
 
+    public void CosmicBlast()
+    {
+        AgentCard agentToDiscard = agentCard;
+
+        RemoveAgentCard();
+
+        //send agent to its factions discard pile
+        BattleManager.Instance.DiscardToDeck(agentToDiscard, agentToDiscard.GetFaction());
+    }
+
     public void Paradox()
     {
         //send event to timeline discard

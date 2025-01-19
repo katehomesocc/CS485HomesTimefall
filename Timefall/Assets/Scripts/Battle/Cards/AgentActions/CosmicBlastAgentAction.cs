@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "New COSMIC BLAST Essence Action", menuName = "Essence Action/COSMIC BLAST")]
+[CreateAssetMenu(fileName = "New COSMIC BLAST Agent Action", menuName = "Agent Action/COSMIC BLAST")]
 [System.Serializable]
-public class CosmicBlastEssenceAction : EssenceAction
+public class CosmicBlastAgentAction : AgentAction
 {
     public Texture COSMIC_BLAST_TEX;
 

@@ -84,7 +84,8 @@ public class DiceRoller : MonoBehaviour
 
     IEnumerator RollDice(string diceType, int rollNeeded, int result, AgentIcon agent)
     {
-        bool success = result >= rollNeeded;
+        //TODO: uncomment only for testing
+        bool success = true; //result >= rollNeeded;
 
         OpenPopup(diceType, rollNeeded.ToString());
         
