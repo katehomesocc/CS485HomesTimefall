@@ -84,23 +84,38 @@ public class DiceRoller : MonoBehaviour
 
     IEnumerator RollDice(string diceType, int rollNeeded, int result, AgentIcon agent)
     {
+        bool success = result >= rollNeeded;
+
         OpenPopup(diceType, rollNeeded.ToString());
+        
         yield return StartCoroutine(AnimateDice(diceType, result));
 
-        if(result >= rollNeeded)
+        ShowPopupResults(success);
+
+        yield return new WaitForSeconds(resultTime);
+        
+        ClosePopup();
+
+        if(success)
+        {
+            agent.SuccessCallback();
+        } else
+        {
+            agent.FailureCallback();
+        }
+    }
+
+    void ShowPopupResults(bool success)
+    {
+        if(success)
         {
             AudioManager.Instance.Play(successSound);
             subtext.text = "successful :)";
-            agent.SuccessCallback();
         } else
         {
             AudioManager.Instance.Play(failureSound);
             subtext.text = "unsuccessful :(";
-            agent.FailureCallback();
         }
-
-        yield return new WaitForSeconds(resultTime);
-        ClosePopup();
     }
 
     IEnumerator AnimateDice(string diceType, int result)
