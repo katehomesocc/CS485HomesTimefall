@@ -152,6 +152,8 @@ public class ShieldAgentAction : AgentAction
         shield.SubscribeToAgent(agent.onDeath);
         
         target.AgentEquiptShield(shield);
+
+        AudioManager.Instance.Play(audioClip);
         
         EndAction(actionRequest);
     }

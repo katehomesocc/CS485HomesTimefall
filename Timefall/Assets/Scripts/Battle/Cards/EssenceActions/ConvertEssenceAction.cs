@@ -130,6 +130,8 @@ public class ConvertEssenceAction : EssenceAction
         AgentCard agent = (AgentCard) discardTarget;
         BattleManager.Instance.ConvertAgent(agent, requestPlayer.faction);
 
+        AudioManager.Instance.Play(audioClip);
+
         //end of action
         EndAction(actionRequest);
     }

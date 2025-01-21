@@ -142,6 +142,8 @@ public class ShieldEssenceAction : EssenceAction
         Shield shield = new Shield(owner, Expiration.NEXT_TURN, target, false, true);
         
         target.AgentEquiptShield(shield);
+
+        AudioManager.Instance.Play(audioClip);
         
         EndAction(actionRequest);
     }

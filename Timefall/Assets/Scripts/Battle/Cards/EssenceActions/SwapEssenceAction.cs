@@ -186,6 +186,8 @@ public class SwapEssenceAction : EssenceAction
         boardTargets[1].SetEventCard(target1);
         boardTargets[0].SetEventCard(target2);
 
+        AudioManager.Instance.Play(audioClip);
+
         //end of action
         EndAction(actionRequest);
     }

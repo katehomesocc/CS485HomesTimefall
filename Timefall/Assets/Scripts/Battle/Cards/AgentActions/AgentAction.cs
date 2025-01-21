@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class AgentAction : ScriptableObject {
+
+    public AudioClip audioClip;
     public abstract bool CanBePlayed(ActionRequest ActionRequest);
     public abstract Texture GetSelectionTexture(ActionRequest ActionRequest);
 

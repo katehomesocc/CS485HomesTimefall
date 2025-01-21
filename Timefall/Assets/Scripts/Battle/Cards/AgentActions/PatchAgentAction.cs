@@ -144,6 +144,8 @@ public class PatchAgentAction : AgentAction
 
         target.Patch();
         
+        AudioManager.Instance.Play(audioClip);
+        
         EndAction(actionRequest);
     }
 }

@@ -134,6 +134,8 @@ public class ChannelEssenceAction : EssenceAction
         
         player.ChannelCard(handTarget);
 
+        AudioManager.Instance.Play(audioClip);
+
         //end of action
         EndAction(actionRequest);
     }

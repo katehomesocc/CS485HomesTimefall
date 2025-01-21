@@ -137,6 +137,8 @@ public class ParadoxEssenceAction : EssenceAction
         BoardSpace target = boardTargets[0];
 
         target.Paradox();
+
+        AudioManager.Instance.Play(audioClip);
         
         EndAction(actionRequest);
     }

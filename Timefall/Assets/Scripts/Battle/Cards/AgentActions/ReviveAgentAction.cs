@@ -128,6 +128,8 @@ public class ReviveAgentAction : AgentAction
         Hand.Instance.SetHandState(HandState.ACTION_START);
         
         player.ReviveAgent((AgentCard) discardTarget);
+        AudioManager.Instance.Play(audioClip);
+        
 
         //end of action
         EndAction(actionRequest);

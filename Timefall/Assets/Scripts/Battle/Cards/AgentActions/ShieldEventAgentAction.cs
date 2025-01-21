@@ -157,6 +157,8 @@ public class EventShieldAgentAction : AgentAction
         //if this agent dies, to remove the shield frome the event
         shield.SubscribeToAgent(agent.onDeath);
         target.EventEquiptShield(shield);
+
+        AudioManager.Instance.Play(audioClip);
         
         EndAction(actionRequest);
     }

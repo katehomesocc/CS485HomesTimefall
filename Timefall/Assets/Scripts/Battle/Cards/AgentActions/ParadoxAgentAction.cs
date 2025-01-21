@@ -143,6 +143,8 @@ public class ParadoxAgentAction : AgentAction
 
         target.Paradox();
 
+        AudioManager.Instance.Play(audioClip);
+
         EndAction(actionRequest);
     }
 }

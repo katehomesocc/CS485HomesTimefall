@@ -129,6 +129,8 @@ public class ReviveEssenceAction : EssenceAction
         
         player.ReviveAgent((AgentCard) discardTarget);
 
+        AudioManager.Instance.Play(audioClip);
+
         //end of action
         EndAction(actionRequest);
     }

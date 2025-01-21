@@ -138,6 +138,8 @@ public class CosmicBlastEssenceAction : EssenceAction
         BoardSpace target = boardTargets[0];
 
         target.CosmicBlast();
+
+        AudioManager.Instance.Play(audioClip);
         
         EndAction(actionRequest);
     }
