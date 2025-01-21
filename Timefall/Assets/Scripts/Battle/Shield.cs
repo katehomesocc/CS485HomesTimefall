@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Shield
 {
-    Player owner;
-    Expiration expiration = Expiration.NONE;
+    public Player owner;
+    public Expiration expiration = Expiration.NONE;
 
     BoardSpace targetSpace;
 
@@ -30,14 +31,15 @@ public class Shield
     {
         if(agentTargeted)
         {
-            Debug.Log("SHIELD: agent targeted");
+            Debug.Log("SHIELD EXPIRED: agent targeted");
             targetSpace.AgentShieldExpired();
         }
 
-        // if(spaceTargeted)
-        // {
-            
-        // }
+        if(spaceTargeted)
+        {
+            Debug.Log("SHIELD EXPIRED: event targeted");
+            targetSpace.EventShieldExpired();
+        }
         //TODO: animation
         //Destroy(this);
     }
@@ -47,18 +49,39 @@ public class Shield
         switch (expiration)
         {
             case Expiration.NONE:
-                Debug.Log("SHIELD: Expiration.NONE");
+                // Debug.Log("SHIELD: Expiration.NONE");
                 return;
             case Expiration.NEXT_TURN:
                 if(owner != TurnManager.Instance.GetCurrentPlayer()){
-                    Debug.Log("SHIELD: Expiration.NEXT_TURN");
+                    // Debug.Log("SHIELD: Expiration.NEXT_TURN");
+
+                    if(agentTargeted)
+                    {
+                        // Debug.Log("SHIELD: agent targeted");
+                        targetSpace.AgentShieldCountdown();
+                    }
+
+                    if(spaceTargeted)
+                    {
+                        // Debug.Log("SHIELD: event targeted");
+                        targetSpace.EventShieldCountdown();
+                    }
                     return;
                 }   
-                Debug.Log("SHIELD: Expiring now :(");
+                // Debug.Log("SHIELD: Expiring now :(");
                 Expire();
                 break;
             default:
                 return;
         }
+    }
+
+    public void SubscribeToAgent(UnityEvent onAgentDeath)
+    {
+        if(onAgentDeath == null)
+        {
+            Debug.LogError("onAgentDeath == null");
+        }
+        onAgentDeath.AddListener(Expire);
     }
 }

@@ -13,6 +13,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
     public GameObject highlight;
     public RawImage selectionIcon;
+    public GameObject eventSpawn;
 
     [Header("Managers")]
     Hand hand;
@@ -37,10 +38,10 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     public bool isHole = false;
 
     public EventCardDisplay eventDisplay;
-    // public AgentCardDisplay agentDisplay;
 
     [Header("Event")]
     public EventCard eventCard;
+    public ShieldDisplay eventShield;
 
     [Header("Agent")]
     public AgentCard agentCard;
@@ -198,12 +199,26 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         agentIcon.SetAgent(agentCard);
     }
 
-    public void RemoveAgentCard()
+    public void RemoveAgentCard(bool onDeath)
     {
+         Debug.Log(string.Format("[{0}] | RemoveAgentCard", this.name));
+        //TODO: animation
+
         agentIcon.transform.SetAsFirstSibling();
 
+        if(onDeath)
+        {
+            Debug.Log(string.Format("[{0}] | [{1}] died", this.name, agentCard.data.cardName));
+            agentCard.Death();
+        }
+        
         this.agentCard = null;
         this.hasAgent = false;
+
+        // if(shielded)
+        // {
+        //     EventShieldExpired();
+        // }
     }
 
     public void Highlight()
@@ -291,18 +306,44 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     public void AgentEquiptShield(Shield shield)
     {
         agentCard.EquipShield(shield);
-        agentIcon.EquipShield();
+        agentIcon.EquiptShield(shield);
     }
 
     public void AgentShieldExpired()
     {
+        Debug.Log(string.Format("[{0}] |  AgentShieldExpired", this.name));
+    
         agentCard.ShieldExpired();
         agentIcon.ShieldExpired();
     }
 
+    public void AgentShieldCountdown()
+    {
+        agentIcon.DecreaseShieldCountDown();
+    }
+
+    public void EventEquiptShield(Shield shield)
+    {
+        shielded = true;
+        eventCard.EquipShield(shield);
+        eventShield.SetShield(shield);
+    }
+
+    public void EventShieldExpired()
+    {
+        shielded = false;
+        eventCard.ShieldExpired();
+        eventShield.Expire();
+    }
+
+    public void EventShieldCountdown()
+    {
+        eventShield.DecreaseCountDown();
+    }
+
     public void PlaceEventOn(EventCardDisplay cardDisplay)
     {
-        StartCoroutine(cardDisplay.ScaleToPositionAndSize(this.transform.position, this.transform.lossyScale, 1f, this.transform));
+        StartCoroutine(cardDisplay.ScaleToPositionAndSize(eventSpawn.transform.position, eventSpawn.transform.lossyScale, 1f, eventSpawn.transform));
         
         SetEventCard(cardDisplay);
         
@@ -313,10 +354,12 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     {
         AgentCard agentToDiscard = agentCard;
 
-        RemoveAgentCard();
-
         //send agent to its factions discard pile
         BattleManager.Instance.DiscardToDeck(agentToDiscard, agentToDiscard.GetFaction());
+
+        RemoveAgentCard(true);
+
+
     }
 
     public void Paradox()
@@ -330,7 +373,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         {
             //send agent to its factions discard pile
             AgentCard agentToDiscard = agentCard;
-            RemoveAgentCard();
+            RemoveAgentCard(true);
             BattleManager.Instance.DiscardToDeck(agentToDiscard, agentToDiscard.GetFaction());
         }
 

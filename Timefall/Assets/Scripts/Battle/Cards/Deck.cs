@@ -87,6 +87,10 @@ public class Deck : MonoBehaviour
 
     public void Discard(Card card)
     {
+        if(discardPile.Contains(card))
+        {
+            return;
+        }
         discardPile.Add(card);
     }
 

@@ -10,7 +10,7 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public RawImage attemptableImage;
     public RawImage border;
     public RawImage agentImage;
-    public GameObject shieldIcon;
+    public ShieldDisplay shieldDisplay;
     
     public AgentCard agentCard;
 
@@ -76,13 +76,13 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         agentCard.SetActionRequest(actionRequest);
     }
 
-    public void EquipShield()
+    public void EquiptShield(Shield shield)
     {
-        shieldIcon.SetActive(true);
+        shieldDisplay.SetShield(shield);
     }
     public void ShieldExpired()
     {
-        shieldIcon.SetActive(false);
+        shieldDisplay.Expire();
     }
 
     public void ResolveStartOfTurn()
@@ -199,6 +199,11 @@ public class AgentIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         agentCard.FailureCallback();
 
         hand.EndAgentAction();
+    }
+
+    public void DecreaseShieldCountDown()
+    {
+        shieldDisplay.DecreaseCountDown();
     }
         
 }

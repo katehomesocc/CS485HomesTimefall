@@ -85,7 +85,7 @@ public class Card
         return true;
     }
 
-    public void EquipShield(Shield equip)
+    public virtual void EquipShield(Shield equip)
     {
         shield = equip;
         shielded = true;

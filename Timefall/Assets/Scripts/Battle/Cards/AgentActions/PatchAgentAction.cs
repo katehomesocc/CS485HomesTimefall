@@ -18,6 +18,11 @@ public class PatchAgentAction : AgentAction
 
     bool CanTargetSpace(BoardSpace boardSpace)
     {   
+        if(!boardSpace.isUnlocked)
+        {
+            return false;
+        }
+
         if(!boardSpace.isHole) { return false ;}
 
         return true;

@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class AgentCard : Card
 {
+    public UnityEvent onDeath = new UnityEvent();
     public AgentCardData agentCardData;
 
     public bool isOnBoard = false;
@@ -109,6 +111,20 @@ public class AgentCard : Card
             default:
                 return;
         }
+    }
+
+    public void Death()
+    {
+        isOnBoard = false;
+        onDeath.Invoke();
+    }
+
+    public override void EquipShield(Shield equip)
+    {
+        shield = equip;
+        shielded = true;
+
+        equip.SubscribeToAgent(onDeath);
     }
 
 }

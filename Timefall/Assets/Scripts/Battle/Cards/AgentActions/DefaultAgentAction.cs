@@ -25,6 +25,11 @@ public class DefaultAgentAction : AgentAction
     bool CanTargetSpace(BoardSpace boardSpace)
     {   
 
+        if(!boardSpace.isUnlocked)
+        {
+            return false;
+        }
+
         //must have an event & not have an agent
         if(!boardSpace.hasEvent || boardSpace.hasAgent) { return false ;}
 

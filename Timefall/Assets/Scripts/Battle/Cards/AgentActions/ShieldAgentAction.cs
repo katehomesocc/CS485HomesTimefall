@@ -18,6 +18,11 @@ public class ShieldAgentAction : AgentAction
 
     bool CanTargetSpace(BoardSpace boardSpace)
     {   
+        if(!boardSpace.isUnlocked)
+        {
+            return false;
+        }
+
         //must have an agent & agent must not be sheilded
         if(!boardSpace.hasAgent || boardSpace.agentCard.shielded) { return false ;}
 
@@ -135,12 +140,16 @@ public class ShieldAgentAction : AgentAction
     {
         Hand.Instance.SetHandState(HandState.ACTION_START);
         
-        //TODO: need to account for if this agent dies, to remove the shield frome the agent
         BoardSpace target = boardTargets[0];
 
         Player owner = actionRequest.player;
 
+        AgentCard agent = (AgentCard) actionRequest.actionCard;
+
         Shield shield = new Shield(owner, Expiration.NEXT_TURN, target, false, true);
+
+        //if this agent dies, to remove the shield frome the event
+        shield.SubscribeToAgent(agent.onDeath);
         
         target.AgentEquiptShield(shield);
         

@@ -19,6 +19,9 @@ public class EventCardDisplay : CardDisplay
     public TMP_Text weaverText;
     public Image weaverImage;
 
+    [Header("Board Effects")]
+    public GameObject shieldIcon;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -90,6 +93,15 @@ public class EventCardDisplay : CardDisplay
             vpTMP.text = vpText;
             vpImage.enabled = true;
         }
+    }
+
+    public void EquipShield()
+    {
+        shieldIcon.SetActive(true);
+    }
+    public void ShieldExpired()
+    {
+        shieldIcon.SetActive(false);
     }
 
 }

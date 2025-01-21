@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 890cef0f1b0aa4a4290ed37aa2cb0abe, type: 3}
-  m_Name: AA_Revive
+  m_Script: {fileID: 11500000, guid: c9d919a25dcc7df48ba1ccfbb63961c0, type: 3}
+  m_Name: AA_AgentShield
   m_EditorClassIdentifier: 
-  REVIVE_TEX: {fileID: 2800000, guid: 2c4ddedd360894f499fcf1e0ef00c506, type: 3}
-  CURSOR_REVIVE_TEX: {fileID: 2800000, guid: 1177990056eb3e9489cdd6fe7ef842cd, type: 3}
+  SHIELD_TEX: {fileID: 2800000, guid: 48fa52892d48328409e64c7951746e37, type: 3}
+  CURSOR_SHIELD_TEX: {fileID: 2800000, guid: 75a270ba058119c4c9a77b536ada8865, type: 3}

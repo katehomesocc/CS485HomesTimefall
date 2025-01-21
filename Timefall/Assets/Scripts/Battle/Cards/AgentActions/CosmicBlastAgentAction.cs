@@ -18,6 +18,11 @@ public class CosmicBlastAgentAction : AgentAction
 
     bool CanTargetSpace(BoardSpace boardSpace)
     {   
+        if(!boardSpace.isUnlocked)
+        {
+            return false;
+        }
+
         //must have an agent & agent must not be sheilded
         if(!boardSpace.hasAgent || boardSpace.agentCard.shielded) { return false ;}
 

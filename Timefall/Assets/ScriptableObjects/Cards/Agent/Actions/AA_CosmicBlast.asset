@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88d9f017f14a51f4da91926ea5b224a4, type: 3}
   m_Name: AA_CosmicBlast
   m_EditorClassIdentifier: 
-  COSMIC_BLAST_TEX: {fileID: 0}
-  CURSOR_COSMIC_BLAST_TEX: {fileID: 0}
+  COSMIC_BLAST_TEX: {fileID: 2800000, guid: 901976f625fb173468d029ff5100fe31, type: 3}
+  CURSOR_COSMIC_BLAST_TEX: {fileID: 2800000, guid: d3ee5c92060ef4249aeede7e3d2ee51c,
+    type: 3}
