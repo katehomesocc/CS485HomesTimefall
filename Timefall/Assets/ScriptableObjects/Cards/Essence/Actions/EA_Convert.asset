@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de0edf9769fafd4479844152b9297ad4, type: 3}
   m_Name: EA_Convert
   m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: b3f3d004ea47f5b4e994ab274a14940f, type: 3}
   CONVERT_TEX: {fileID: 2800000, guid: c40cf07ed39ba714187112bfed9a3476, type: 3}
   CURSOR_CONVERT_TEX: {fileID: 2800000, guid: 72132bb5aca155b4bbec1befcc32f77b, type: 3}

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 671539f302be00f4d9e203a8a67eb619, type: 3}
   m_Name: EA_Shield
   m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: ecb02bd01014cca4baf72fdb4db51c1c, type: 3}
   SHIELD_TEX: {fileID: 2800000, guid: 48fa52892d48328409e64c7951746e37, type: 3}
   CURSOR_SHIELD_TEX: {fileID: 2800000, guid: 75a270ba058119c4c9a77b536ada8865, type: 3}

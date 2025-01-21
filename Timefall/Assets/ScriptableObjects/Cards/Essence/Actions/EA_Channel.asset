@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4a19ddc81b5487479066c02060854ff, type: 3}
   m_Name: EA_Channel
   m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 87320cb1826b0e04ea9910a28db053ac, type: 3}
   CHANNEL_TEX: {fileID: 2800000, guid: 9c1c8e0ed37376549973613e43ef59e7, type: 3}
   CURSOR_CHANNEL_TEX: {fileID: 2800000, guid: 34814981af3618f4486a36564c14d013, type: 3}

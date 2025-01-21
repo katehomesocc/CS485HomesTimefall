@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc024ebc8f57b374cb76ca833afc539d, type: 3}
   m_Name: EA_CosmicBlast
   m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 06c5a8c6fbadff94c8753db8e269240f, type: 3}
   COSMIC_BLAST_TEX: {fileID: 2800000, guid: 901976f625fb173468d029ff5100fe31, type: 3}
   CURSOR_COSMIC_BLAST_TEX: {fileID: 2800000, guid: d3ee5c92060ef4249aeede7e3d2ee51c,
     type: 3}

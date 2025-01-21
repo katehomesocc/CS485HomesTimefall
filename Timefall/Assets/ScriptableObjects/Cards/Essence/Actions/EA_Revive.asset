@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aed8a146140eed4f841f06160764ff9, type: 3}
   m_Name: EA_Revive
   m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: c7a0ff2e410a3e54ba5f8cfe64201f2c, type: 3}
   REVIVE_TEX: {fileID: 2800000, guid: 2c4ddedd360894f499fcf1e0ef00c506, type: 3}
   CURSOR_REVIVE_TEX: {fileID: 2800000, guid: 1177990056eb3e9489cdd6fe7ef842cd, type: 3}

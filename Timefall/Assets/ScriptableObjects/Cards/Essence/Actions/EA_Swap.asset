@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2e510a251768544c90dd84b4da09123, type: 3}
   m_Name: EA_Swap
   m_EditorClassIdentifier: 
-  targets:
-  - {fileID: 0}
-  - {fileID: 0}
+  audioClip: {fileID: 8300000, guid: 34e06a33f3ccd0b4c8ccf1cb2903657f, type: 3}
   CARD_TAP_UP_TEX: {fileID: 2800000, guid: dcce84131d4a72241bf22fce4fc8e1f2, type: 3}
   CARD_TAP_DOWN_TEX: {fileID: 2800000, guid: 8e78257487c87ad4ebf0e570021ecc8d, type: 3}
   CURSOR_CARD_TAP_UP_TEX: {fileID: 2800000, guid: 8b19a34d71702c144860a662817f52ee,
