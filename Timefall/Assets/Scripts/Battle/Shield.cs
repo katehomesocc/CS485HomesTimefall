@@ -52,7 +52,7 @@ public class Shield
                 // Debug.Log("SHIELD: Expiration.NONE");
                 return;
             case Expiration.NEXT_TURN:
-                if(owner != TurnManager.Instance.GetCurrentPlayer()){
+                if(owner != BattleStateMachine.Instance.GetCurrentPlayer()){
                     // Debug.Log("SHIELD: Expiration.NEXT_TURN");
 
                     if(agentTargeted)

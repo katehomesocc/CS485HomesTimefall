@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-
+//TODO: Delete this class and any references
+//only keep for transition purposes
 public class TurnManager : MonoBehaviour
 {
     public static TurnManager Instance;

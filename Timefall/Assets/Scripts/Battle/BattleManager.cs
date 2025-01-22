@@ -7,7 +7,7 @@ using TMPro;
 public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance;
-    TurnManager turnManager;
+    BattleStateMachine battleStateMachine;
     BoardManager boardManager;
     Hand hand;
 
@@ -95,7 +95,7 @@ public class BattleManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        turnManager = TurnManager.Instance;
+        battleStateMachine = BattleStateMachine.Instance;
         boardManager = BoardManager.Instance;
         hand = Hand.Instance;
 
@@ -122,28 +122,28 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    IEnumerator QueueFirstAutoplay()
-    {
-        yield return StartCoroutine(turnManager.StartOfGame());
+    // IEnumerator QueueFirstAutoplay()
+    // {
+    //     yield return StartCoroutine(battleStateMachine.StartOfGame());
 
-        StartCoroutine(AutoplayRound());
-    }
+    //     StartCoroutine(AutoplayRound());
+    // }
 
-    IEnumerator AutoplayRound()
-    {
-        expandDisplay.AutoPlayInitialTimelineCard();
+    // IEnumerator AutoplayRound()
+    // {
+    //     expandDisplay.AutoPlayInitialTimelineCard();
         
-        yield return turnManager.EndTurn();
+    //     yield return battleStateMachine.EndTurn();
 
-        yield return new WaitForSeconds(0.1f);
+    //     yield return new WaitForSeconds(0.1f);
 
-        if(turn < autoplayUntilTurn)
-        {
-            turn++;
-            StartCoroutine(AutoplayRound());
-        }
+    //     if(turn < autoplayUntilTurn)
+    //     {
+    //         turn++;
+    //         StartCoroutine(AutoplayRound());
+    //     }
         
-    }
+    // }
 
     public void PlayInitialTimelineCard(CardDisplay display)
     {
@@ -170,10 +170,10 @@ public class BattleManager : MonoBehaviour
 
         if(autoplay)
         {
-            StartCoroutine(QueueFirstAutoplay());
+            // StartCoroutine(QueueFirstAutoplay());
         } else
         {
-            turnManager.StartGame();
+            battleStateMachine.StartGame();
         }
     }
 
@@ -342,7 +342,7 @@ public class BattleManager : MonoBehaviour
 
     public Player GetCurrentPlayer()
     {
-        return turnManager.GetCurrentPlayer();
+        return battleStateMachine.GetCurrentPlayer();
     }
 
     public void ToggleSettingsMenu()

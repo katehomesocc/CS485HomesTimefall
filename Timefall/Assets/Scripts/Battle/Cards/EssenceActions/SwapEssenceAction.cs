@@ -154,7 +154,7 @@ public class SwapEssenceAction : EssenceAction
             targetedSpace.DeselectAsTarget();
         }
 
-        hand.RemoveCardAfterPlaying(true);
+        hand.RemoveCardAfterPlaying(true,true);
     }
 
     private void Swap(ActionRequest actionRequest)

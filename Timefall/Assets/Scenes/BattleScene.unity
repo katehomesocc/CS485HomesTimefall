@@ -1211,6 +1211,7 @@ GameObject:
   m_Component:
   - component: {fileID: 140469340}
   - component: {fileID: 140469341}
+  - component: {fileID: 140469342}
   m_Layer: 0
   m_Name: TurnManager
   m_TagString: Untagged
@@ -1240,7 +1241,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 140469338}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ee0b34caea7fd24c83de8ed3bce0127, type: 3}
   m_Name: 
@@ -1272,6 +1273,53 @@ MonoBehaviour:
   seekerRoundVPText: {fileID: 1282402202}
   sovereignRoundVPText: {fileID: 44638996}
   weaverRoundVPText: {fileID: 1535453558}
+  ZERO_ESSENCE_TEXTURE: {fileID: 2800000, guid: fc001b33f7852204281d5cf70bfc4fb0,
+    type: 3}
+  ONE_ESSENCE_TEXTURE: {fileID: 2800000, guid: 8c5cc766a31b4f94989eb97dcdd4d884, type: 3}
+  TWO_ESSENCE_TEXTURE: {fileID: 2800000, guid: 42e4a9a2d846319439242d57b2769c2d, type: 3}
+  THREE_ESSENCE_TEXTURE: {fileID: 2800000, guid: 67e04162866621847b4ad99ad0890160,
+    type: 3}
+  essenceCountImage: {fileID: 1019838046}
+--- !u!114 &140469342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140469338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef352ef7d5f1db44f81ca4c6e0e7a4dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  fabricOfTime: {fileID: 1131212133}
+  turnOrderCovers:
+  - {fileID: 352151419}
+  - {fileID: 1552792944}
+  - {fileID: 538380636}
+  - {fileID: 86102335}
+  scoreboard: {fileID: 762729346}
+  scoreboardPanel: {fileID: 508962572}
+  scoreboardLabelText: {fileID: 813591763}
+  scoreboardWinnerText: {fileID: 2133230394}
+  roundWinners: 
+  roundNumText: {fileID: 1119059257}
+  stewardVPText: {fileID: 135966708}
+  seekerVPText: {fileID: 1904372992}
+  sovereignVPText: {fileID: 2067987617}
+  weaverVPText: {fileID: 32498081}
+  stewardRoundVPText: {fileID: 1006288495}
+  seekerRoundVPText: {fileID: 1282402202}
+  sovereignRoundVPText: {fileID: 44638996}
+  weaverRoundVPText: {fileID: 1535453558}
+  currentTurn: 0
+  totalTurns: 32
+  currentPlayer: {fileID: 0}
+  currentFaction: 3
+  essenceCount: 0
+  currentTurnText: {fileID: 1119059257}
+  endTurnButton: {fileID: 799107644}
   ZERO_ESSENCE_TEXTURE: {fileID: 2800000, guid: fc001b33f7852204281d5cf70bfc4fb0,
     type: 3}
   ONE_ESSENCE_TEXTURE: {fileID: 2800000, guid: 8c5cc766a31b4f94989eb97dcdd4d884, type: 3}
@@ -6379,6 +6427,10 @@ MonoBehaviour:
   deck: {fileID: 504536986}
   channelList: []
   handSize: 5
+  isBot: 0
+  botAI:
+    currentState: 0
+    essenceCount: 3
 --- !u!114 &504536986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9362,6 +9414,10 @@ MonoBehaviour:
   deck: {fileID: 745033239}
   channelList: []
   handSize: 5
+  isBot: 1
+  botAI:
+    currentState: 0
+    essenceCount: 3
 --- !u!114 &745033239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9688,6 +9744,10 @@ MonoBehaviour:
   deck: {fileID: 752113217}
   channelList: []
   handSize: 5
+  isBot: 1
+  botAI:
+    currentState: 0
+    essenceCount: 3
 --- !u!114 &752113217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10377,8 +10437,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 140469341}
-        m_TargetAssemblyTypeName: TurnManager, Assembly-CSharp
+      - m_Target: {fileID: 140469342}
+        m_TargetAssemblyTypeName: BattleStateMachine, Assembly-CSharp
         m_MethodName: KickoffEndTurn
         m_Mode: 1
         m_Arguments:
@@ -16282,6 +16342,83 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b509c92a64f1b5f46a6c8fb3dc56f6c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1257507429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1257507430}
+  - component: {fileID: 1257507431}
+  m_Layer: 0
+  m_Name: BattleStateMachine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1257507430
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257507429}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2051374907}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1257507431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257507429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef352ef7d5f1db44f81ca4c6e0e7a4dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  fabricOfTime: {fileID: 1131212133}
+  turnOrderCovers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  scoreboard: {fileID: 762729346}
+  scoreboardPanel: {fileID: 508962572}
+  scoreboardLabelText: {fileID: 813591763}
+  scoreboardWinnerText: {fileID: 2133230394}
+  roundWinners: 
+  roundNumText: {fileID: 0}
+  stewardVPText: {fileID: 0}
+  seekerVPText: {fileID: 0}
+  sovereignVPText: {fileID: 0}
+  weaverVPText: {fileID: 0}
+  stewardRoundVPText: {fileID: 0}
+  seekerRoundVPText: {fileID: 0}
+  sovereignRoundVPText: {fileID: 0}
+  weaverRoundVPText: {fileID: 0}
+  currentTurn: 0
+  totalTurns: 32
+  currentPlayer: {fileID: 0}
+  currentFaction: 0
+  essenceCount: 0
+  currentTurnText: {fileID: 0}
+  endTurnButton: {fileID: 0}
+  ZERO_ESSENCE_TEXTURE: {fileID: 0}
+  ONE_ESSENCE_TEXTURE: {fileID: 0}
+  TWO_ESSENCE_TEXTURE: {fileID: 0}
+  THREE_ESSENCE_TEXTURE: {fileID: 0}
+  essenceCountImage: {fileID: 0}
 --- !u!1 &1258111194
 GameObject:
   m_ObjectHideFlags: 0
@@ -17380,6 +17517,10 @@ MonoBehaviour:
   deck: {fileID: 1378618517}
   channelList: []
   handSize: 5
+  isBot: 1
+  botAI:
+    currentState: 0
+    essenceCount: 3
 --- !u!114 &1378618517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25887,7 +26028,7 @@ MonoBehaviour:
   discardPileManager: {fileID: 330134324}
   expandDisplay: {fileID: 163754642}
   diceRoller: {fileID: 1928601825}
-  autoplay: 1
+  autoplay: 0
   autoplayUntilTurn: 4
   autoplayWaitTime: 1.5
   startupTime: 0
@@ -25929,6 +26070,7 @@ Transform:
   m_Children:
   - {fileID: 140469340}
   - {fileID: 1928601826}
+  - {fileID: 1257507430}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2052829411

@@ -13,6 +13,20 @@ public class Player : MonoBehaviour
 
     public PlayerEffect playerEffect;
 
+    public bool isBot = false;
+
+    [SerializeField]
+    public BotAI botAI = null;
+
+    void Awake()
+    {
+        if(isBot)
+        {
+            botAI = new BotAI();
+            botAI.InitializeBot(this);
+        }
+    }
+
     public void ChannelCard(CardDisplay cardDisplay)
     {
         cardDisplay.ApplyChannelEffect();

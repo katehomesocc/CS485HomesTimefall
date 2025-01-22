@@ -17,7 +17,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
     [Header("Managers")]
     Hand hand;
-    TurnManager turnManager;
+    BattleStateMachine battleStateMachine;
     BoardManager boardManager;
 
     [Header("Display Prefabs")]
@@ -50,7 +50,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     void Start()
     {
         hand = Hand.Instance;
-        turnManager = TurnManager.Instance;
+        battleStateMachine = BattleStateMachine.Instance;
         boardManager = BoardManager.Instance;
         border.color = Color.white;
     }
@@ -74,7 +74,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         //     {
         //         EssenceCard essenceCard = (EssenceCard) card;
                 
-        //         essenceCard.SelectBoardTarget(this, turnManager.GetCurrentPlayer());  
+        //         essenceCard.SelectBoardTarget(this, battleStateMachine.GetCurrentPlayer());  
         //     }
             
 
@@ -151,7 +151,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
         //     if(!CanPlayCardOnThisSpace(display.displayCard)) {return;}
 
-        //     turnManager.SetVictoryPointUI();
+        //     battleStateMachine.SetVictoryPointUI();
 
         // }
     }
@@ -167,9 +167,9 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
     bool CanPlayCardOnThisSpace(Card card)
     {
-        bool turnManagerApproved = turnManager.HasEssenceToPlayCard(card);
+        bool battleStateMachineApproved = battleStateMachine.HasEssenceToPlayCard(card);
 
-        return turnManagerApproved;
+        return battleStateMachineApproved;
         
     }
 
@@ -397,7 +397,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
         PlaceEventOn(display);
 
-        turnManager.SetVictoryPointUI();
+        battleStateMachine.SetVictoryPointUI();
 
         isHole = false;
     }
@@ -417,7 +417,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
         PlaceEventOn(display);
 
-        turnManager.SetVictoryPointUI();
+        battleStateMachine.SetVictoryPointUI();
 
     }
 }

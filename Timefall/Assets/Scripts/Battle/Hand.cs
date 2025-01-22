@@ -13,7 +13,7 @@ public class Hand : MonoBehaviour
     public List<Card> cardsInHand = new List<Card>();
     public List<CardDisplay> displaysInHand = new List<CardDisplay>();
     BoardManager boardManager;
-    TurnManager turnManager;
+    BattleStateMachine battleStateMachine;
     BattleManager battleManager;
 
     public DiceRoller diceRoller;
@@ -56,7 +56,7 @@ public class Hand : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        turnManager = TurnManager.Instance;
+        battleStateMachine = BattleStateMachine.Instance;
         boardManager = BoardManager.Instance;
         battleManager = BattleManager.Instance;
 
@@ -199,10 +199,9 @@ public class Hand : MonoBehaviour
         if(display == null){ return;}
 
         boardManager.PlaceTimelineEventForTurn(display);
-        turnManager.SetVictoryPointUI();
-        turnManager.EnableEndTurnButton();
+        battleStateMachine.SetVictoryPointUI();
 
-        turnManager.ResolveStartOfTurn();
+        battleStateMachine.ResolveStartOfTurn();
 
         SetHandState(HandState.CHOOSING);
     }
@@ -283,7 +282,7 @@ public class Hand : MonoBehaviour
         // Card card = cardDisplay.displayCard;
 
         // //check if enough essence to play card
-        // bool haveEnoughEssence = turnManager.HasEssenceToPlayCard(card);
+        // bool haveEnoughEssence = battleStateMachine.HasEssenceToPlayCard(card);
 
         // // Debug.Log("haveEnoughEssence = " + haveEnoughEssence);
 
@@ -302,7 +301,7 @@ public class Hand : MonoBehaviour
 
     public void PlayCard(CardDisplay cardDisplay)
     {
-        if(!turnManager.HasEssenceToPlayCard(cardDisplay.displayCard))
+        if(!battleStateMachine.HasEssenceToPlayCard(cardDisplay.displayCard))
         {
             Debug.Log("not enough essence to play card");
             return;
@@ -310,7 +309,7 @@ public class Hand : MonoBehaviour
 
         currentActionRequest = cardDisplay.actionRequest;
 
-        if(!cardDisplay.CanBePlayed(turnManager.GetCurrentPlayer()))
+        if(!cardDisplay.CanBePlayed(battleStateMachine.GetCurrentPlayer()))
         {
             Debug.Log(currentActionRequest.ToString());
             Debug.Log("cannot play display");
@@ -323,13 +322,13 @@ public class Hand : MonoBehaviour
 
         if(cardDisplay.GetCardType() == CardType.ESSENCE)
         {       
-            turnManager.PlayEssenceCard();     
+            battleStateMachine.PlayEssenceCard();     
             SetHandState(HandState.TARGET_SELECTION);
 
             EssenceCardDisplay ecDisplay = (EssenceCardDisplay) cardDisplay;
 
             currentActionRequest = ecDisplay.actionRequest;
-            currentActionRequest.player = turnManager.GetCurrentPlayer();
+            currentActionRequest.player = battleStateMachine.GetCurrentPlayer();
 
             //start essence action
             EssenceCard essenceCard = ecDisplay.PlayFromHand();
@@ -341,13 +340,13 @@ public class Hand : MonoBehaviour
 
         if(cardDisplay.GetCardType() == CardType.AGENT)
         {       
-            turnManager.PlayAgentCard();     
+            battleStateMachine.PlayAgentCard();     
             SetHandState(HandState.TARGET_SELECTION);
 
             AgentCardDisplay acDisplay = (AgentCardDisplay) cardDisplay;
             
             currentActionRequest = acDisplay.actionRequest;
-            currentActionRequest.player = turnManager.GetCurrentPlayer();
+            currentActionRequest.player = battleStateMachine.GetCurrentPlayer();
 
             //start agent action
             AgentCard agentCard = acDisplay.PlayFromHand();
@@ -359,13 +358,13 @@ public class Hand : MonoBehaviour
 
         if(cardDisplay.GetCardType() == CardType.EVENT)
         {       
-            turnManager.ReplaceTimelineEvent();     
+            battleStateMachine.ReplaceTimelineEvent();     
             SetHandState(HandState.TARGET_SELECTION);
 
             EventCardDisplay ecDisplay = (EventCardDisplay) cardDisplay;
             
             currentActionRequest = ecDisplay.actionRequest;
-            currentActionRequest.player = turnManager.GetCurrentPlayer();
+            currentActionRequest.player = battleStateMachine.GetCurrentPlayer();
             currentActionRequest.activeHandTargets.Add(ecDisplay);
 
             //start agent action
@@ -379,7 +378,7 @@ public class Hand : MonoBehaviour
 
     public void AttemptAgentAction(AgentIcon agentIcon)
     {
-        if(!turnManager.HasEssenceToRollAgentEffect(agentIcon))
+        if(!battleStateMachine.HasEssenceToRollAgentEffect(agentIcon))
         {
             Debug.Log("not enough essence to play card");
             return;
@@ -388,13 +387,13 @@ public class Hand : MonoBehaviour
         cardPlaying = agentIcon.agentCard;
         agentIconActing = agentIcon;
         currentActionRequest = agentIcon.actionRequest;
-        currentActionRequest.player = turnManager.GetCurrentPlayer();
+        currentActionRequest.player = battleStateMachine.GetCurrentPlayer();
 
         Debug.Log("attempt agent");
 
         SetHandState(HandState.DICE_ROLL);
         
-        turnManager.RollAgentEffect(agentIcon);     
+        battleStateMachine.RollAgentEffect(agentIcon);     
 
         agentIcon.AttemptAction();
     }
@@ -452,7 +451,7 @@ public class Hand : MonoBehaviour
             case HandState.ACTION_END:
                 currentActionRequest = null;
                 battleManager.ClearPossibleTargetHighlights(null);
-                turnManager.SetVictoryPointUI();
+                battleStateMachine.SetVictoryPointUI();
                 break;
             case HandState.DICE_ROLL:
                 break;
@@ -476,7 +475,7 @@ public class Hand : MonoBehaviour
         }
 
         if(discard){
-            turnManager.GetCurrentPlayer().deck.Discard(cardPlaying);
+            battleStateMachine.GetCurrentPlayer().deck.Discard(cardPlaying);
         }
     
         cardPlaying = null;
@@ -582,7 +581,7 @@ public class Hand : MonoBehaviour
     public void PlayBotCard(CardDisplay cardDisplay)
     {
         
-        if(!turnManager.HasEssenceToPlayCard(cardDisplay.displayCard))
+        if(!battleStateMachine.HasEssenceToPlayCard(cardDisplay.displayCard))
         {
             Debug.Log("not enough essence to play card");
             return;
@@ -591,7 +590,7 @@ public class Hand : MonoBehaviour
         currentActionRequest = cardDisplay.actionRequest;
         currentActionRequest.isBot = true;
 
-        if(!cardDisplay.CanBePlayed(turnManager.GetCurrentPlayer()))
+        if(!cardDisplay.CanBePlayed(battleStateMachine.GetCurrentPlayer()))
         {
             Debug.Log(currentActionRequest.ToString());
             Debug.Log("cannot play display");
@@ -604,13 +603,13 @@ public class Hand : MonoBehaviour
 
         if(cardDisplay.GetCardType() == CardType.ESSENCE)
         {       
-            turnManager.PlayEssenceCard();     
+            battleStateMachine.PlayEssenceCard();     
             SetHandState(HandState.TARGET_SELECTION);
 
             EssenceCardDisplay ecDisplay = (EssenceCardDisplay) cardDisplay;
 
             currentActionRequest = ecDisplay.actionRequest;
-            currentActionRequest.player = turnManager.GetCurrentPlayer();
+            currentActionRequest.player = battleStateMachine.GetCurrentPlayer();
 
             //start essence action
             EssenceCard essenceCard = ecDisplay.PlayFromHand();
@@ -622,13 +621,13 @@ public class Hand : MonoBehaviour
 
         if(cardDisplay.GetCardType() == CardType.AGENT)
         {       
-            turnManager.PlayAgentCard();     
+            battleStateMachine.PlayAgentCard();     
             SetHandState(HandState.TARGET_SELECTION);
 
             AgentCardDisplay acDisplay = (AgentCardDisplay) cardDisplay;
             
             currentActionRequest = acDisplay.actionRequest;
-            currentActionRequest.player = turnManager.GetCurrentPlayer();
+            currentActionRequest.player = battleStateMachine.GetCurrentPlayer();
 
             //start agent action
             AgentCard agentCard = acDisplay.PlayFromHand();
