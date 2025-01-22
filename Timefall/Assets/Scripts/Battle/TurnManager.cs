@@ -182,6 +182,14 @@ public class TurnManager : MonoBehaviour
                 }
 
                 break;
+            case CardType.EVENT:
+
+                if(essenceCount >= REPLACE_TIMELINE_EVENT)
+                {
+                    return true;
+                }
+
+                break;
             default:
             //Error handling
                 Debug.LogError("Invalid Card Type: " + cardType);
@@ -246,7 +254,7 @@ public class TurnManager : MonoBehaviour
         return true;
     }
 
-    public bool ReplaceTimelineEvent(EventCard timelineEvent, EventCard replaceEvent)
+    public bool ReplaceTimelineEvent()
     {
         if(essenceCount >= REPLACE_TIMELINE_EVENT) {return false;}
 

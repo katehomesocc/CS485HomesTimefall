@@ -46,8 +46,8 @@ public class EssenceCardDisplay : CardDisplay
 
     public EssenceCard PlayFromHand()
     {
-        Vector3 newPosition = this.transform.position + new Vector3(0, 50, 0);
-        StartCoroutine(this.MoveToPosition(newPosition, 0.25f));
+        Vector3 newPosition = this.transform.localPosition + new Vector3(0, 50, 0);
+        StartCoroutine(this.MoveToLocalPosition(newPosition, 0.25f));
                     
         GetEssenceCard().StartAction(actionRequest);
         return GetEssenceCard();

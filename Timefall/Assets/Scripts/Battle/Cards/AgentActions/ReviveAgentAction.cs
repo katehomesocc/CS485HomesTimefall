@@ -120,7 +120,7 @@ public class ReviveAgentAction : AgentAction
         //close discard display
         BattleManager.Instance.ClearPossibleTargetHighlights(actionRequest);
 
-        hand.RemoveCardAfterPlaying(true);
+        hand.RemoveCardAfterPlaying(true,true);
     }
 
     private void Revive(Card discardTarget, Player player, ActionRequest actionRequest)

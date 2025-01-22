@@ -17,7 +17,6 @@ MonoBehaviour:
   description: E71_Description_text
   image: {fileID: 0}
   faction: 0
-  isPlaced: 0
   cardType: 2
+  essenceAction: {fileID: 11400000, guid: ff89d3577da0a6c4ba5526e50acea4b3, type: 2}
   victoryPoints: 00000000000000000000000014000000
-  cardType: 2

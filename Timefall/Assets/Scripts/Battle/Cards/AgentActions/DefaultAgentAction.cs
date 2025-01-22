@@ -142,7 +142,7 @@ public class DefaultAgentAction : AgentAction
             targetedSpace.DeselectAsTarget();
         }
 
-        hand.RemoveCardAfterPlaying(true);
+        hand.RemoveCardAfterPlaying(true,true);
     }
 
     private void PlaceAgent(List<BoardSpace> boardTargets, ActionRequest actionRequest)

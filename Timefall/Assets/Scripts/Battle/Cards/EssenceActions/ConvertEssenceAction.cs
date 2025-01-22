@@ -120,7 +120,7 @@ public class ConvertEssenceAction : EssenceAction
         //close discard display
         BattleManager.Instance.ClearPossibleTargetHighlights(actionRequest);
 
-        hand.RemoveCardAfterPlaying(true);
+        hand.RemoveCardAfterPlaying(true,true);
     }
 
     private void Convert(Card discardTarget, Player requestPlayer, ActionRequest actionRequest)

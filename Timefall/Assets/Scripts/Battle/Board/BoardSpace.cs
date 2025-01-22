@@ -402,4 +402,22 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         isHole = false;
     }
 
+    public void Replace(EventCardDisplay replacementDisplay)
+    {
+        StartCoroutine(ReplaceAnimation(replacementDisplay));
+    }
+
+    IEnumerator ReplaceAnimation(EventCardDisplay display)
+    {
+        //TODO: replace audio effect
+
+        RemoveEventCard();
+
+        yield return new WaitForSeconds(0.25f);
+
+        PlaceEventOn(display);
+
+        turnManager.SetVictoryPointUI();
+
+    }
 }

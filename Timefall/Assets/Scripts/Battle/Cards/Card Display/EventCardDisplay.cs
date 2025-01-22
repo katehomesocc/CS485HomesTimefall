@@ -48,6 +48,13 @@ public class EventCardDisplay : CardDisplay
     {
         displayCard = eventCard;
         ResetDisplay(eventCard.eventCardData);
+
+        if(eventCard.data.faction == Faction.NONE)
+        {
+            return;
+        }
+
+        eventCard.SetActionRequest(actionRequest);
     }
 
     // public void SetCard(Card eventCard)
@@ -102,6 +109,20 @@ public class EventCardDisplay : CardDisplay
     public void ShieldExpired()
     {
         shieldIcon.SetActive(false);
+    }
+
+    public EventCard GetEventCard()
+    {
+        return (EventCard) displayCard;
+    }
+
+    public EventCard PlayFromHand()
+    {
+        Vector3 newPosition = this.transform.localPosition + new Vector3(0, 50, 0);
+        StartCoroutine(this.MoveToLocalPosition(newPosition, 0.25f));
+                    
+        GetEventCard().StartAction(actionRequest);
+        return GetEventCard();
     }
 
 }

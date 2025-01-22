@@ -356,6 +356,25 @@ public class Hand : MonoBehaviour
             cardPlayingIndex = acDisplay.GetPositionInParent();
 
         }
+
+        if(cardDisplay.GetCardType() == CardType.EVENT)
+        {       
+            turnManager.ReplaceTimelineEvent();     
+            SetHandState(HandState.TARGET_SELECTION);
+
+            EventCardDisplay ecDisplay = (EventCardDisplay) cardDisplay;
+            
+            currentActionRequest = ecDisplay.actionRequest;
+            currentActionRequest.player = turnManager.GetCurrentPlayer();
+            currentActionRequest.activeHandTargets.Add(ecDisplay);
+
+            //start agent action
+            EventCard eventCard = ecDisplay.PlayFromHand();
+
+            cardPlaying = eventCard;
+            cardPlayingIndex = ecDisplay.GetPositionInParent();
+
+        }
     }
 
     public void AttemptAgentAction(AgentIcon agentIcon)
@@ -442,7 +461,7 @@ public class Hand : MonoBehaviour
         }
     }
 
-    public void RemoveCardAfterPlaying(bool discard)
+    public void RemoveCardAfterPlaying(bool discard, bool destroy)
     {
         //TODO: Implement animation effects
 
@@ -451,7 +470,10 @@ public class Hand : MonoBehaviour
         cardsInHand.RemoveAt(cardPlayingIndex);
         displaysInHand.RemoveAt(cardPlayingIndex);
 
-        DestroyImmediate(this.transform.GetChild(cardPlayingIndex).gameObject);
+        if(destroy)
+        {
+            DestroyImmediate(this.transform.GetChild(cardPlayingIndex).gameObject);
+        }
 
         if(discard){
             turnManager.GetCurrentPlayer().deck.Discard(cardPlaying);
@@ -555,6 +577,66 @@ public class Hand : MonoBehaviour
         display.playState = CardPlayState.PATCH;
 
         return display;
+    }
+
+    public void PlayBotCard(CardDisplay cardDisplay)
+    {
+        
+        if(!turnManager.HasEssenceToPlayCard(cardDisplay.displayCard))
+        {
+            Debug.Log("not enough essence to play card");
+            return;
+        }
+
+        currentActionRequest = cardDisplay.actionRequest;
+        currentActionRequest.isBot = true;
+
+        if(!cardDisplay.CanBePlayed(turnManager.GetCurrentPlayer()))
+        {
+            Debug.Log(currentActionRequest.ToString());
+            Debug.Log("cannot play display");
+            return;
+        }
+
+        Debug.Log("play card");
+
+        //TODO handle event and agent cards
+
+        if(cardDisplay.GetCardType() == CardType.ESSENCE)
+        {       
+            turnManager.PlayEssenceCard();     
+            SetHandState(HandState.TARGET_SELECTION);
+
+            EssenceCardDisplay ecDisplay = (EssenceCardDisplay) cardDisplay;
+
+            currentActionRequest = ecDisplay.actionRequest;
+            currentActionRequest.player = turnManager.GetCurrentPlayer();
+
+            //start essence action
+            EssenceCard essenceCard = ecDisplay.PlayFromHand();
+
+            cardPlaying = essenceCard;
+            cardPlayingIndex = ecDisplay.GetPositionInParent();
+
+        }
+
+        if(cardDisplay.GetCardType() == CardType.AGENT)
+        {       
+            turnManager.PlayAgentCard();     
+            SetHandState(HandState.TARGET_SELECTION);
+
+            AgentCardDisplay acDisplay = (AgentCardDisplay) cardDisplay;
+            
+            currentActionRequest = acDisplay.actionRequest;
+            currentActionRequest.player = turnManager.GetCurrentPlayer();
+
+            //start agent action
+            AgentCard agentCard = acDisplay.PlayFromHand();
+
+            cardPlaying = agentCard;
+            cardPlayingIndex = acDisplay.GetPositionInParent();
+
+        }
     }
         
 }

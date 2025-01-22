@@ -181,6 +181,19 @@ public class CardDisplay : MonoBehaviour,
         isExpanded = false;
     }
 
+    public IEnumerator MoveToLocalPosition(Vector3 localPosition, float timeToMove)
+    {
+        var currentPos = this.transform.localPosition;
+        var t = 0f;
+        while(t <= 1f)
+        {
+            t += Time.deltaTime / timeToMove;
+            this.transform.localPosition = Vector3.Lerp(currentPos, localPosition, t);
+            yield return null;
+        }
+        this.transform.localPosition = localPosition;
+    }
+
     public IEnumerator MoveToPosition(Vector3 position, float timeToMove)
     {
         var currentPos = this.transform.position;
@@ -268,16 +281,7 @@ public class CardDisplay : MonoBehaviour,
 
     void DoubleClickToPlayCard()
     {
-        CardType cardType = GetCardType();
-
-        switch (cardType)
-        {
-            case CardType.ESSENCE: case CardType.AGENT:
-                hand.PlayCard(this);
-                return;
-            default:    
-                return;
-        }
+        hand.PlayCard(this);
     }
 
     public void SetTargetable(bool targetable)

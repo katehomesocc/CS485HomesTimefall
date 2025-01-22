@@ -385,5 +385,23 @@ public class BattleManager : MonoBehaviour
 		AudioManager.Instance.UpdateMusicVolume(volume);
 	}
 
+    public static int GetPlayerNumber(Faction faction)
+    {
+         //0: Stewards, 1: Seekers, 2: Sovereigns, 3: Weavers
+        switch(faction)
+        {
+            case Faction.STEWARDS:
+                return 0;
+            case Faction.SEEKERS:
+                return 1;
+            case Faction.SOVEREIGNS:
+                return 2;
+            case Faction.WEAVERS:
+                return 3;
+        }
+
+        return 0;
+    }
+
     
 }

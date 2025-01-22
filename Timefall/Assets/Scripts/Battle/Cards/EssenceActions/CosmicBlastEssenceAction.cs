@@ -128,7 +128,7 @@ public class CosmicBlastEssenceAction : EssenceAction
             targetedSpace.DeselectAsTarget();
         }
 
-        hand.RemoveCardAfterPlaying(true);
+        hand.RemoveCardAfterPlaying(true,true);
     }
 
     private void CosmicBlast(List<BoardSpace> boardTargets, ActionRequest actionRequest)

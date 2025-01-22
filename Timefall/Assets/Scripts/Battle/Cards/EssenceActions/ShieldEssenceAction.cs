@@ -128,7 +128,7 @@ public class ShieldEssenceAction : EssenceAction
             targetedSpace.DeselectAsTarget();
         }
 
-        hand.RemoveCardAfterPlaying(true);
+        hand.RemoveCardAfterPlaying(true,true);
     }
 
     private void Shield(List<BoardSpace> boardTargets, ActionRequest actionRequest)

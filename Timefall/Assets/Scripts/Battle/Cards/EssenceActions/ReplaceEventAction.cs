@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "New PARADOX Essence Action", menuName = "Essence Action/PARADOX")]
+[CreateAssetMenu(fileName = "New REPLACE Essence Action", menuName = "Essence Action/REPLACE")]
 [System.Serializable]
-public class ParadoxEssenceAction : EssenceAction
+public class ReplaceEssenceAction : EssenceAction
 {
-    public Texture PARADOX_TEX;
+    public Texture REPLACE_TEX;
 
-    public Texture2D CURSOR_PARADOX_TEX;
+    public Texture2D CURSOR_REPLACE_TEX;
 
     public override bool CanBePlayed(ActionRequest actionRequest)
     {
@@ -54,7 +54,7 @@ public class ParadoxEssenceAction : EssenceAction
     {
         if(actionRequest.activeBoardTargets.Count == 0)
         {
-            return PARADOX_TEX;
+            return REPLACE_TEX;
         }
 
         return null;
@@ -64,7 +64,7 @@ public class ParadoxEssenceAction : EssenceAction
     {
         if(actionRequest.activeBoardTargets.Count == 0)
         {
-            return CURSOR_PARADOX_TEX;
+            return CURSOR_REPLACE_TEX;
         }
 
         return null;
@@ -88,7 +88,7 @@ public class ParadoxEssenceAction : EssenceAction
 
         if(activeBoardTargets.Count == 1)
         {
-            Paradox(activeBoardTargets, actionRequest);
+            Replace(activeBoardTargets, actionRequest.activeHandTargets[0], actionRequest);
         }
     }
 
@@ -109,7 +109,12 @@ public class ParadoxEssenceAction : EssenceAction
     public override void StartAction(ActionRequest actionRequest)
     {
         BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
-        Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
+        
+        if(actionRequest.isBot){
+            //TODO BOT AI
+        } else {
+            Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
+        }
     }
 
     public override void EndAction(ActionRequest actionRequest)
@@ -127,16 +132,16 @@ public class ParadoxEssenceAction : EssenceAction
             targetedSpace.DeselectAsTarget();
         }
 
-        hand.RemoveCardAfterPlaying(true,true);
+        hand.RemoveCardAfterPlaying(true, false);
     }
 
-    private void Paradox(List<BoardSpace> boardTargets, ActionRequest actionRequest)
+    private void Replace(List<BoardSpace> boardTargets, CardDisplay handTarget, ActionRequest actionRequest)
     {
         Hand.Instance.SetHandState(HandState.ACTION_START);
         
         BoardSpace target = boardTargets[0];
 
-        target.Paradox();
+        target.Replace((EventCardDisplay) handTarget);
 
         AudioManager.Instance.Play(audioClip);
         

@@ -10,6 +10,8 @@ public class ActionRequest
     public bool doHand = false;
     public bool doDiscard = false;
 
+    public bool isBot = false;
+
     public List<BoardSpace> potentialBoardTargets = new List<BoardSpace>();
     public List<CardDisplay> potentialHandTargets = new List<CardDisplay>();
     public List<Card> potentialDiscardedTargets = new List<Card>();

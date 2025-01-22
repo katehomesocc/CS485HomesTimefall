@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class BoardManager : MonoBehaviour
 {
@@ -103,8 +104,7 @@ public class BoardManager : MonoBehaviour
                     SetEssencePossibilities((EssenceCard) card, actionRequest);
                     break;
                 case CardType.EVENT:
-
-
+                    SetEventPossibilities((EventCard) card, actionRequest);
                     break;
                 default:
                 //Error handling
@@ -124,7 +124,7 @@ public class BoardManager : MonoBehaviour
             case CardType.ESSENCE:
                 return GetEssencePossibilities((EssenceCard) card, actionRequest);
             case CardType.EVENT:
-                break;
+                return GetEventPossibilities((EventCard) card, actionRequest);
             default:
             //Error handling
                 Debug.LogError("Invalid Card Type: " + card.data.cardType);
@@ -169,6 +169,24 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public List<BoardSpace> GetEventPossibilities(EventCard eventCard, ActionRequest actionRequest)
+    {   
+        actionRequest.potentialBoardTargets = new List<BoardSpace>(spaces);
+        return eventCard.GetTargatableSpaces(actionRequest);
+    }
+
+    void SetEventPossibilities(EventCard eventCard, ActionRequest actionRequest)
+    {
+        List<BoardSpace> targetable = GetEventPossibilities(eventCard, actionRequest);
+
+        foreach (BoardSpace boardSpace in targetable)
+        {
+            boardSpace.Highlight();
+            targetsAvailable.Add(boardSpace);
+            boardSpace.isTargetable = true;
+        }
+    }
+
     public void ClearPossibleTargetHighlights()
     {
         foreach (BoardSpace boardSpace in targetsAvailable)
@@ -194,6 +212,37 @@ public class BoardManager : MonoBehaviour
         {
             boardSpace.ResolveEndOfTurn();
         }
+    }
+
+    /// <summary>
+    /// Returns a list of BoardSpace objects sorted by the event card's victory points for the specified faction,
+    /// from highest to lowest. Can optionally filter by just the current turn cycle. Holes are included at the end.
+    /// </summary>
+    /// <param name="faction">The faction for which the board spaces are sorted.</param>
+    /// <param name="turnCycleOnly">If true, only includes spaces from the current turn cycle; otherwise, includes all unlocked spaces.</param>
+    /// <returns>A sorted list of BoardSpace objects.</returns>
+    public List<BoardSpace> GetBoardSpacesSortedByFactionVictoryPoints(Faction faction, bool turnCycleOnly)
+    {
+        IEnumerable<BoardSpace> filteredSpaces;
+
+        if (turnCycleOnly)
+        {
+            int currentCycle = Mathf.CeilToInt(round / 4f);
+            int offset = (currentCycle - 1) * 4;
+            filteredSpaces = spaces.Skip(offset).Take(4).Where(space => space.isUnlocked);
+        }
+        else
+        {
+            filteredSpaces = spaces.Where(space => space.isUnlocked);
+        }
+
+        var nonHoleSpaces = filteredSpaces
+            .Where(space => space.hasEvent && space.eventCard != null)
+            .OrderByDescending(space => space.eventCard.eventCardData.victoryPoints[BattleManager.GetPlayerNumber(faction)]);
+
+        var holeSpaces = filteredSpaces.Where(space => space.isHole);
+
+        return nonHoleSpaces.Concat(holeSpaces).ToList();
     }
 
 }
