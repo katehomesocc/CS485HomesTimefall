@@ -11,12 +11,15 @@ public class PlayerOptions : MonoBehaviour
     public bool Locked { get; private set;}
 
     [Header("Player Name")]
-    public string defaultName = "Player #1";
+    public int playerNumber = 1;
     public TMP_InputField nameInput;
 
     [Header("Bot Settings")]
     public Toggle botToggle;
-    public bool Bot { get; private set;}
+    public GameObject difficultyCover;
+    public Toggle easyToggle;
+    public Toggle mediumToggle;
+    public Toggle hardToggle;
 
     [Header("Faction Selection")]
     public Faction selectedFaction = Faction.STEWARDS;
@@ -35,7 +38,18 @@ public class PlayerOptions : MonoBehaviour
         buttonLeft.onClick.AddListener(ListDown);
         buttonRight.onClick.AddListener(ListUp);
         lockInButton.onClick.AddListener(ToggleLockInButton);
-        botToggle.onValueChanged.AddListener(delegate { ToggleBot(); });
+
+        botToggle.onValueChanged.AddListener(delegate { ToggleBot(botToggle.isOn); });
+
+        easyToggle.onValueChanged.AddListener(delegate {
+                ToggleDifficulty(easyToggle);
+            });
+        mediumToggle.onValueChanged.AddListener(delegate {
+                ToggleDifficulty(mediumToggle);
+        });
+        hardToggle.onValueChanged.AddListener(delegate {
+                ToggleDifficulty(hardToggle);
+            });
     }
     // Start is called before the first frame update
     void Start()
@@ -118,9 +132,9 @@ public class PlayerOptions : MonoBehaviour
     {
         Color selectedColor = BattleManager.GetFactionColor(faction);
 
-        buttonLeft.targetGraphic.color =  BattleManager.GetFactionColor(previous);
+        // buttonLeft.targetGraphic.color =  BattleManager.GetFactionColor(previous);
         
-        buttonRight.targetGraphic.color =  BattleManager.GetFactionColor(next);
+        // buttonRight.targetGraphic.color =  BattleManager.GetFactionColor(next);
 
         if(available)
         {
@@ -164,7 +178,7 @@ public class PlayerOptions : MonoBehaviour
     {
         Locked = false;
         buttonLeft.interactable = true;
-        buttonLeft.interactable = true;
+        buttonRight.interactable = true;
 
         lockInButton.GetComponentInChildren<TMP_Text>().text = "Lock In";
 
@@ -178,8 +192,27 @@ public class PlayerOptions : MonoBehaviour
         SelectFaction(listPos);
     }
 
-    void ToggleBot()
+    void ToggleBot(bool isBot)
     {
-        //TODO, update indicator UI
+        Debug.Log(difficultyCover == null);
+        difficultyCover.SetActive(!isBot);
+
+        if(!Locked) {return;}
+
+        PlayerSelector.Instance.UpdateIndicator(this);
+    }
+
+    void ToggleDifficulty(Toggle toggle)
+    {
+        RectTransform rect = toggle.GetComponentInChildren<RectTransform>();
+
+        if(!toggle.isOn){
+            rect.sizeDelta = new Vector2 (25, 25);
+            return;
+        }
+
+        rect.sizeDelta = new Vector2 (40, 40);
+
+        //TODO: add to player selection logic
     }
 }

@@ -77,6 +77,8 @@ public class BattleManager : MonoBehaviour
             Instance = this; 
         } 
 
+        playerSelectionPanel.SetActive(true);
+
         masterSlider.onValueChanged.AddListener(delegate {
             UpdateMasterVolume(masterSlider.value);
             PlaySliderEffect();
@@ -99,7 +101,6 @@ public class BattleManager : MonoBehaviour
         battleStateMachine = BattleStateMachine.Instance;
         boardManager = BoardManager.Instance;
         hand = Hand.Instance;
-        
     }
 
     // Update is called once per frame

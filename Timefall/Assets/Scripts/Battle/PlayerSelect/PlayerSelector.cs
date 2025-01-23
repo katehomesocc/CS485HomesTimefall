@@ -13,6 +13,11 @@ public class PlayerSelector : MonoBehaviour
 
     public Button startButton;
 
+    [Header("Faction Indicators")]
+    public PlayerSelectionIndicator stewardIndicator;
+    public PlayerSelectionIndicator seekerIndicator;
+    public PlayerSelectionIndicator sovereignIndicator;
+    public PlayerSelectionIndicator weaverIndicator;
     void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -57,6 +62,7 @@ public class PlayerSelector : MonoBehaviour
         if(!availableFactions.Contains(faction)) {return false;}
 
         lockOption.LockIn();
+        GetIndicator(faction).SelectOptions(lockOption);
 
         availableFactions.Remove(faction);
 
@@ -79,6 +85,8 @@ public class PlayerSelector : MonoBehaviour
     public void Unlock(Faction faction)
     {
         availableFactions.Add(faction);
+
+        GetIndicator(faction).Hide();
 
         HideStartInfo();
 
@@ -114,5 +122,29 @@ public class PlayerSelector : MonoBehaviour
     void SelectPlayersAndStart()
     {
         BattleManager.Instance.SelectPlayersAndStart(playerOptions);
+    }
+
+    PlayerSelectionIndicator GetIndicator(Faction faction)
+    {
+        switch(faction) 
+        {
+            case Faction.STEWARDS:
+                return stewardIndicator;
+            case Faction.SEEKERS:
+                return seekerIndicator;
+            case Faction.SOVEREIGNS:
+                return sovereignIndicator;
+            case Faction.WEAVERS:
+                return weaverIndicator;
+        }
+
+        return stewardIndicator;
+    }
+
+    public void UpdateIndicator(PlayerOptions options)
+    {
+        if(!options.Locked) {return;}
+
+        GetIndicator(options.selectedFaction).SelectOptions(options);
     }
 }
