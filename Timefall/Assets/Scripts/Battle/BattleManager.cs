@@ -337,6 +337,7 @@ public class BattleManager : MonoBehaviour
 
     public void ExitToTitle()
     {
+        PlayerSelector.Instance.SaveAllPlayerPrefs();
         GameManager.Instance.LoadTitleScene();
     }
 
@@ -403,6 +404,7 @@ public class BattleManager : MonoBehaviour
     {
         foreach (PlayerOptions options in playerOptions)
         {
+            PlayerSelector.SavePlayerPrefs(options);
             Player player = GetFactionPlayer(options.selectedFaction);
 
             player.playerName = options.nameInput.text;
@@ -410,7 +412,7 @@ public class BattleManager : MonoBehaviour
         }
 
         StartCoroutine(StartOfGame());
-    }
+    }    
 
     
 }

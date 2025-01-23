@@ -147,4 +147,57 @@ public class PlayerSelector : MonoBehaviour
 
         GetIndicator(options.selectedFaction).SelectOptions(options);
     }
+
+    public static void SavePlayerPrefs(PlayerOptions options)
+    {
+        int playerNumber = options.playerNumber;
+
+        PlayerPrefs.SetString($"playerName{playerNumber}", options.nameInput.text);
+        PlayerPrefs.SetString($"playerSelectedFaction{playerNumber}", options.selectedFaction.ToString());
+        PlayerPrefs.SetInt($"playerIsBot{playerNumber}", options.botToggle.isOn ? 1 : 0);
+        PlayerPrefs.SetInt($"playerLocked{playerNumber}", options.Locked ? 1 : 0);
+    }
+    
+    public static void LoadPlayerPrefs(PlayerOptions options)
+    {
+        int playerNumber = options.playerNumber;
+
+        options.nameInput.text = PlayerPrefs.GetString($"playerName{playerNumber}", "");
+
+        options.botToggle.isOn =  PlayerPrefs.GetInt($"playerIsBot{playerNumber}") == 1;
+
+        string factionString = PlayerPrefs.GetString($"playerSelectedFaction{playerNumber}", "");
+
+        if(string.IsNullOrEmpty(factionString))
+        {
+            options.selectedFaction = Faction.STEWARDS;
+        }
+        else
+        {
+            options.selectedFaction = BattleManager.GetFactionFromString(factionString);
+        }
+
+        bool locked = PlayerPrefs.GetInt($"playerLocked{playerNumber}") == 1;
+        if(locked)
+        {
+            options.ToggleLockInButton();
+        }
+        
+        
+    }
+
+    public void SaveAllPlayerPrefs()
+    {
+        foreach (PlayerOptions options in playerOptions)
+        {
+            PlayerSelector.SavePlayerPrefs(options);
+        }
+
+    }
+
+    void OnApplicationQuit()
+    {
+        Debug.Log("Saving all player prefs");
+        SaveAllPlayerPrefs();
+    }
 }

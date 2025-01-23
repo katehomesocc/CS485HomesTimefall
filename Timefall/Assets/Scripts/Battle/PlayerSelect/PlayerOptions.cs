@@ -31,9 +31,7 @@ public class PlayerOptions : MonoBehaviour
 
     void Awake()
     {
-        availableFactions = PlayerSelector.Instance.GetRemainngFactions();
         listPos = BattleManager.GetPlayerNumber(selectedFaction);
-        Refresh(availableFactions);
 
         buttonLeft.onClick.AddListener(ListDown);
         buttonRight.onClick.AddListener(ListUp);
@@ -51,10 +49,14 @@ public class PlayerOptions : MonoBehaviour
                 ToggleDifficulty(hardToggle);
             });
     }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        availableFactions = PlayerSelector.Instance.GetRemainngFactions();
+        Refresh(availableFactions);
+
+        PlayerSelector.LoadPlayerPrefs(this);
     }
 
     // Update is called once per frame
@@ -145,7 +147,7 @@ public class PlayerOptions : MonoBehaviour
         factionsDropdown.targetGraphic.color = Color.white;
     }
 
-    void ToggleLockInButton()
+    public void ToggleLockInButton()
     {
         if(Locked)
         {
@@ -194,7 +196,6 @@ public class PlayerOptions : MonoBehaviour
 
     void ToggleBot(bool isBot)
     {
-        Debug.Log(difficultyCover == null);
         difficultyCover.SetActive(!isBot);
 
         if(!Locked) {return;}
