@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public string playerName;
     public Faction faction;
     public Deck deck;
 

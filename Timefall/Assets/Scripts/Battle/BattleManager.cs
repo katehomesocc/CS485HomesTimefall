@@ -27,6 +27,7 @@ public class BattleManager : MonoBehaviour
     public float autoplayWaitTime = 1.5f;
 
     [Header("Start Of Game")]
+    public GameObject playerSelectionPanel;
     public int startupTime = 5;
     public GameObject startOfGamePanel;
     public TMP_Text startOfGameText;
@@ -98,8 +99,6 @@ public class BattleManager : MonoBehaviour
         battleStateMachine = BattleStateMachine.Instance;
         boardManager = BoardManager.Instance;
         hand = Hand.Instance;
-
-        StartCoroutine(StartOfGame());
         
     }
 
@@ -122,29 +121,6 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    // IEnumerator QueueFirstAutoplay()
-    // {
-    //     yield return StartCoroutine(battleStateMachine.StartOfGame());
-
-    //     StartCoroutine(AutoplayRound());
-    // }
-
-    // IEnumerator AutoplayRound()
-    // {
-    //     expandDisplay.AutoPlayInitialTimelineCard();
-        
-    //     yield return battleStateMachine.EndTurn();
-
-    //     yield return new WaitForSeconds(0.1f);
-
-    //     if(turn < autoplayUntilTurn)
-    //     {
-    //         turn++;
-    //         StartCoroutine(AutoplayRound());
-    //     }
-        
-    // }
-
     public void PlayInitialTimelineCard(CardDisplay display)
     {
         expandDisplay.PlayInitialTimelineCard(display);
@@ -161,20 +137,18 @@ public class BattleManager : MonoBehaviour
             
         }
 
+        playerSelectionPanel.SetActive(false);
+
         startOfGameText.text = "";
 
         startOfGameCountdownText.text = "BATTLE";
+        
         yield return new WaitForSeconds(1);
 
         startOfGamePanel.SetActive(false);
 
-        if(autoplay)
-        {
-            // StartCoroutine(QueueFirstAutoplay());
-        } else
-        {
-            battleStateMachine.StartGame();
-        }
+        battleStateMachine.StartGame();
+        
     }
 
     public ActionRequest GetPotentialTargets(Card card, ActionRequest request)
@@ -384,7 +358,6 @@ public class BattleManager : MonoBehaviour
 	{
 		AudioManager.Instance.UpdateMusicVolume(volume);
 	}
-
     public static int GetPlayerNumber(Faction faction)
     {
          //0: Stewards, 1: Seekers, 2: Sovereigns, 3: Weavers
@@ -401,6 +374,41 @@ public class BattleManager : MonoBehaviour
         }
 
         return 0;
+    }
+
+    public static Faction GetFactionFromString(string faction)
+    {
+        return (Faction) System.Enum.Parse( typeof(Faction), faction );
+    }
+
+    public static Faction GetFactionFromIndex(int faction)
+    {
+        switch(faction)
+        {
+            case 0:
+                return Faction.STEWARDS;
+            case 1:
+                return Faction.SEEKERS;
+            case 2:
+                return Faction.SOVEREIGNS;
+            case 3:
+                return Faction.WEAVERS;
+        }
+
+        return Faction.STEWARDS;
+    }
+
+    public void SelectPlayersAndStart(PlayerOptions[] playerOptions)
+    {
+        foreach (PlayerOptions options in playerOptions)
+        {
+            Player player = GetFactionPlayer(options.selectedFaction);
+
+            player.playerName = options.nameInput.text;
+            player.isBot = options.botToggle.isOn;
+        }
+
+        StartCoroutine(StartOfGame());
     }
 
     
