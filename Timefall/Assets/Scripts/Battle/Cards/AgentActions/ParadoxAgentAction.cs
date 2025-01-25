@@ -141,10 +141,20 @@ public class ParadoxAgentAction : AgentAction
         
         BoardSpace target = boardTargets[0];
 
+        SendChatLogMessage(actionRequest.player, target.eventCard.data);
+
         target.Paradox();
 
         AudioManager.Instance.Play(audioClip);
 
         EndAction(actionRequest);
+    }
+
+    void SendChatLogMessage(Player player,CardData agentData)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.Paradox);
+        data.cards.Add(agentData);
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }

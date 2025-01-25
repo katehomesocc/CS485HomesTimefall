@@ -136,10 +136,22 @@ public class ParadoxEssenceAction : EssenceAction
         
         BoardSpace target = boardTargets[0];
 
+        SendChatLogMessage(actionRequest.player, actionRequest.actionCard.data, target.eventCard.data);
+
         target.Paradox();
 
         AudioManager.Instance.Play(audioClip);
         
         EndAction(actionRequest);
+    }
+
+    void SendChatLogMessage(Player player, CardData castingAgentData, CardData eventData)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.Paradox);
+
+        data.cards.Add(castingAgentData);
+        data.cards.Add(eventData);
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }
