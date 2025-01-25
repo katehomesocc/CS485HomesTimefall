@@ -186,9 +186,21 @@ public class SwapEssenceAction : EssenceAction
         boardTargets[1].SetEventCard(target1);
         boardTargets[0].SetEventCard(target2);
 
+        SendChatLogMessage(actionRequest.player, target1.displayCard.data,  target2.displayCard.data);
+
         AudioManager.Instance.Play(audioClip);
 
         //end of action
         EndAction(actionRequest);
+    }
+
+    void SendChatLogMessage(Player player, CardData event1, CardData event2)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.SwapEvent);
+
+        data.cards.Add(event1);
+        data.cards.Add(event2);
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }

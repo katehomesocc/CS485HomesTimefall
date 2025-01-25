@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChatMessageData
 {
-    public enum Action { TESTING, ReplaceEvent, PatchEvent, DeployAgent }
+    public enum Action { TESTING, DeployAgent, PatchEvent, ReplaceEvent, SwapEvent }
 
     public Action action;
     public Player player;
@@ -22,12 +22,14 @@ public class ChatMessageData
     {
         switch (action)
         {
-            case Action.PatchEvent:
-                return PatchEventMessage();
             case Action.DeployAgent:
                 return DeployAgentMessage();
+            case Action.PatchEvent:
+                return PatchEventMessage();
             case Action.ReplaceEvent:
                 return ReplaceEventMessage();
+            case Action.SwapEvent:
+                return SwapEventMessage();
             default:
                 return "default message string";
         }
@@ -69,6 +71,15 @@ public class ChatMessageData
         string newEventText = CardText(cards[1]);
 
         return $"{playerText} replaced {originalEventText} with {newEventText}.";
+    }
+
+    string SwapEventMessage()
+    {
+        string playerText = PlayerText();
+        string event1Text = CardText(cards[0]);
+        string event2Text = CardText(cards[1]);
+
+        return $"{playerText} swapped {event1Text} with {event2Text}.";
     }
 
     string PlayerText()
