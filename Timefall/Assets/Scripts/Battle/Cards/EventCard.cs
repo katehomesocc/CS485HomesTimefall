@@ -67,6 +67,10 @@ public class EventCard : Card
         GetEssenceAction().StartAction(actionRequest);
     }
 
+    public IEnumerator StartBotAction(ActionRequest actionRequest)
+    {
+        return GetEssenceAction().StartBotAction(actionRequest.player.botAI, actionRequest);
+    }
     
     public override bool CanBePlayed(ActionRequest potentialTargetsRequest)
     {

@@ -16,14 +16,13 @@ public class Player : MonoBehaviour
 
     public bool isBot = false;
 
-    [SerializeField]
     public BotAI botAI = null;
 
     void Awake()
     {
         if(isBot)
         {
-            botAI = new BotAI();
+            botAI = gameObject.AddComponent(typeof(BotAI)) as BotAI;
             botAI.InitializeBot(this);
         }
     }

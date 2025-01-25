@@ -122,13 +122,9 @@ public class ReplaceEssenceAction : EssenceAction
     {
         Debug.Log("StartAction");
         BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
+
+        Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
         
-        if(actionRequest.isBot){
-            //TODO BOT AI
-            SelectBoardTarget(actionRequest);
-        } else {
-            Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
-        }
     }
 
     public override void EndAction(ActionRequest actionRequest)
@@ -177,5 +173,15 @@ public class ReplaceEssenceAction : EssenceAction
         data.cards.Add(newEvent);
 
         ChatLogManager.Instance.SendMessage(data);
+    }
+
+    public override IEnumerator StartBotAction(BotAI botAI, ActionRequest actionRequest)
+    {
+        BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
+
+        BoardSpace target = actionRequest.activeBoardTargets[0];
+        yield return botAI.MoveCursor(target.transform.position);
+            //TODO BOT AI
+        SelectBoardTarget(actionRequest);
     }
 }

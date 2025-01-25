@@ -373,7 +373,7 @@ public class Hand : MonoBehaviour
             cardPlayingIndex = ecDisplay.GetPositionInParent();
 
             //start agent action
-            ecDisplay.PlayFromHand();
+            ecDisplay.PlayFromHand(currentActionRequest.player.isBot);
         }
     }
 

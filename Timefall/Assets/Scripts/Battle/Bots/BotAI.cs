@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class BotAI 
+
+public class BotAI : MonoBehaviour
 {
+    public static float PAUSE = 0.25f;
     BattleStateMachine battleStateMachine;
     public enum BotState
     {
@@ -22,6 +23,8 @@ public class BotAI
     private List<BoardSpace> turnCycleSpaces = null;
     private List<BoardSpace> allSpaces = null;
 
+    private BotCursor botCursor;
+
     public void InitializeBot(Player player)
     {
         botPlayer = player;
@@ -32,6 +35,10 @@ public class BotAI
 
     public IEnumerator StartTurn()
     {
+        botCursor = BattleStateMachine.Instance.botCursor;
+        botCursor.SetBot(this, botPlayer.faction);
+        botCursor.Enable();
+
         currentState = BotState.AnalyzeBoard;
 
         yield return ExecuteTurn();
@@ -43,7 +50,7 @@ public class BotAI
         if(hand.handState == HandState.START_TURN_DRAW_TIMELINE)
         {
             BattleManager.Instance.expandDisplay.AutoPlayInitialTimelineCard();
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(PAUSE);
         }
 
         //Debug.Break();
@@ -68,7 +75,13 @@ public class BotAI
             yield return null;
         }
 
-        yield return new WaitForSeconds(0.1f);
+        botCursor.Enable();
+
+        yield return new WaitForSeconds(PAUSE);
+
+        yield return MoveCursor(BattleStateMachine.Instance.endTurnButton.transform.position);
+
+        yield return new WaitForSeconds(PAUSE);
     }
 
     public void EndAction()
@@ -150,7 +163,7 @@ public class BotAI
         {
             if (space.isUnlocked && (space.isHole || space.hasEvent) && (space.eventCard.data.faction != botPlayer.faction))
             {
-                ReplaceTimelineEvent(card, space);
+                StartCoroutine(ReplaceTimelineEvent(card, space));
                 Debug.Log($"Played event card on the board (TurnCycleOnly: {turnCycleOnly}).");
                 return true;
             }
@@ -184,10 +197,20 @@ public class BotAI
         return true;
     }
 
-    void ReplaceTimelineEvent(CardDisplay eventToPlay, BoardSpace targetSpace)
+    IEnumerator ReplaceTimelineEvent(CardDisplay eventToPlay, BoardSpace targetSpace)
     {
+        yield return MoveCursor(eventToPlay.transform.position);
+
         eventToPlay.actionRequest.isBot = true;
         eventToPlay.actionRequest.activeBoardTargets.Add(targetSpace);
+        
         hand.PlayCard(eventToPlay, true); // Play the event card
+    }
+
+    public IEnumerator MoveCursor(Vector3 worldPos)
+    {
+        yield return new WaitForSeconds(PAUSE);
+        yield return botCursor.MoveToPosition(worldPos);
+        yield return new WaitForSeconds(PAUSE);
     }
 }

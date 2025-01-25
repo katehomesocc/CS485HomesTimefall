@@ -422,6 +422,7 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
     public void EndCallbackAction(EssenceAction essenceAction, ActionRequest actionRequest)
     {
+        Debug.Log("BoardSpace EndCallbackAction ");
         essenceAction.EndAction(actionRequest);
     }
 }

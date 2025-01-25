@@ -66,6 +66,9 @@ public class BattleStateMachine : MonoBehaviour
     public Texture THREE_ESSENCE_TEXTURE;
     public RawImage essenceCountImage;
 
+    [Header("Bots")]
+    public BotCursor botCursor;
+
     private BoardManager boardManager;
     private BattleManager battleManager;
     private Hand hand;
@@ -211,6 +214,8 @@ public class BattleStateMachine : MonoBehaviour
     {
         Debug.Log($"Ending turn {currentTurn}.");
         DisableEndTurnButton();
+
+        botCursor.Disable();
 
         boardManager.ResolveEndOfTurnOnBoard();
         hand.ShuffleHandBackIntoDeck(currentPlayer);

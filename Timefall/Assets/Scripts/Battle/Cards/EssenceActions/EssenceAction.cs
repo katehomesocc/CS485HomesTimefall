@@ -18,6 +18,7 @@ public abstract class EssenceAction : ScriptableObject {
 
     public abstract void SetActionRequest(ActionRequest actionRequest);
     public abstract void StartAction(ActionRequest ActionRequest);
+    public abstract IEnumerator StartBotAction(BotAI botAI, ActionRequest ActionRequest);
     public abstract void EndAction(ActionRequest ActionRequest);
 
 }

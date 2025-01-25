@@ -203,4 +203,15 @@ public class SwapEssenceAction : EssenceAction
 
         ChatLogManager.Instance.SendMessage(data);
     }
+
+    public override IEnumerator StartBotAction(BotAI botAI, ActionRequest actionRequest)
+    {
+        // BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
+
+        // BoardSpace target = actionRequest.activeBoardTargets[0];
+        // yield return botAI.MoveCursor(target.transform.position);
+        //     //TODO BOT AI
+        // SelectBoardTarget(actionRequest);
+        yield return null;
+    }
 }

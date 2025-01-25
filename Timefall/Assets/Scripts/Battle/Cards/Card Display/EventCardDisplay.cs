@@ -116,11 +116,17 @@ public class EventCardDisplay : CardDisplay
         return (EventCard) displayCard;
     }
 
-    public void PlayFromHand()
+    public void PlayFromHand(bool isBot)
     {
         Debug.Log("Play Event From Hand");
         Vector3 newPosition = this.transform.localPosition + new Vector3(0, 50, 0);
         StartCoroutine(this.MoveToLocalPosition(newPosition, 0.25f));
+
+        if(isBot)
+        {
+            StartCoroutine(GetEventCard().StartBotAction(actionRequest));
+            return;
+        }
                     
         GetEventCard().StartAction(actionRequest);
     }
