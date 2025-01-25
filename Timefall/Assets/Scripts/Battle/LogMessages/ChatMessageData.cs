@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChatMessageData
 {
-    public enum Action { TESTING, ReplaceEvent }
+    public enum Action { TESTING, ReplaceEvent, PatchEvent, DeployAgent }
 
     public Action action;
     public Player player;
@@ -22,6 +22,10 @@ public class ChatMessageData
     {
         switch (action)
         {
+            case Action.PatchEvent:
+                return PatchEventMessage();
+            case Action.DeployAgent:
+                return DeployAgentMessage();
             case Action.ReplaceEvent:
                 return ReplaceEventMessage();
             default:
@@ -40,11 +44,29 @@ public class ChatMessageData
         }
     }
 
+    string DeployAgentMessage()
+    {
+        string playerText = PlayerText();
+        string agentText = CardText(cards[0]);
+        string eventText = CardText(cards[1]);
+
+        return $"{playerText} deployed {agentText} on {eventText}.";
+    }
+
+    string PatchEventMessage()
+    {
+        string playerText = PlayerText();
+        string agentText = CardText(cards[0]);
+        string eventText = CardText(cards[1]);
+
+        return $"{playerText} used {agentText} to patch a hole on the timeline with {eventText}.";
+    }
+
     string ReplaceEventMessage()
     {
         string playerText = PlayerText();
-        string originalEventText = EventText(cards[0]);
-        string newEventText = EventText(cards[1]);
+        string originalEventText = CardText(cards[0]);
+        string newEventText = CardText(cards[1]);
 
         return $"{playerText} replaced {originalEventText} with {newEventText}.";
     }
@@ -56,7 +78,7 @@ public class ChatMessageData
         return $"<color=#{playerColor}><b>{playerName}</b></color>";
     }
 
-    string EventText(CardData cardData)
+    string CardText(CardData cardData)
     {
         Faction faction = cardData.faction;
         

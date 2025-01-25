@@ -149,9 +149,21 @@ public class DefaultAgentAction : AgentAction
     {
         BoardSpace target = boardTargets[0];
 
+        SendChatLogMessage(actionRequest.player, actionRequest.actionCard.data, target.eventCard.data);
+
         //place agent on timeline event
         target.SetAgentCard((AgentCard) actionRequest.actionCard);
 
         EndAction(actionRequest);
+    }
+
+    void SendChatLogMessage(Player player, CardData agent, CardData eventTarget)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.DeployAgent);
+
+        data.cards.Add(agent);
+        data.cards.Add(eventTarget);
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }

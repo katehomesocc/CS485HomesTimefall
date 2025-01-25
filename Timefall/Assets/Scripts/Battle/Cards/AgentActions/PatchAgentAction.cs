@@ -141,11 +141,24 @@ public class PatchAgentAction : AgentAction
         BoardSpace target = boardTargets[0];
 
         //Draw card from timeline deck
+        EventCardDisplay display = Hand.Instance.PatchDisplayFromTimelineDeck();
 
-        target.Patch();
+        SendChatLogMessage(actionRequest.player, actionRequest.actionCard.data, display.displayCard.data);
+
+        target.Patch(display);
         
         AudioManager.Instance.Play(audioClip);
         
         EndAction(actionRequest);
+    }
+
+    void SendChatLogMessage(Player player, CardData agent, CardData eventTarget)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.PatchEvent);
+
+        data.cards.Add(agent);
+        data.cards.Add(eventTarget);
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }

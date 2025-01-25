@@ -380,10 +380,8 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         isHole = true;
     }
 
-    public void Patch()
+    public void Patch(EventCardDisplay display)
     {
-        EventCardDisplay display = hand.PatchDisplayFromTimelineDeck();
-
         StartCoroutine(PatchAnimation(display));
     }
 
