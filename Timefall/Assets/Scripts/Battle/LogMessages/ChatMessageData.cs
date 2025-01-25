@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChatMessageData
 {
-    public enum Action { TESTING, AgentShield, Channel, Convert, DeployAgent, PatchEvent, PlayerShield, ReplaceEvent, SwapEvent }
+    public enum Action { TESTING, AgentShield, Channel, Convert, CosmicBlast, DeployAgent, PatchEvent, PlayerShield, ReplaceEvent, SwapEvent }
 
     public Action action;
     public Player player;
@@ -28,6 +28,8 @@ public class ChatMessageData
                 return ChannelMessage();
             case Action.Convert:
                 return ConvertMessage();
+            case Action.CosmicBlast:
+                return CosmicBlastMessage();
             case Action.DeployAgent:
                 return DeployAgentMessage();
             case Action.PatchEvent:
@@ -66,6 +68,21 @@ public class ChatMessageData
         string agentText = CardText(cards[0]);
 
         return $"{playerText} has converted {agentText}.";
+    }
+    string CosmicBlastMessage()
+    {
+        string playerText = PlayerText();
+
+        if(cards.Count == 1)
+        {
+            string agentText = CardText(cards[0]);
+            return $"{playerText} cast a Cosmic Blast on {agentText}.";
+        }
+
+        string castingAgentText = CardText(cards[0]);
+        string blastAgentText = CardText(cards[1]);
+
+        return $"{playerText} used {castingAgentText} to cast a Cosmic Blast on {blastAgentText}.";
     }
 
     string PlayerShieldMessage()

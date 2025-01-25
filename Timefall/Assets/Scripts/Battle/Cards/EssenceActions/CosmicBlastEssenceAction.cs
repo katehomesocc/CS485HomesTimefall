@@ -137,10 +137,20 @@ public class CosmicBlastEssenceAction : EssenceAction
         
         BoardSpace target = boardTargets[0];
 
+        SendChatLogMessage(actionRequest.player, target.agentCard.data);
+
         target.CosmicBlast();
 
         AudioManager.Instance.Play(audioClip);
         
         EndAction(actionRequest);
+    }
+
+        void SendChatLogMessage(Player player,CardData agentData)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.CosmicBlast);
+        data.cards.Add(agentData);
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }
