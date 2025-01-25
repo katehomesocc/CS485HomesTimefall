@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ChatMessageData
 {
-    public enum Action { TESTING, AgentShield, Channel, Convert, CosmicBlast, DeployAgent, PatchEvent, Paradox, PlayerShield, ReplaceEvent, SwapEvent }
+    public enum Action { TESTING, AgentShield, Channel, Convert, CosmicBlast, //
+                    DeployAgent, PatchEvent, Paradox, PlayerShield, Revive, //
+                    ReplaceEvent, SwapEvent } //
 
     public Action action;
     public Player player;
@@ -38,6 +40,8 @@ public class ChatMessageData
                 return ParadoxMessage();
             case Action.PlayerShield:
                 return PlayerShieldMessage();
+            case Action.Revive:
+                return ReviveMessage();
             case Action.ReplaceEvent:
                 return ReplaceEventMessage();
             case Action.SwapEvent:
@@ -127,6 +131,22 @@ public class ChatMessageData
         string paradoxEventText = CardText(cards[1]);
 
         return $"{playerText} used {castingAgentText} to cast a Paradox on {paradoxEventText}.";
+    }
+
+    string ReviveMessage()
+    {
+        string playerText = PlayerText();
+
+        if(cards.Count == 1)
+        {
+            string agentText = CardText(cards[0]);
+            return $"{playerText} revived {agentText}.";
+        }
+
+        string castingAgentText = CardText(cards[0]);
+        string reviveAgentText = CardText(cards[1]);
+
+        return $"{playerText} used {castingAgentText} to revive {reviveAgentText}.";
     }
 
     string ReplaceEventMessage()

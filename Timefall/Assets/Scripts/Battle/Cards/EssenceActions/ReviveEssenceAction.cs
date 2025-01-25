@@ -129,9 +129,20 @@ public class ReviveEssenceAction : EssenceAction
         
         player.ReviveAgent((AgentCard) discardTarget);
 
+        SendChatLogMessage(player, discardTarget.data);
+
         AudioManager.Instance.Play(audioClip);
 
         //end of action
         EndAction(actionRequest);
+    }
+
+    void SendChatLogMessage(Player player, CardData agentData)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.Revive);
+
+        data.cards.Add(agentData);
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }

@@ -128,10 +128,22 @@ public class ReviveAgentAction : AgentAction
         Hand.Instance.SetHandState(HandState.ACTION_START);
         
         player.ReviveAgent((AgentCard) discardTarget);
+
+        SendChatLogMessage(player, actionRequest.actionCard.data, discardTarget.data);
+
         AudioManager.Instance.Play(audioClip);
-        
 
         //end of action
         EndAction(actionRequest);
+    }
+
+    void SendChatLogMessage(Player player, CardData castingAgentData, CardData agentData)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.Revive);
+
+        data.cards.Add(castingAgentData);
+        data.cards.Add(agentData);
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }

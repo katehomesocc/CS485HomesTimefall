@@ -146,7 +146,7 @@ public class CosmicBlastEssenceAction : EssenceAction
         EndAction(actionRequest);
     }
 
-        void SendChatLogMessage(Player player,CardData agentData)
+    void SendChatLogMessage(Player player,CardData agentData)
     {
         ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.CosmicBlast);
         data.cards.Add(agentData);
