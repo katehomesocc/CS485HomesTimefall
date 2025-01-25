@@ -281,7 +281,7 @@ public class CardDisplay : MonoBehaviour,
 
     void DoubleClickToPlayCard()
     {
-        hand.PlayCard(this);
+        hand.PlayCard(this, false);
     }
 
     public void SetTargetable(bool targetable)

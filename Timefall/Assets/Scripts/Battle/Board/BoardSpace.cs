@@ -341,9 +341,9 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         eventShield.DecreaseCountDown();
     }
 
-    public void PlaceEventOn(EventCardDisplay cardDisplay)
+    public IEnumerator PlaceEventOn(EventCardDisplay cardDisplay)
     {
-        StartCoroutine(cardDisplay.ScaleToPositionAndSize(eventSpawn.transform.position, eventSpawn.transform.lossyScale, 1f, eventSpawn.transform));
+        yield return cardDisplay.ScaleToPositionAndSize(eventSpawn.transform.position, eventSpawn.transform.lossyScale, 1f, eventSpawn.transform);
         
         SetEventCard(cardDisplay);
         
@@ -395,19 +395,19 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
         BattleManager.Instance.expandDisplay.RemoveStaticDisplay(display);
 
-        PlaceEventOn(display);
+        yield return PlaceEventOn(display);
 
         battleStateMachine.SetVictoryPointUI();
 
         isHole = false;
     }
 
-    public void Replace(EventCardDisplay replacementDisplay)
+    public void Replace(EventCardDisplay replacementDisplay, EssenceAction essenceAction, ActionRequest actionRequest)
     {
-        StartCoroutine(ReplaceAnimation(replacementDisplay));
+        StartCoroutine(ReplaceAnimation(replacementDisplay, essenceAction, actionRequest));
     }
 
-    IEnumerator ReplaceAnimation(EventCardDisplay display)
+    IEnumerator ReplaceAnimation(EventCardDisplay display, EssenceAction essenceAction, ActionRequest actionRequest)
     {
         //TODO: replace audio effect
 
@@ -415,9 +415,15 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
 
         yield return new WaitForSeconds(0.25f);
 
-        PlaceEventOn(display);
+        yield return PlaceEventOn(display);
 
         battleStateMachine.SetVictoryPointUI();
 
+        EndCallbackAction(essenceAction, actionRequest);
+    }
+
+    public void EndCallbackAction(EssenceAction essenceAction, ActionRequest actionRequest)
+    {
+        essenceAction.EndAction(actionRequest);
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class BotAI 
 {
+    BattleStateMachine battleStateMachine;
     public enum BotState
     {
         AnalyzeBoard,
@@ -20,7 +21,6 @@ public class BotAI
 
     private List<BoardSpace> turnCycleSpaces = null;
     private List<BoardSpace> allSpaces = null;
-    public int essenceCount = 3;
 
     public void InitializeBot(Player player)
     {
@@ -30,32 +30,50 @@ public class BotAI
         currentState = BotState.AnalyzeBoard;
     }
 
+    public IEnumerator StartTurn()
+    {
+        currentState = BotState.AnalyzeBoard;
+
+        yield return ExecuteTurn();
+    }
+
     public IEnumerator ExecuteTurn()
     {
-        // while (currentState != BotState.EndTurn)
-        // {
-        //     switch (currentState)
-        //     {
-        //         case BotState.AnalyzeBoard:
-        //             AnalyzeBoard();
-        //             break;
 
-        //         case BotState.ChooseAction:
-        //             ChooseAction();
-        //             break;
+        if(hand.handState == HandState.START_TURN_DRAW_TIMELINE)
+        {
+            BattleManager.Instance.expandDisplay.AutoPlayInitialTimelineCard();
+            yield return new WaitForSeconds(0.1f);
+        }
 
-        //         case BotState.ExecuteAction:
-        //             yield return ExecuteAction();
-        //             break;
-        //     }
+        //Debug.Break();
 
-        //     yield return null;
-        // }
+        while (currentState != BotState.EndTurn)
+        {
+            switch (currentState)
+            {
+                case BotState.AnalyzeBoard:
+                    AnalyzeBoard();
+                    break;
 
+                case BotState.ChooseAction:
+                    ChooseAction();
+                    break;
 
-        BattleManager.Instance.expandDisplay.AutoPlayInitialTimelineCard();
+                case BotState.ExecuteAction:
+                    yield return ExecuteAction();
+                    break;
+            }
+
+            yield return null;
+        }
 
         yield return new WaitForSeconds(0.1f);
+    }
+
+    public void EndAction()
+    {
+        currentState = BattleStateMachine.Instance.GetEssenceCount() > 0 ? BotState.AnalyzeBoard : BotState.EndTurn;
     }
 
     private void AnalyzeBoard()
@@ -63,8 +81,10 @@ public class BotAI
         Debug.Log("Bot is analyzing the board.");
 
         // Get sorted board spaces for Turn Cycle and Whole Board
-        turnCycleSpaces = boardManager.GetBoardSpacesSortedByFactionVictoryPoints(botPlayer.faction, true);
-        allSpaces = boardManager.GetBoardSpacesSortedByFactionVictoryPoints(botPlayer.faction, false);
+        turnCycleSpaces = BoardManager.Instance.GetBoardSpacesSortedByFactionVictoryPoints(botPlayer.faction, true);
+        allSpaces = BoardManager.Instance.GetBoardSpacesSortedByFactionVictoryPoints(botPlayer.faction, false);
+
+        Debug.Log($"Turn Cycle [{turnCycleSpaces.Count}] | All [{allSpaces.Count}]");
 
         Debug.Log("Prioritized spaces analyzed.");
         currentState = BotState.ChooseAction;
@@ -83,11 +103,11 @@ public class BotAI
                 return;
             }
 
-            if (cardDisplay.displayCard.data.cardType == CardType.AGENT && TryPlayAgentCard(cardDisplay, true)) // Turn Cycle
-            {
-                currentState = BotState.ExecuteAction;
-                return;
-            }
+            // if (cardDisplay.displayCard.data.cardType == CardType.AGENT && TryPlayAgentCard(cardDisplay, true)) // Turn Cycle
+            // {
+            //     currentState = BotState.ExecuteAction;
+            //     return;
+            // }
         }
 
         foreach (var cardDisplay in hand.displaysInHand)
@@ -98,17 +118,17 @@ public class BotAI
                 return;
             }
 
-            if (cardDisplay.displayCard.data.cardType == CardType.AGENT && TryPlayAgentCard(cardDisplay, false)) // Whole Board
-            {
-                currentState = BotState.ExecuteAction;
-                return;
-            }
+            // if (cardDisplay.displayCard.data.cardType == CardType.AGENT && TryPlayAgentCard(cardDisplay, false)) // Whole Board
+            // {
+            //     currentState = BotState.ExecuteAction;
+            //     return;
+            // }
 
-            if (cardDisplay.displayCard.data.cardType == CardType.ESSENCE && TryUseEssenceCard(cardDisplay))
-            {
-                currentState = BotState.ExecuteAction;
-                return;
-            }
+            // if (cardDisplay.displayCard.data.cardType == CardType.ESSENCE && TryUseEssenceCard(cardDisplay))
+            // {
+            //     currentState = BotState.ExecuteAction;
+            //     return;
+            // }
         }
 
         // If no actions are possible, end turn
@@ -119,12 +139,7 @@ public class BotAI
     private IEnumerator ExecuteAction()
     {
         Debug.Log("Bot is executing an action.");
-
-        // Simulate action execution
-        yield return new WaitForSeconds(1);
-
-        // Return to AnalyzeBoard for next action
-        currentState = essenceCount > 0 ? BotState.AnalyzeBoard : BotState.EndTurn;
+        yield return null;
     }
 
     private bool TryPlayEventCard(CardDisplay card, bool turnCycleOnly)
@@ -133,10 +148,9 @@ public class BotAI
 
         foreach (var space in targetSpaces)
         {
-            if (space.isUnlocked && (space.isHole || space.hasEvent))
+            if (space.isUnlocked && (space.isHole || space.hasEvent) && (space.eventCard.data.faction != botPlayer.faction))
             {
-                card.actionRequest.isBot = true;
-                hand.PlayCard(card); // Play the event card
+                ReplaceTimelineEvent(card, space);
                 Debug.Log($"Played event card on the board (TurnCycleOnly: {turnCycleOnly}).");
                 return true;
             }
@@ -153,8 +167,6 @@ public class BotAI
         {
             if (space.hasEvent && !space.hasAgent)
             {
-                card.actionRequest.isBot = true;
-                hand.PlayCard(card); // Deploy agent
                 Debug.Log($"Deployed agent on the board (TurnCycleOnly: {turnCycleOnly}).");
                 return true;
             }
@@ -167,8 +179,15 @@ public class BotAI
     {
         card.actionRequest.isBot = true;
         // Use essence cards for shielding or disruption
-        hand.PlayCard(card); // Play essence card
+        hand.PlayCard(card, true); // Play essence card
         Debug.Log("Used essence card.");
         return true;
+    }
+
+    void ReplaceTimelineEvent(CardDisplay eventToPlay, BoardSpace targetSpace)
+    {
+        eventToPlay.actionRequest.isBot = true;
+        eventToPlay.actionRequest.activeBoardTargets.Add(targetSpace);
+        hand.PlayCard(eventToPlay, true); // Play the event card
     }
 }

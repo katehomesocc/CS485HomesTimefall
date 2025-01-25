@@ -379,7 +379,7 @@ public class BattleStateMachine : MonoBehaviour
 
         //TODO: connect to bot AI logic
 
-        yield return currentPlayer.botAI.ExecuteTurn();
+        yield return currentPlayer.botAI.StartTurn();
 
         Debug.Log($"Bot {currentPlayer.name} turn ended.");
 
@@ -551,15 +551,12 @@ public class BattleStateMachine : MonoBehaviour
         return true;
     }
 
-    public bool ReplaceTimelineEvent()
+    public void ReplaceTimelineEvent()
     {
-        if(essenceCount >= REPLACE_TIMELINE_EVENT) {return false;}
+        if(SpendEssence(REPLACE_TIMELINE_EVENT)) {return;}
 
-        SpendEssence(REPLACE_TIMELINE_EVENT);
-
+        Debug.LogError("not enough essence");
         //do stuff
-
-        return true;
     }
 
     public void AttemptToSpendTest()
@@ -594,6 +591,11 @@ public class BattleStateMachine : MonoBehaviour
     public void KickoffEndTurn()
     {
         currentState = GameState.EndOfTurn;
+    }
+
+    public int GetEssenceCount()
+    {
+        return essenceCount;
     }
 
 }

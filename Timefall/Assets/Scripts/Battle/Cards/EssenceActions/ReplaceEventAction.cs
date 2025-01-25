@@ -13,7 +13,18 @@ public class ReplaceEssenceAction : EssenceAction
 
     public override bool CanBePlayed(ActionRequest actionRequest)
     {
-        return actionRequest.potentialBoardTargets.Count >= 1; 
+
+        if(actionRequest.potentialBoardTargets.Count >= 1)
+        {
+            return true;
+        }
+
+        if(actionRequest.isBot)
+        {
+            return (actionRequest.activeBoardTargets.Count == 1);
+        }
+
+        return false; 
     }
 
     bool CanTargetSpace(BoardSpace boardSpace)
@@ -72,6 +83,7 @@ public class ReplaceEssenceAction : EssenceAction
 
     public override void SelectBoardTarget(ActionRequest actionRequest)
     {
+        Debug.Log("SelectBoardTarget");
         List<BoardSpace> activeBoardTargets = actionRequest.activeBoardTargets;
         if(activeBoardTargets.Count == 0)
         {
@@ -108,10 +120,12 @@ public class ReplaceEssenceAction : EssenceAction
     }
     public override void StartAction(ActionRequest actionRequest)
     {
+        Debug.Log("StartAction");
         BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
         
         if(actionRequest.isBot){
             //TODO BOT AI
+            SelectBoardTarget(actionRequest);
         } else {
             Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
         }
@@ -119,6 +133,7 @@ public class ReplaceEssenceAction : EssenceAction
 
     public override void EndAction(ActionRequest actionRequest)
     {
+        Debug.Log("EndAction");
         //set handstate
         Hand hand = Hand.Instance;
         hand.SetHandState(HandState.ACTION_END);
@@ -133,18 +148,34 @@ public class ReplaceEssenceAction : EssenceAction
         }
 
         hand.RemoveCardAfterPlaying(true, false);
+
+        if(actionRequest.isBot)
+        {
+            actionRequest.player.EndBotAction();
+        }
     }
 
     private void Replace(List<BoardSpace> boardTargets, CardDisplay handTarget, ActionRequest actionRequest)
     {
+        
         Hand.Instance.SetHandState(HandState.ACTION_START);
         
         BoardSpace target = boardTargets[0];
 
-        target.Replace((EventCardDisplay) handTarget);
+        SendChatLogMessage(actionRequest.player, target.eventCard.data, handTarget.displayCard.data);
 
         AudioManager.Instance.Play(audioClip);
-        
-        EndAction(actionRequest);
+
+        target.Replace((EventCardDisplay) handTarget, this, actionRequest);
+    }
+
+    void SendChatLogMessage(Player player, CardData oldEvent, CardData newEvent)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.ReplaceEvent);
+
+        data.cards.Add(oldEvent);
+        data.cards.Add(newEvent);
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }

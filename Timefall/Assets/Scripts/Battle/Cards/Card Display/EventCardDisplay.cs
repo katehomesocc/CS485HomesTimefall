@@ -116,13 +116,13 @@ public class EventCardDisplay : CardDisplay
         return (EventCard) displayCard;
     }
 
-    public EventCard PlayFromHand()
+    public void PlayFromHand()
     {
+        Debug.Log("Play Event From Hand");
         Vector3 newPosition = this.transform.localPosition + new Vector3(0, 50, 0);
         StartCoroutine(this.MoveToLocalPosition(newPosition, 0.25f));
                     
         GetEventCard().StartAction(actionRequest);
-        return GetEventCard();
     }
 
 }

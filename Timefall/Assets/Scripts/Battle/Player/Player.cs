@@ -28,6 +28,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    public Color GetFactionColor()
+    {
+        return BattleManager.GetFactionColor(faction);
+    }
+
     public void ChannelCard(CardDisplay cardDisplay)
     {
         cardDisplay.ApplyChannelEffect();
@@ -59,5 +64,10 @@ public class Player : MonoBehaviour
         if(playerEffect != null) {return;}
 
         playerEffect = new PlayerEffect(PlayerEffectType.PUPPET, puppetPlayer);
+    }
+
+    public void EndBotAction()
+    {
+        botAI.EndAction();
     }
 }
