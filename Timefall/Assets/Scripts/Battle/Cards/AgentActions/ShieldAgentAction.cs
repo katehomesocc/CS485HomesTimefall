@@ -153,8 +153,21 @@ public class ShieldAgentAction : AgentAction
         
         target.AgentEquiptShield(shield);
 
+        SendChatLogMessage(actionRequest.player, agent.data, target.agentCard.data);
+
         AudioManager.Instance.Play(audioClip);
         
         EndAction(actionRequest);
+    }
+
+     void SendChatLogMessage(Player player, CardData agentData, CardData eventData)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.AgentShield);
+
+        data.cards.Add(agentData);
+        data.cards.Add(eventData);
+        data.expiration = Expiration.NEXT_TURN;
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }

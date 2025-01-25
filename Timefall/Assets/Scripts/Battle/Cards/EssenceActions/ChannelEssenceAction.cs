@@ -133,10 +133,19 @@ public class ChannelEssenceAction : EssenceAction
         Hand.Instance.SetHandState(HandState.ACTION_START);
         
         player.ChannelCard(handTarget);
+        
+        SendChatLogMessage(player);
 
         AudioManager.Instance.Play(audioClip);
 
         //end of action
         EndAction(actionRequest);
+    }
+
+    void SendChatLogMessage(Player player)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.Channel);
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }

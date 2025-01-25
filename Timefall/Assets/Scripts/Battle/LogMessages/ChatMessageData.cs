@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class ChatMessageData
 {
-    public enum Action { TESTING, DeployAgent, PatchEvent, ReplaceEvent, SwapEvent }
+    public enum Action { TESTING, AgentShield, Channel, Convert, DeployAgent, PatchEvent, PlayerShield, ReplaceEvent, SwapEvent }
 
     public Action action;
     public Player player;
-
-    public List<BoardSpace> spaces = new List<BoardSpace>();
     public List<CardData> cards = new List<CardData>();
+
+    public Expiration expiration;
     
     public ChatMessageData(Player _player, Action _action)
     {
@@ -22,10 +22,18 @@ public class ChatMessageData
     {
         switch (action)
         {
+            case Action.AgentShield:
+                return AgentShieldMessage();
+            case Action.Channel:
+                return ChannelMessage();
+            case Action.Convert:
+                return ConvertMessage();
             case Action.DeployAgent:
                 return DeployAgentMessage();
             case Action.PatchEvent:
                 return PatchEventMessage();
+            case Action.PlayerShield:
+                return PlayerShieldMessage();
             case Action.ReplaceEvent:
                 return ReplaceEventMessage();
             case Action.SwapEvent:
@@ -35,15 +43,37 @@ public class ChatMessageData
         }
     }
 
-    public bool SingleLineMessage()
+    string AgentShieldMessage()
     {
-        switch (action)
-        {
-            case Action.ReplaceEvent:
-                return false;
-            default:
-                return true;
-        }
+        string playerText = PlayerText();
+        string agentText = CardText(cards[0]);
+        string eventOrAgentText = CardText(cards[1]);
+        string expText = ExpirationText(expiration, cards[0]);
+
+        return $"{playerText} used {agentText} to cast a shield on {eventOrAgentText} that will expire {expText}.";
+    }
+
+    string ChannelMessage()
+    {
+        string playerText = PlayerText();
+
+        return $"{playerText} is channeling.";
+    }
+
+    string ConvertMessage()
+    {
+        string playerText = PlayerText();
+        string agentText = CardText(cards[0]);
+
+        return $"{playerText} has converted {agentText}.";
+    }
+
+    string PlayerShieldMessage()
+    {
+        string playerText = PlayerText();
+        string eventText = CardText(cards[0]);
+
+        return $"{playerText} cast a shield on {eventText} that will expire on their next turn.";
     }
 
     string DeployAgentMessage()
@@ -101,6 +131,23 @@ public class ChatMessageData
         string factionColor = ColorUtility.ToHtmlStringRGB(BattleManager.GetFactionColor(faction));
 
         return $"<color=#{factionColor}><b>{cardData.cardName}</b></color>";
+        
+    }
+
+    string ExpirationText(Expiration expiration, CardData agentData)
+    {
+        Faction faction = agentData.faction;
+
+        string factionColor = ColorUtility.ToHtmlStringRGB(BattleManager.GetFactionColor(faction));
+
+        string whenDamagedText = $"when <color=#{factionColor}><b>{agentData.cardName}</b></color> is damaged";
+
+        if(expiration == Expiration.NONE)
+        {
+            return whenDamagedText;
+        }
+
+        return $"on the next <color=#{factionColor}><b>{faction.ToString()}</b></color> turn or {whenDamagedText}";
         
     }
 }

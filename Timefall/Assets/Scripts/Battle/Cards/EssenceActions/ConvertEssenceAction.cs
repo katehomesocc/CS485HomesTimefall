@@ -130,9 +130,20 @@ public class ConvertEssenceAction : EssenceAction
         AgentCard agent = (AgentCard) discardTarget;
         BattleManager.Instance.ConvertAgent(agent, requestPlayer.faction);
 
+        SendChatLogMessage(requestPlayer, agent.data);
+
         AudioManager.Instance.Play(audioClip);
 
         //end of action
         EndAction(actionRequest);
+    }
+
+    void SendChatLogMessage(Player player, CardData agentData)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.Convert);
+
+        data.cards.Add(agentData);
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }

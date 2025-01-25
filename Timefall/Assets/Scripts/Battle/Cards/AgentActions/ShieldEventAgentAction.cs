@@ -158,8 +158,21 @@ public class EventShieldAgentAction : AgentAction
         shield.SubscribeToAgent(agent.onDeath);
         target.EventEquiptShield(shield);
 
+        SendChatLogMessage(actionRequest.player, agent.data, target.eventCard.data);
+
         AudioManager.Instance.Play(audioClip);
         
         EndAction(actionRequest);
+    }
+
+    void SendChatLogMessage(Player player, CardData agentData, CardData eventData)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.AgentShield);
+
+        data.cards.Add(agentData);
+        data.cards.Add(eventData);
+        data.expiration = Expiration.NONE;
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }

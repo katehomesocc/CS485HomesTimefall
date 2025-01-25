@@ -142,9 +142,20 @@ public class ShieldEssenceAction : EssenceAction
         Shield shield = new Shield(owner, Expiration.NEXT_TURN, target, false, true);
         
         target.AgentEquiptShield(shield);
+        
+        SendChatLogMessage(actionRequest.player, target.eventCard.data);
 
         AudioManager.Instance.Play(audioClip);
         
         EndAction(actionRequest);
+    }
+
+    void SendChatLogMessage(Player player, CardData eventData)
+    {
+        ChatMessageData data = new ChatMessageData(player, ChatMessageData.Action.PlayerShield);
+
+        data.cards.Add(eventData);
+
+        ChatLogManager.Instance.SendMessage(data);
     }
 }

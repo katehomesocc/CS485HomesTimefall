@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ChatLogManager : MonoBehaviour
 {
     public static ChatLogManager Instance;
     [SerializeField]
     private ScrollRect logView;
-    public GameObject oneLinePrefab;
-    public GameObject twoLinePrefab;
-
+    public GameObject prefab;
     public GameObject content;
 
     void Awake()
@@ -42,27 +41,19 @@ public class ChatLogManager : MonoBehaviour
     {
         //TODO aduio?
 
-        InstaniateMessage(messageData, GetPrefabForAction(messageData));
-    }
-    GameObject GetPrefabForAction(ChatMessageData messageData)
-    {
-        return messageData.SingleLineMessage() ? oneLinePrefab : twoLinePrefab;
+        InstaniateMessage(messageData);
+        logView.verticalNormalizedPosition = 0;
     }
 
-    void InstaniateMessage(ChatMessageData messageData, GameObject prefab)
+    void InstaniateMessage(ChatMessageData messageData)
     {
         GameObject obj = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
         
-        ChatMessage chatMessage = obj.GetComponent<ChatMessage>();
-        chatMessage.SetData(messageData);
+        TMP_Text text = obj.GetComponent<TMP_Text>();
+        
+        text.text = messageData.BuildMessageString();
 
         obj.transform.SetParent(content.transform, false);
-    }
-
-    void AddMessage(ChatMessageData messageData)
-    {
-        SendMessage(messageData);
-        logView.verticalNormalizedPosition = 0;
     }
 
 
