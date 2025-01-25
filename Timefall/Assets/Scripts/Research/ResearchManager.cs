@@ -107,17 +107,17 @@ public class ResearchManager : MonoBehaviour
 
 	public void UpdateMasterVolume(float volume)
 	{
-		AudioManager.Instance.UpdateMasterVolume(volume);
+		GameManager.Instance.UpdateMasterVolume(volume);
 	}
 
 	public void UpdateEffectVolume(float volume)
 	{
-		AudioManager.Instance.UpdateEffectVolume(volume);
+		GameManager.Instance.UpdateEffectVolume(volume);
 	}
 
 	public void UpdateMusicVolume(float volume)
 	{
-		AudioManager.Instance.UpdateMusicVolume(volume);
+		GameManager.Instance.UpdateMusicVolume(volume);
 	}
 
     void PlayUIEffect()

@@ -182,6 +182,24 @@ public class GameManager : MonoBehaviour
         transform.position = position;
     }
 
+    public void UpdateMasterVolume(float volume)
+	{
+		AudioManager.Instance.UpdateMasterVolume(volume);
+        PlayerPrefs.SetFloat("masterVolume", volume);
+	}
+
+	public void UpdateEffectVolume(float volume)
+	{
+		AudioManager.Instance.UpdateEffectVolume(volume);
+        PlayerPrefs.SetFloat("effectVolume", volume);
+	}
+
+	public void UpdateMusicVolume(float volume)
+	{
+		AudioManager.Instance.UpdateMusicVolume(volume);
+        PlayerPrefs.SetFloat("musicVolume", volume);
+	}
+
     public void QuitApplication()
     {
 #if UNITY_STANDALONE

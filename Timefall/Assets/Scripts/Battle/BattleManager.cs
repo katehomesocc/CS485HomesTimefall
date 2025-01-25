@@ -98,6 +98,7 @@ public class BattleManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SetAudioSliders();
         battleStateMachine = BattleStateMachine.Instance;
         boardManager = BoardManager.Instance;
         hand = Hand.Instance;
@@ -348,17 +349,17 @@ public class BattleManager : MonoBehaviour
 
     public void UpdateMasterVolume(float volume)
 	{
-		AudioManager.Instance.UpdateMasterVolume(volume);
+		GameManager.Instance.UpdateMasterVolume(volume);
 	}
 
 	public void UpdateEffectVolume(float volume)
 	{
-		AudioManager.Instance.UpdateEffectVolume(volume);
+		GameManager.Instance.UpdateEffectVolume(volume);
 	}
 
 	public void UpdateMusicVolume(float volume)
 	{
-		AudioManager.Instance.UpdateMusicVolume(volume);
+		GameManager.Instance.UpdateMusicVolume(volume);
 	}
     public static int GetPlayerNumber(Faction faction)
     {
@@ -413,6 +414,13 @@ public class BattleManager : MonoBehaviour
 
         StartCoroutine(StartOfGame());
     }    
+
+    void SetAudioSliders()
+    {
+        masterSlider.value = AudioManager.Instance.masterVolume;
+        effectsSlider.value = AudioManager.Instance.effectVolume;
+        musicSlider.value = AudioManager.Instance.musicVolume;
+    }
 
     
 }

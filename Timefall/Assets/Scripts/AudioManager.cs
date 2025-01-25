@@ -27,6 +27,8 @@ public class AudioManager : MonoBehaviour
 
 	private void Awake()
 	{
+		LoadPlayerPrefs();
+		
         // If there is an instance, and it's not me, delete myself.
         if (Instance != null && Instance != this) 
         { 
@@ -105,5 +107,12 @@ public class AudioManager : MonoBehaviour
 	public void PlayUISliderUpdate()
 	{
 		Play(UI_SLIDER_UPDATE_CLIP);
+	}
+
+	void LoadPlayerPrefs()
+	{
+		masterVolume = PlayerPrefs.GetFloat($"masterVolume", 1.0f);
+		musicVolume = PlayerPrefs.GetFloat($"musicVolume", 0.75f);
+		effectVolume = PlayerPrefs.GetFloat($"effectVolume", 0.55f);
 	}
 }
