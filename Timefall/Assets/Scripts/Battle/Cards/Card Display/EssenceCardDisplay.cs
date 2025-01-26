@@ -44,13 +44,23 @@ public class EssenceCardDisplay : CardDisplay
         return (EssenceCard) displayCard;
     }
 
-    public EssenceCard PlayFromHand()
+    public override ActionType GetActionType()
+    {
+        return GetEssenceCard().GetActionType();
+    }
+
+    public void PlayFromHand(bool isBot)
     {
         Vector3 newPosition = this.transform.localPosition + new Vector3(0, 50, 0);
         StartCoroutine(this.MoveToLocalPosition(newPosition, 0.25f));
+
+        if(isBot)
+        {
+            StartCoroutine(GetEssenceCard().StartBotAction(actionRequest));
+            return;
+        }
                     
         GetEssenceCard().StartAction(actionRequest);
-        return GetEssenceCard();
     }
 
 }

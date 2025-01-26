@@ -50,6 +50,7 @@ public class BattleStateMachine : MonoBehaviour
 
     [Header("Current Turn")]
     public int currentTurn;
+    public int currentTurnCycle = 1;
     public int totalTurns = 32;
     public Player currentPlayer;
     public Faction currentFaction;
@@ -223,6 +224,7 @@ public class BattleStateMachine : MonoBehaviour
         if (currentTurn % 4 == 0) // End of cycle
         {
             currentState = GameState.EndOfCycle;
+            currentTurnCycle++;
         }
         else if (currentTurn >= totalTurns)
         {

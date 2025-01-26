@@ -338,7 +338,7 @@ public class Hand : MonoBehaviour
             cardPlayingIndex = ecDisplay.GetPositionInParent();
 
             //start essence action
-            EssenceCard essenceCard = ecDisplay.PlayFromHand();
+            ecDisplay.PlayFromHand(currentActionRequest.player.isBot);
         }
 
         if(cardDisplay.GetCardType() == CardType.AGENT)

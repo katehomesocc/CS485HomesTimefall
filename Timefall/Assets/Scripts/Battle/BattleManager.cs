@@ -65,6 +65,9 @@ public class BattleManager : MonoBehaviour
     public Slider effectsSlider;
     public AudioClip UI_EFFECT_SOUND;
 
+    [Header("Audio")]
+    public AudioClip BOT_CLICK_SOUND;
+
     void Awake()
     {
         // If there is an instance, and it's not me, delete myself.

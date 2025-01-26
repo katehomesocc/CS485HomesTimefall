@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Essence CardData", menuName = "CardData/EssenceCardData")]
 public class EssenceCardData : CardData
 {
+    public ActionType actionType;
     [SerializeField]
     public EssenceAction essenceAction;
     public void Awake()

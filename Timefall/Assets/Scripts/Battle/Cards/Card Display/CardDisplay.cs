@@ -293,6 +293,11 @@ public class CardDisplay : MonoBehaviour,
     {
         return this.displayCard.data.cardType;
     }
+
+    public virtual ActionType GetActionType()
+    {
+        return ActionType.None;
+    }
     
     public void SelectAsTarget(Texture tex)
     {

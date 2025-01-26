@@ -103,9 +103,11 @@ public class SwapEssenceAction : EssenceAction
         {
             BoardSpace boardTarget =  actionRequest.boardTarget;
             activeBoardTargets.Add(boardTarget);
-
-            Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
-
+            
+            if(!actionRequest.player.isBot){
+                Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
+            }
+        
             Texture selectionTexture = GetSelectionTexture(actionRequest);
             boardTarget.SelectAsTarget(selectionTexture);
         }
@@ -155,6 +157,11 @@ public class SwapEssenceAction : EssenceAction
         }
 
         hand.RemoveCardAfterPlaying(true,true);
+
+        if(actionRequest.isBot)
+        {
+            actionRequest.player.EndBotAction();
+        }
     }
 
     private void Swap(ActionRequest actionRequest)
@@ -206,12 +213,21 @@ public class SwapEssenceAction : EssenceAction
 
     public override IEnumerator StartBotAction(BotAI botAI, ActionRequest actionRequest)
     {
-        // BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
+        BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
 
-        // BoardSpace target = actionRequest.activeBoardTargets[0];
-        // yield return botAI.MoveCursor(target.transform.position);
-        //     //TODO BOT AI
-        // SelectBoardTarget(actionRequest);
+        BoardSpace target1 = actionRequest.activeBoardTargets[0];
+        BoardSpace target2 = actionRequest.activeBoardTargets[1];
+
+        actionRequest.activeBoardTargets.Clear();
+
+        yield return botAI.MoveCursor(target1.transform.position);
+        actionRequest.boardTarget = target1;
+        SelectBoardTarget(actionRequest);
+
+        yield return botAI.MoveCursor(target2.transform.position);
+        actionRequest.boardTarget = target2;
+        SelectBoardTarget(actionRequest);
+        
         yield return null;
     }
 }

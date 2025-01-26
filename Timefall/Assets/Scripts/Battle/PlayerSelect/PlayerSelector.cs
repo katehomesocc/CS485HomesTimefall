@@ -68,10 +68,9 @@ public class PlayerSelector : MonoBehaviour
 
         if(!LocksRemaining())
         {
-            Debug.Log("No locks remaining");
             ShowStartInfo();
         }
-        else {Debug.Log("locks remaining");}
+        
 
         foreach (PlayerOptions options in playerOptions)
         {

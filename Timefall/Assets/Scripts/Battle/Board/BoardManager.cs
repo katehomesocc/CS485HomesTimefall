@@ -64,7 +64,7 @@ public class BoardManager : MonoBehaviour
             weaversVP += eventCard.eventCardData.victoryPoints[3];
         }
 
-        Debug.Log(string.Format("BM calculated: [{0}] [{1}] [{2}] [{3}]", stewardsVP, seekersVP, sovereignsVP, weaversVP));
+        // Debug.Log(string.Format("BM calculated: [{0}] [{1}] [{2}] [{3}]", stewardsVP, seekersVP, sovereignsVP, weaversVP));
 
         return new int[] {stewardsVP, seekersVP, sovereignsVP, weaversVP};
     }
@@ -78,7 +78,7 @@ public class BoardManager : MonoBehaviour
     {
         int offset = (roundNumber - 1) * 4;
 
-        Debug.Log(string.Format("roundNum:[{0}], offset:[{1}], calcuating: [{2},{3},{4},{5}]", roundNumber, offset, 0 + offset, 1 + offset, 2 + offset, 3 + offset));
+        // Debug.Log(string.Format("roundNum:[{0}], offset:[{1}], calcuating: [{2},{3},{4},{5}]", roundNumber, offset, 0 + offset, 1 + offset, 2 + offset, 3 + offset));
 
         BoardSpace[] spacesToCalc = new BoardSpace[4];
 
@@ -116,7 +116,7 @@ public class BoardManager : MonoBehaviour
 
     public List<BoardSpace> GetPossibleTargets(Card card, ActionRequest actionRequest)
     {
-        Debug.Log(string.Format("BM GPT: {0}", actionRequest));
+        // Debug.Log(string.Format("BM GPT: {0}", actionRequest));
         switch(card.GetCardType()) 
         {
             case CardType.AGENT:

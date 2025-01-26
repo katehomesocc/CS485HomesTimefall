@@ -7,6 +7,7 @@ using System.Linq;
 
 public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler 
 {
+    public int spaceNumber;
     public RawImage border;
 
     public Color resetColor;
@@ -424,5 +425,22 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     {
         Debug.Log("BoardSpace EndCallbackAction ");
         essenceAction.EndAction(actionRequest);
+    }
+
+    public override bool Equals(object obj)
+    {
+        var space = obj as BoardSpace;
+
+        if (space == null)
+        {
+            return false;
+        }
+
+        return this.spaceNumber.Equals(space.spaceNumber);
+    }
+
+    public override int GetHashCode()
+    {
+        return this.spaceNumber.GetHashCode();
     }
 }
