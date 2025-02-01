@@ -20,6 +20,7 @@ public class PlayerOptions : MonoBehaviour
     public Toggle easyToggle;
     public Toggle mediumToggle;
     public Toggle hardToggle;
+    public int difficultyLevel = 2;
 
     [Header("Faction Selection")]
     public Faction selectedFaction = Faction.STEWARDS;
@@ -40,13 +41,13 @@ public class PlayerOptions : MonoBehaviour
         botToggle.onValueChanged.AddListener(delegate { ToggleBot(botToggle.isOn); });
 
         easyToggle.onValueChanged.AddListener(delegate {
-                ToggleDifficulty(easyToggle);
+                ToggleDifficulty(easyToggle, 1);
             });
         mediumToggle.onValueChanged.AddListener(delegate {
-                ToggleDifficulty(mediumToggle);
+                ToggleDifficulty(mediumToggle, 2);
         });
         hardToggle.onValueChanged.AddListener(delegate {
-                ToggleDifficulty(hardToggle);
+                ToggleDifficulty(hardToggle, 3);
             });
     }
 
@@ -203,7 +204,7 @@ public class PlayerOptions : MonoBehaviour
         PlayerSelector.Instance.UpdateIndicator(this);
     }
 
-    void ToggleDifficulty(Toggle toggle)
+    void ToggleDifficulty(Toggle toggle, int level)
     {
         RectTransform rect = toggle.GetComponentInChildren<RectTransform>();
 
@@ -214,6 +215,6 @@ public class PlayerOptions : MonoBehaviour
 
         rect.sizeDelta = new Vector2 (40, 40);
 
-        //TODO: add to player selection logic
+        difficultyLevel = level;
     }
 }

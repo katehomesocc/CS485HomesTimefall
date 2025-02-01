@@ -412,7 +412,17 @@ public class BattleManager : MonoBehaviour
             Player player = GetFactionPlayer(options.selectedFaction);
 
             player.playerName = options.nameInput.text;
-            player.isBot = options.botToggle.isOn;
+
+            if(options.botToggle.isOn)
+            {
+                player.isBot = true;
+                player.LoadBot(options.difficultyLevel);
+            } 
+            else
+            {
+                player.isBot = false;
+            }
+            
         }
 
         StartCoroutine(StartOfGame());

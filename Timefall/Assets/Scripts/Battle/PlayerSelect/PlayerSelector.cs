@@ -155,6 +155,7 @@ public class PlayerSelector : MonoBehaviour
         PlayerPrefs.SetString($"playerSelectedFaction{playerNumber}", options.selectedFaction.ToString());
         PlayerPrefs.SetInt($"playerIsBot{playerNumber}", options.botToggle.isOn ? 1 : 0);
         PlayerPrefs.SetInt($"playerLocked{playerNumber}", options.Locked ? 1 : 0);
+        PlayerPrefs.SetInt($"playerBotDifficulty{playerNumber}", options.difficultyLevel);
     }
     
     public static void LoadPlayerPrefs(PlayerOptions options)
@@ -164,6 +165,22 @@ public class PlayerSelector : MonoBehaviour
         options.nameInput.text = PlayerPrefs.GetString($"playerName{playerNumber}", "");
 
         options.botToggle.isOn =  PlayerPrefs.GetInt($"playerIsBot{playerNumber}") == 1;
+        options.difficultyLevel = PlayerPrefs.GetInt($"playerIsBot{playerNumber}", 0);
+        switch(options.difficultyLevel)
+        {
+            case 1:
+                options.easyToggle.isOn = true;
+                break;
+            case 2:
+                options.mediumToggle.isOn = true;
+                break;
+            case 3:
+                options.hardToggle.isOn = true;
+                break;
+            default:
+                options.mediumToggle.isOn = true;
+                break;
+        }
 
         string factionString = PlayerPrefs.GetString($"playerSelectedFaction{playerNumber}", "");
 

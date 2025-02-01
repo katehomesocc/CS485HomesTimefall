@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     // called third
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("OnSceneLoaded: " + scene.name);
+        // Debug.Log("OnSceneLoaded: " + scene.name);
         this.currentScene = scene.name;
 
         StartCoroutine(OpenDoors());

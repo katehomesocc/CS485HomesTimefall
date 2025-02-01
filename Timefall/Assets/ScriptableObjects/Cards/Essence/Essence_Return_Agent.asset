@@ -18,4 +18,5 @@ MonoBehaviour:
   image: {fileID: 0}
   faction: 4
   cardType: 1
+  actionType: 7
   essenceAction: {fileID: 11400000, guid: e4de1cc38f486fd469b5752186624b70, type: 2}

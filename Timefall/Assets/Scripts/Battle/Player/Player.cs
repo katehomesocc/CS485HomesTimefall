@@ -18,15 +18,6 @@ public class Player : MonoBehaviour
 
     public BotAI botAI = null;
 
-    void Awake()
-    {
-        if(isBot)
-        {
-            botAI = gameObject.AddComponent(typeof(BotAI)) as BotAI;
-            botAI.InitializeBot(this);
-        }
-    }
-
     public Color GetFactionColor()
     {
         return BattleManager.GetFactionColor(faction);
@@ -68,5 +59,11 @@ public class Player : MonoBehaviour
     public void EndBotAction()
     {
         botAI.EndAction();
+    }
+
+    public void LoadBot(int difficultyLevel)
+    {
+        botAI = BotFactory.LoadBot(difficultyLevel, gameObject);
+        botAI.InitializeBot(this);
     }
 }
