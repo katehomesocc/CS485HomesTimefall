@@ -84,10 +84,45 @@ public class MediumBotAI : BotAI
     {
         switch (actionType)
         {
+            case ActionType.Revive:
+                return TryUseRevive();
             case ActionType.Swap:
                 if (currentTurnCycle == 1) break;
                 return TryUseSwap();
         }
+        return false;
+    }
+
+    private bool TryUseRevive()
+    {
+        foreach (CardDisplay cardDisplay in hand.displaysInHand)
+        {
+            if (cardDisplay.GetActionType() != ActionType.Revive) continue;
+            if (!cardDisplay.CanBePlayed(botPlayer)) return false;
+
+            
+            var discardPile = botPlayer.deck.discardPile; 
+
+            Card agentToRevive = discardPile.FirstOrDefault(card => card.GetCardType() == CardType.AGENT);
+
+            if (agentToRevive == null) return false;
+
+            // Cast cardDisplay to EssenceCardDisplay to access action request
+            EssenceCardDisplay essenceCardDisplay = (EssenceCardDisplay) cardDisplay;
+            ActionRequest actionRequest = essenceCardDisplay.actionRequest;
+
+            // Set the revive target
+            actionRequest.discardedTarget = agentToRevive;
+
+            // Play the revive action
+            StartCoroutine(ReviveAgent(cardDisplay, agentToRevive));
+
+            Debug.Log($"Revived agent: {agentToRevive.data.cardName} for faction {botPlayer.faction}");
+
+            return true;
+        }
+
+        // No revive card was played
         return false;
     }
 
@@ -197,41 +232,5 @@ public class MediumBotAI : BotAI
 //         // Debug.Log("MediumBot is executing an action.");
 //         yield return null;
 //     }
-
-    private bool TryPlayEventCard(CardDisplay card, bool turnCycleOnly)
-    {
-        var targetSpaces = turnCycleOnly ? turnCycleSpaces : allSpaces;
-
-        foreach (var space in targetSpaces)
-        {
-            if (space.isUnlocked && (space.isHole || space.hasEvent) && (space.eventCard.data.faction != botPlayer.faction))
-            {
-                StartCoroutine(ReplaceTimelineEvent(card, space));
-                Debug.Log($"Played event card on the board (TurnCycleOnly: {turnCycleOnly}).");
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private bool TryPlayAgentCard(CardDisplay card, bool turnCycleOnly)
-    {
-        var targetSpaces = turnCycleOnly ? turnCycleSpaces : allSpaces;
-
-        foreach (var space in targetSpaces)
-        {
-            if (space.hasEvent && !space.hasAgent)
-            {
-                StartCoroutine(PlaceAgent(card, space));
-                Debug.Log($"Deployed agent on the board (TurnCycleOnly: {turnCycleOnly}).");
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
 
 }

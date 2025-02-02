@@ -4,10 +4,24 @@ using UnityEngine;
 
 public class DiscardPileManager : MonoBehaviour
 {
+    public static DiscardPileManager Instance;
     public DiscardPileDisplay stewardDisplay;
     public DiscardPileDisplay seekerDisplay;
     public DiscardPileDisplay sovereignDisplay;
     public DiscardPileDisplay weaverDisplay;
+    
+    void Awake()
+    {
+        // If there is an instance, and it's not me, delete myself.
+        if (Instance != null && Instance != this) 
+        { 
+            Destroy(this); 
+        } 
+        else 
+        { 
+            Instance = this; 
+        } 
+    }
 
     // Start is called before the first frame update
     void Start()

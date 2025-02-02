@@ -224,4 +224,18 @@ public class DiscardPileDisplay : MonoBehaviour
         
         OpenInventory();
     }
+
+    public CardDisplay GetCardDisplayForDiscardedCard(Card targetCard)
+    {
+        foreach (CardDisplay cardDisplay in displaysShowing)
+        {
+            if (cardDisplay.displayCard == targetCard)
+            {
+                return cardDisplay;
+            }
+        }
+
+        return null; 
+    }
+
 }

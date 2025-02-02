@@ -22,6 +22,7 @@ public abstract class BotAI : MonoBehaviour
     [Header("Player Info")]
     protected int playerNumber;
     protected Player botPlayer;
+    public Faction faction { get; private set; }
 
     [Header("BSM Info")]
     protected BotCursor botCursor;
@@ -32,16 +33,17 @@ public abstract class BotAI : MonoBehaviour
     public void InitializeBot(Player player)
     {
         botPlayer = player;
+        faction = player.faction;
         boardManager = BoardManager.Instance;
         hand = Hand.Instance;
-        playerNumber = BattleManager.GetPlayerNumber(botPlayer.faction);
+        playerNumber = BattleManager.GetPlayerNumber(faction);
         currentState = BotState.AnalyzeBoard;
     }
 
     public IEnumerator StartTurn()
     {
         botCursor = BattleStateMachine.Instance.botCursor;
-        botCursor.SetBot(this, botPlayer.faction);
+        botCursor.SetBot(this, faction);
         botCursor.Enable();
 
         currentTurnCycle = BattleStateMachine.Instance.currentTurnCycle;
@@ -101,6 +103,43 @@ public abstract class BotAI : MonoBehaviour
     }
 
     /*
+        Try To Play Bools
+    */
+    protected bool TryPlayAgentCard(CardDisplay card, bool turnCycleOnly)
+    {
+        var targetSpaces = turnCycleOnly ? turnCycleSpaces : allSpaces;
+
+        foreach (var space in targetSpaces)
+        {
+            if (space.hasEvent && !space.hasAgent)
+            {
+                StartCoroutine(PlaceAgent(card, space));
+                Debug.Log($"Deployed agent on the board (TurnCycleOnly: {turnCycleOnly}).");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool TryPlayEventCard(CardDisplay card, bool turnCycleOnly)
+    {
+        var targetSpaces = turnCycleOnly ? turnCycleSpaces : allSpaces;
+
+        foreach (var space in targetSpaces)
+        {
+            if (space.isUnlocked && (space.isHole || space.hasEvent) && (space.eventCard.data.faction != faction))
+            {
+                StartCoroutine(ReplaceTimelineEvent(card, space));
+                Debug.Log($"Played event card on the board (TurnCycleOnly: {turnCycleOnly}).");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /*
         Action Enumerators
     */
 
@@ -123,6 +162,16 @@ public abstract class BotAI : MonoBehaviour
         eventToPlay.actionRequest.activeBoardTargets.Add(targetSpace);
         
         hand.PlayCard(eventToPlay, true); // Play the event card, force = true
+    }
+
+    protected IEnumerator ReviveAgent(CardDisplay handDisplay, Card agentToRevive)
+    {
+        yield return MoveCursor(handDisplay.transform.position);
+
+        handDisplay.actionRequest.isBot = true;
+        handDisplay.actionRequest.discardedTarget = agentToRevive;
+        
+        hand.PlayCard(handDisplay, true); // Revive the agent card, force = true
     }
 
     protected IEnumerator PlaceAgent(CardDisplay agentToPlay, BoardSpace targetSpace)

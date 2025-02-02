@@ -121,6 +121,11 @@ public class ReviveEssenceAction : EssenceAction
         BattleManager.Instance.ClearPossibleTargetHighlights(actionRequest);
 
         hand.RemoveCardAfterPlaying(true,true);
+        
+        if(actionRequest.isBot)
+        {
+            actionRequest.player.EndBotAction();
+        }
     }
 
     private void Revive(Card discardTarget, Player player, ActionRequest actionRequest)
@@ -148,12 +153,17 @@ public class ReviveEssenceAction : EssenceAction
 
     public override IEnumerator StartBotAction(BotAI botAI, ActionRequest actionRequest)
     {
-        // BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
+        BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
 
-        // BoardSpace target = actionRequest.activeBoardTargets[0];
-        // yield return botAI.MoveCursor(target.transform.position);
-        //     //TODO BOT AI
-        // SelectBoardTarget(actionRequest);
+        Card agentToRevive = actionRequest.discardedTarget;
+
+        DiscardPileDisplay discardPile = DiscardPileManager.Instance.GetFactionPileDisplay(botAI.faction);
+
+        CardDisplay discardedTarget = discardPile.GetCardDisplayForDiscardedCard(agentToRevive);
+        
+        yield return botAI.MoveCursor(discardedTarget.gameObject.transform.position);
+
+        SelectDiscardedTarget(actionRequest);
         yield return null;
     }
 }
