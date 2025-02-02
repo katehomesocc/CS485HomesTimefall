@@ -30,6 +30,10 @@ public abstract class BotAI : MonoBehaviour
     protected List<BoardSpace> turnCycleSpaces = null;
     protected List<BoardSpace> allSpaces = null;
 
+    protected bool agentEnoughEssence = true;
+    protected bool eventEnoughEssence = true;
+    protected bool essenceEnoughEssence = true;
+
     public void InitializeBot(Player player)
     {
         botPlayer = player;

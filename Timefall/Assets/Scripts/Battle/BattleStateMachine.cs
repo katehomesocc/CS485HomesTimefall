@@ -469,6 +469,11 @@ public class BattleStateMachine : MonoBehaviour
 
         CardType cardType = card.data.cardType;
 
+        return HasEssenceToPlayCardType(cardType);
+    }
+
+    public bool HasEssenceToPlayCardType(CardType cardType)
+    {
         switch(cardType) 
         {
             case CardType.AGENT:

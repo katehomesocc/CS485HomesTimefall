@@ -250,4 +250,23 @@ public class BoardManager : MonoBehaviour
         return spaces.Where(space => space.isUnlocked).ToList();
     }
 
+    public BoardSpace GetBoardSpaceWithHighestEnemyVP(Faction botFaction)
+    {
+        return spaces
+            .Where(space => space.hasEvent) // Ensure space has an event
+            .OrderByDescending(space => GetHighestEnemyVP(space, botFaction)) // Sort by highest enemy VP
+            .FirstOrDefault(); // Return the top choice or null if none
+    }
+
+
+    public static int GetHighestEnemyVP(BoardSpace space, Faction botFaction)
+    {
+        int[] vpValues = space.eventCard.eventCardData.victoryPoints;
+
+        return vpValues
+            .Where((vp, index) => (Faction)index != botFaction) // Exclude bot's own faction
+            .Max(); // Return the highest VP an enemy gains from this event
+    }
+
+
 }

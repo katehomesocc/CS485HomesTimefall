@@ -9,11 +9,16 @@ public class MediumBotAI : BotAI
     {
         Debug.Log("MediumBot is analyzing the board.");
 
-        turnCycleSpaces = boardManager.GetBoardSpacesSortedByFactionVictoryPoints(botPlayer.faction, true);
-        allSpaces = boardManager.GetBoardSpacesSortedByFactionVictoryPoints(botPlayer.faction, false);
+        turnCycleSpaces = boardManager.GetBoardSpacesSortedByFactionVictoryPoints(faction, true);
+        allSpaces = boardManager.GetBoardSpacesSortedByFactionVictoryPoints(faction, false);
 
         Debug.Log($"Turn Cycle [{turnCycleSpaces.Count}] | All [{allSpaces.Count}]");
         Debug.Log("Prioritized spaces analyzed.");
+
+        agentEnoughEssence = BattleStateMachine.Instance.HasEssenceToPlayCardType(CardType.AGENT);
+        eventEnoughEssence = BattleStateMachine.Instance.HasEssenceToPlayCardType(CardType.EVENT);
+        essenceEnoughEssence = BattleStateMachine.Instance.HasEssenceToPlayCardType(CardType.ESSENCE);
+
 
         currentState = BotState.ChooseAction;
     }
@@ -24,13 +29,13 @@ public class MediumBotAI : BotAI
 
         foreach (CardDisplay cardDisplay in hand.displaysInHand)
         {
-            // if (cardDisplay.GetCardType() == CardType.EVENT && TryPlayEventCard(cardDisplay, true)) // Turn Cycle
+            // if (eventEnoughEssence && cardDisplay.GetCardType() == CardType.EVENT && TryPlayEventCard(cardDisplay, true)) // Turn Cycle
             // {
             //     currentState = BotState.ExecuteAction;
             //     return;
             // }
 
-            if (cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, true)) // Turn Cycle
+            if (agentEnoughEssence && cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, true)) // Turn Cycle
             {
                 currentState = BotState.ExecuteAction;
                 return;
@@ -39,20 +44,20 @@ public class MediumBotAI : BotAI
 
         foreach (CardDisplay cardDisplay in hand.displaysInHand)
         {
-            // if (cardDisplay.GetCardType() == CardType.EVENT && TryPlayEventCard(cardDisplay, false)) // Whole Board
+            // if (eventEnoughEssence && cardDisplay.GetCardType() == CardType.EVENT && TryPlayEventCard(cardDisplay, false)) // Whole Board
             // {
             //     currentState = BotState.ExecuteAction;
             //     return;
             // }
 
-            if (cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, false)) // Whole Board
+            if (agentEnoughEssence && cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, false)) // Whole Board
             {
                 currentState = BotState.ExecuteAction;
                 return;
             }
         }
 
-        if (ChooseEssenceAction())
+        if (essenceEnoughEssence && ChooseEssenceAction())
         {
             currentState = BotState.ExecuteAction;
             return;
@@ -86,6 +91,8 @@ public class MediumBotAI : BotAI
         {
             case ActionType.CosmicBlast:
                 return TryUseCosmicBlast();
+            case ActionType.Paradox:
+                return TryUseParadox();
             case ActionType.Revive:
                 return TryUseRevive();
             case ActionType.Swap:
@@ -96,34 +103,61 @@ public class MediumBotAI : BotAI
     }
 
     private bool TryUseCosmicBlast()
-{
-    foreach (var cardDisplay in hand.displaysInHand)
     {
-        if (cardDisplay.GetActionType() != ActionType.CosmicBlast) continue;
-        if (!cardDisplay.CanBePlayed(botPlayer)) return false;
+        foreach (var cardDisplay in hand.displaysInHand)
+        {
+            if (cardDisplay.GetActionType() != ActionType.CosmicBlast) continue;
+            if (!cardDisplay.CanBePlayed(botPlayer)) return false;
 
-        var essenceCardDisplay = (EssenceCardDisplay)cardDisplay;
-        ActionRequest actionRequest = essenceCardDisplay.actionRequest;
+            var essenceCardDisplay = (EssenceCardDisplay)cardDisplay;
+            ActionRequest actionRequest = essenceCardDisplay.actionRequest;
 
-        // Find a board space with an event that has an enemy agent
-        var targetSpace = allSpaces
-            .Where(space => space.hasEvent && space.hasAgent && !space.agentCard.GetFaction().Equals(faction))
-            .OrderByDescending(space => space.eventCard.eventCardData.victoryPoints[BattleManager.GetPlayerNumber(botPlayer.faction)])
-            .FirstOrDefault();
+            // Find a board space with an event that has an enemy agent
+            var targetSpace = allSpaces
+                .Where(space => space.hasEvent && space.hasAgent && space.agentCard.GetFaction() != faction)
+                .OrderByDescending(space => BoardManager.GetHighestEnemyVP(space, faction))
+                .FirstOrDefault();
 
-        if (targetSpace == null) return false;
+            if (targetSpace == null) return false;
 
-        StartCoroutine(CosmicBlast(cardDisplay, targetSpace));
+            Debug.Log($"Bot = [{faction}], agent =[{targetSpace.agentCard.GetFaction()}]");
 
-        Debug.Log($"Cosmic Blast used on {targetSpace.eventCard.eventCardData.cardName}, removing enemy agent {targetSpace.agentCard.agentCardData.cardName}");
+            StartCoroutine(CosmicBlast(cardDisplay, targetSpace));
 
-        return true;
+            Debug.Log($"Cosmic Blast used on {targetSpace.eventCard.eventCardData.cardName}, removing enemy agent {targetSpace.agentCard.agentCardData.cardName}");
+
+            return true;
+        }
+
+        return false;
     }
+    
+    private bool TryUseParadox()
+    {
+        foreach (var cardDisplay in hand.displaysInHand)
+        {
+            if (cardDisplay.GetActionType() != ActionType.Paradox) continue;
+            if (!cardDisplay.CanBePlayed(botPlayer)) return false;
 
-    // No Cosmic Blast action was successfully executed
-    return false;
-}
+            var essenceCardDisplay = (EssenceCardDisplay)cardDisplay;
+            ActionRequest actionRequest = essenceCardDisplay.actionRequest;
 
+            var targetSpace = allSpaces
+                .Where(space => space.hasEvent && space.eventCard.GetFaction() != faction && !space.shielded)
+                .OrderByDescending(space => BoardManager.GetHighestEnemyVP(space, faction))
+                .FirstOrDefault();
+
+            if (targetSpace == null) return false;
+            
+            StartCoroutine(Paradox(cardDisplay, targetSpace));
+
+            Debug.Log($"Paradox used on {targetSpace.eventCard.eventCardData.cardName}, creating a hole in time.");
+
+            return true;
+        }
+
+        return false;
+    }
 
     private bool TryUseRevive()
     {
@@ -149,7 +183,7 @@ public class MediumBotAI : BotAI
             // Play the revive action
             StartCoroutine(ReviveAgent(cardDisplay, agentToRevive));
 
-            Debug.Log($"Revived agent: {agentToRevive.data.cardName} for faction {botPlayer.faction}");
+            Debug.Log($"Revived agent: {agentToRevive.data.cardName} for faction {faction}");
 
             return true;
         }

@@ -128,6 +128,11 @@ public class ParadoxEssenceAction : EssenceAction
         }
 
         hand.RemoveCardAfterPlaying(true,true);
+
+        if(actionRequest.isBot)
+        {
+            actionRequest.player.EndBotAction();
+        }
     }
 
     private void Paradox(List<BoardSpace> boardTargets, ActionRequest actionRequest)
@@ -157,12 +162,12 @@ public class ParadoxEssenceAction : EssenceAction
 
     public override IEnumerator StartBotAction(BotAI botAI, ActionRequest actionRequest)
     {
-        // BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
+        BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
 
-        // BoardSpace target = actionRequest.activeBoardTargets[0];
-        // yield return botAI.MoveCursor(target.transform.position);
-        //     //TODO BOT AI
-        // SelectBoardTarget(actionRequest);
+        BoardSpace target = actionRequest.activeBoardTargets[0];
+        yield return botAI.MoveCursor(target.transform.position);
+        
+        SelectBoardTarget(actionRequest);
         yield return null;
     }
 }
