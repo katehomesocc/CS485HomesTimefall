@@ -65,10 +65,10 @@ public class EasyBotAI : BotAI
     private bool TryPlayEventCard(CardDisplay card)
     {
         // Get a random unlocked board space
-        var validSpaces = allSpaces.Where(space => (space.hasEvent)).ToList();
+        List<BoardSpace> validSpaces = allSpaces.Where(space => (space.hasEvent)).ToList();
         if (validSpaces.Count == 0) return false;
 
-        var targetSpace = validSpaces[Random.Range(0, validSpaces.Count)];
+        BoardSpace targetSpace = validSpaces[Random.Range(0, validSpaces.Count)];
         StartCoroutine(ReplaceTimelineEvent(card, targetSpace));
 
         Debug.Log($"Easy Bot played event card [{card.displayCard.data.cardName}] on space #{targetSpace.spaceNumber}.");
@@ -77,7 +77,7 @@ public class EasyBotAI : BotAI
 
     private bool TryPlayAgentCard(CardDisplay card)
     {
-        var validSpaces = allSpaces.Where(space => space.hasEvent && !space.hasAgent).ToList();
+        List<BoardSpace> validSpaces = allSpaces.Where(space => space.hasEvent && !space.hasAgent).ToList();
         if (validSpaces.Count == 0) return false;
 
         var targetSpace = validSpaces[Random.Range(0, validSpaces.Count)];

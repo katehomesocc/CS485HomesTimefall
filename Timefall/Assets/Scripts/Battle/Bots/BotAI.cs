@@ -107,9 +107,9 @@ public abstract class BotAI : MonoBehaviour
     */
     protected bool TryPlayAgentCard(CardDisplay card, bool turnCycleOnly)
     {
-        var targetSpaces = turnCycleOnly ? turnCycleSpaces : allSpaces;
+        List<BoardSpace> targetSpaces = turnCycleOnly ? turnCycleSpaces : allSpaces;
 
-        foreach (var space in targetSpaces)
+        foreach (BoardSpace space in targetSpaces)
         {
             if (space.hasEvent && !space.hasAgent)
             {
@@ -124,9 +124,9 @@ public abstract class BotAI : MonoBehaviour
 
     private bool TryPlayEventCard(CardDisplay card, bool turnCycleOnly)
     {
-        var targetSpaces = turnCycleOnly ? turnCycleSpaces : allSpaces;
+        List<BoardSpace> targetSpaces = turnCycleOnly ? turnCycleSpaces : allSpaces;
 
-        foreach (var space in targetSpaces)
+        foreach (BoardSpace space in targetSpaces)
         {
             if (space.isUnlocked && (space.isHole || space.hasEvent) && (space.eventCard.data.faction != faction))
             {
@@ -142,6 +142,15 @@ public abstract class BotAI : MonoBehaviour
     /*
         Action Enumerators
     */
+    protected IEnumerator CosmicBlast(CardDisplay eventToPlay, BoardSpace targetSpace)
+    {
+        yield return MoveCursor(eventToPlay.transform.position);
+
+        eventToPlay.actionRequest.isBot = true;
+        eventToPlay.actionRequest.activeBoardTargets.Add(targetSpace);
+        
+        hand.PlayCard(eventToPlay, true); // Play the paradox card, force = true
+    }
 
     protected IEnumerator SwapEvents(CardDisplay handCardToPlay, BoardSpace target1, BoardSpace target2)
     {
@@ -152,6 +161,25 @@ public abstract class BotAI : MonoBehaviour
         handCardToPlay.actionRequest.activeBoardTargets.Add(target2);
 
         hand.PlayCard(handCardToPlay, true); // Play the swap card, force = true
+    }
+    protected IEnumerator Paradox(CardDisplay eventToPlay, BoardSpace targetSpace)
+    {
+        yield return MoveCursor(eventToPlay.transform.position);
+
+        eventToPlay.actionRequest.isBot = true;
+        eventToPlay.actionRequest.activeBoardTargets.Add(targetSpace);
+        
+        hand.PlayCard(eventToPlay, true); // Play the paradox card, force = true
+    }
+
+    protected IEnumerator PlaceAgent(CardDisplay agentToPlay, BoardSpace targetSpace)
+    {
+        yield return MoveCursor(agentToPlay.transform.position);
+
+        agentToPlay.actionRequest.isBot = true;
+        agentToPlay.actionRequest.activeBoardTargets.Add(targetSpace);
+        
+        hand.PlayCard(agentToPlay, true);
     }
 
     protected IEnumerator ReplaceTimelineEvent(CardDisplay eventToPlay, BoardSpace targetSpace)
@@ -172,16 +200,6 @@ public abstract class BotAI : MonoBehaviour
         handDisplay.actionRequest.discardedTarget = agentToRevive;
         
         hand.PlayCard(handDisplay, true); // Revive the agent card, force = true
-    }
-
-    protected IEnumerator PlaceAgent(CardDisplay agentToPlay, BoardSpace targetSpace)
-    {
-        yield return MoveCursor(agentToPlay.transform.position);
-
-        agentToPlay.actionRequest.isBot = true;
-        agentToPlay.actionRequest.activeBoardTargets.Add(targetSpace);
-        
-        hand.PlayCard(agentToPlay, true);
     }
 
 }

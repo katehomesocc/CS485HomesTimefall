@@ -123,12 +123,17 @@ public class CosmicBlastEssenceAction : EssenceAction
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
         //reset boardTargets
-        foreach (var targetedSpace in actionRequest.activeBoardTargets)
+        foreach (BoardSpace targetedSpace in actionRequest.activeBoardTargets)
         {
             targetedSpace.DeselectAsTarget();
         }
 
         hand.RemoveCardAfterPlaying(true,true);
+
+        if(actionRequest.isBot)
+        {
+            actionRequest.player.EndBotAction();
+        }
     }
 
     private void CosmicBlast(List<BoardSpace> boardTargets, ActionRequest actionRequest)
@@ -155,12 +160,12 @@ public class CosmicBlastEssenceAction : EssenceAction
     }
     public override IEnumerator StartBotAction(BotAI botAI, ActionRequest actionRequest)
     {
-        // BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
+        BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
 
-        // BoardSpace target = actionRequest.activeBoardTargets[0];
-        // yield return botAI.MoveCursor(target.transform.position);
-        //     //TODO BOT AI
-        // SelectBoardTarget(actionRequest);
+        BoardSpace target = actionRequest.activeBoardTargets[0];
+        yield return botAI.MoveCursor(target.transform.position);
+        
+        SelectBoardTarget(actionRequest);
         yield return null;
     }
 }
