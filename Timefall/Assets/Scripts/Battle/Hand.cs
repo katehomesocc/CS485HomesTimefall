@@ -355,7 +355,7 @@ public class Hand : MonoBehaviour
             cardPlayingIndex = acDisplay.GetPositionInParent();
 
             //start agent action
-            acDisplay.PlayFromHand();
+            acDisplay.PlayFromHand(currentActionRequest.player.isBot);
         }
 
         if(cardDisplay.GetCardType() == CardType.EVENT)

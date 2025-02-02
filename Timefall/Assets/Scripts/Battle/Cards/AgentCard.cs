@@ -71,6 +71,10 @@ public class AgentCard : Card
         GetAgentAction().StartAction(actionRequest);
     }
 
+    public IEnumerator StartBotAction(ActionRequest actionRequest)
+    {
+        return GetAgentAction().StartBotAction(actionRequest.player.botAI, actionRequest);
+    }
     
     public override bool CanBePlayed(ActionRequest potentialTargetsRequest)
     {

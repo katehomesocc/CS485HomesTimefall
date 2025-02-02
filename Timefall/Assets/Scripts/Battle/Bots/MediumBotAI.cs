@@ -30,11 +30,11 @@ public class MediumBotAI : BotAI
             //     return;
             // }
 
-            // if (cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, true)) // Turn Cycle
-            // {
-            //     currentState = BotState.ExecuteAction;
-            //     return;
-            // }
+            if (cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, true)) // Turn Cycle
+            {
+                currentState = BotState.ExecuteAction;
+                return;
+            }
         }
 
         foreach (var cardDisplay in hand.displaysInHand)
@@ -45,18 +45,18 @@ public class MediumBotAI : BotAI
             //     return;
             // }
 
-            // if (cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, false)) // Whole Board
-            // {
-            //     currentState = BotState.ExecuteAction;
-            //     return;
-            // }
+            if (cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, false)) // Whole Board
+            {
+                currentState = BotState.ExecuteAction;
+                return;
+            }
         }
 
-        if (ChooseEssenceAction())
-        {
-            currentState = BotState.ExecuteAction;
-            return;
-        }
+        // if (ChooseEssenceAction())
+        // {
+        //     currentState = BotState.ExecuteAction;
+        //     return;
+        // }
 
         Debug.Log("No valid actions. Ending turn.");
         currentState = BotState.EndTurn;
@@ -215,21 +215,22 @@ public class MediumBotAI : BotAI
         return false;
     }
 
-//     private bool TryPlayAgentCard(CardDisplay card, bool turnCycleOnly)
-//     {
-//         var targetSpaces = turnCycleOnly ? turnCycleSpaces : allSpaces;
+    private bool TryPlayAgentCard(CardDisplay card, bool turnCycleOnly)
+    {
+        var targetSpaces = turnCycleOnly ? turnCycleSpaces : allSpaces;
 
-//         foreach (var space in targetSpaces)
-//         {
-//             if (space.hasEvent && !space.hasAgent)
-//             {
-//                 Debug.Log($"Deployed agent on the board (TurnCycleOnly: {turnCycleOnly}).");
-//                 return true;
-//             }
-//         }
+        foreach (var space in targetSpaces)
+        {
+            if (space.hasEvent && !space.hasAgent)
+            {
+                StartCoroutine(PlaceAgent(card, space));
+                Debug.Log($"Deployed agent on the board (TurnCycleOnly: {turnCycleOnly}).");
+                return true;
+            }
+        }
 
-//         return false;
-//     }
+        return false;
+    }
 
 
 

@@ -97,14 +97,20 @@ public class AgentCardDisplay : CardDisplay
         return (AgentCard) displayCard;
     }
 
-    public AgentCard PlayFromHand()
+    public void PlayFromHand(bool isBot)
     {
         Vector3 newPosition = this.transform.localPosition + new Vector3(0, 50, 0);
         StartCoroutine(this.MoveToLocalPosition(newPosition, 0.25f));
 
+        if(isBot)
+        {
+            StartCoroutine(GetAgentCard().StartBotAction(actionRequest));
+            return;
+        }
+
         GetAgentCard().StartAction(actionRequest);
         
-        return GetAgentCard();
+        return ;
     }
 
 }
