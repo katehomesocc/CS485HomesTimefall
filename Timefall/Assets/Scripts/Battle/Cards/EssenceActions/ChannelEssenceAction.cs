@@ -85,7 +85,7 @@ public class ChannelEssenceAction : EssenceAction
 
         activeHandTargets.Add(handTarget);
 
-        Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto);
+        if(!actionRequest.isBot) { Cursor.SetCursor(GetCursorTexture(actionRequest), Vector2.zero, CursorMode.Auto); }
 
         Channel(handTarget, activeHandTargets, actionRequest.player, actionRequest);
 
@@ -126,6 +126,11 @@ public class ChannelEssenceAction : EssenceAction
         }
 
         hand.RemoveCardAfterPlaying(true,true);
+        
+        if(actionRequest.isBot)
+        {
+            actionRequest.player.EndBotAction();
+        }
     }
 
     private void Channel(CardDisplay handTarget, List<CardDisplay> handTargets, Player player, ActionRequest actionRequest)
@@ -151,12 +156,12 @@ public class ChannelEssenceAction : EssenceAction
 
     public override IEnumerator StartBotAction(BotAI botAI, ActionRequest actionRequest)
     {
-        // BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
+        BattleManager.Instance.SetPossibleTargetHighlights(actionRequest.actionCard, actionRequest);
 
-        // BoardSpace target = actionRequest.activeBoardTargets[0];
-        // yield return botAI.MoveCursor(target.transform.position);
-        //     //TODO BOT AI
-        // SelectBoardTarget(actionRequest);
+        CardDisplay target = actionRequest.handTarget;
+        yield return botAI.MoveCursor(target.transform.position);
+
+        SelectHandTarget(actionRequest);
         yield return null;
     }
 }

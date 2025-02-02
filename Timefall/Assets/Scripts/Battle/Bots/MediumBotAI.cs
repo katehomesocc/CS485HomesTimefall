@@ -27,35 +27,35 @@ public class MediumBotAI : BotAI
     {
         Debug.Log("MediumBot is choosing an action.");
 
-        foreach (CardDisplay cardDisplay in hand.displaysInHand)
-        {
-            // if (eventEnoughEssence && cardDisplay.GetCardType() == CardType.EVENT && TryPlayEventCard(cardDisplay, true)) // Turn Cycle
-            // {
-            //     currentState = BotState.ExecuteAction;
-            //     return;
-            // }
+        // foreach (CardDisplay cardDisplay in hand.displaysInHand)
+        // {
+        //     // if (eventEnoughEssence && cardDisplay.GetCardType() == CardType.EVENT && TryPlayEventCard(cardDisplay, true)) // Turn Cycle
+        //     // {
+        //     //     currentState = BotState.ExecuteAction;
+        //     //     return;
+        //     // }
 
-            if (agentEnoughEssence && cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, true)) // Turn Cycle
-            {
-                currentState = BotState.ExecuteAction;
-                return;
-            }
-        }
+        //     if (agentEnoughEssence && cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, true)) // Turn Cycle
+        //     {
+        //         currentState = BotState.ExecuteAction;
+        //         return;
+        //     }
+        // }
 
-        foreach (CardDisplay cardDisplay in hand.displaysInHand)
-        {
-            // if (eventEnoughEssence && cardDisplay.GetCardType() == CardType.EVENT && TryPlayEventCard(cardDisplay, false)) // Whole Board
-            // {
-            //     currentState = BotState.ExecuteAction;
-            //     return;
-            // }
+        // foreach (CardDisplay cardDisplay in hand.displaysInHand)
+        // {
+        //     // if (eventEnoughEssence && cardDisplay.GetCardType() == CardType.EVENT && TryPlayEventCard(cardDisplay, false)) // Whole Board
+        //     // {
+        //     //     currentState = BotState.ExecuteAction;
+        //     //     return;
+        //     // }
 
-            if (agentEnoughEssence && cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, false)) // Whole Board
-            {
-                currentState = BotState.ExecuteAction;
-                return;
-            }
-        }
+        //     if (agentEnoughEssence && cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, false)) // Whole Board
+        //     {
+        //         currentState = BotState.ExecuteAction;
+        //         return;
+        //     }
+        // }
 
         if (essenceEnoughEssence && ChooseEssenceAction())
         {
@@ -74,12 +74,12 @@ public class MediumBotAI : BotAI
 
     private bool ChooseEssenceAction()
     {
-        if (TryUseEssenceOfType(ActionType.Revive)) return true;
-        if (TryUseEssenceOfType(ActionType.Swap)) return true;
-        if (TryUseEssenceOfType(ActionType.Shield)) return true;
-        if (TryUseEssenceOfType(ActionType.CosmicBlast)) return true;
-        if (TryUseEssenceOfType(ActionType.Paradox)) return true;
-        if (TryUseEssenceOfType(ActionType.Convert)) return true;
+        // if (TryUseEssenceOfType(ActionType.Revive)) return true;
+        // if (TryUseEssenceOfType(ActionType.Swap)) return true;
+        // if (TryUseEssenceOfType(ActionType.Shield)) return true;
+        // if (TryUseEssenceOfType(ActionType.CosmicBlast)) return true;
+        // if (TryUseEssenceOfType(ActionType.Paradox)) return true;
+        // if (TryUseEssenceOfType(ActionType.Convert)) return true;
         if (TryUseEssenceOfType(ActionType.Channel)) return true;
 
         return false;
@@ -89,6 +89,8 @@ public class MediumBotAI : BotAI
     {
         switch (actionType)
         {
+            case ActionType.Channel:
+                return TryUseChannel();
             case ActionType.Convert:
                 return TryUseConvert();
             case ActionType.CosmicBlast:
@@ -105,6 +107,39 @@ public class MediumBotAI : BotAI
         }
         return false;
     }
+    private bool TryUseChannel()
+    {
+        foreach (CardDisplay cardDisplay in hand.displaysInHand)
+        {
+            if (cardDisplay.GetActionType() != ActionType.Channel) continue;
+            if (!cardDisplay.CanBePlayed(botPlayer)) return false;
+
+            List<CardDisplay> potentialHandTargets = cardDisplay.actionRequest.potentialHandTargets;
+
+            // Prioritize which card to channel
+            CardDisplay cardToChannel = potentialHandTargets
+            .Where(card => card.GetActionType() == ActionType.Paradox ||
+                         card.GetActionType() == ActionType.Shield ||
+                         card.GetActionType() == ActionType.Revive)
+            .OrderByDescending(card => GetChannelPriority(card)) // Sort by priority
+            .FirstOrDefault();
+
+            if (cardToChannel == null) return false;
+
+            // Cast cardDisplay to EssenceCardDisplay to access action request
+            EssenceCardDisplay essenceCardDisplay = (EssenceCardDisplay) cardDisplay;
+            ActionRequest actionRequest = essenceCardDisplay.actionRequest;
+
+            // Play the revive action
+            StartCoroutine(Channel(cardDisplay, cardToChannel));
+
+            return true;
+        }
+
+        return false;
+    }
+
+        
     private bool TryUseConvert()
     {
         foreach (CardDisplay cardDisplay in hand.displaysInHand)
@@ -291,5 +326,21 @@ public class MediumBotAI : BotAI
 
         return false;
     }
+
+    private int GetChannelPriority(CardDisplay card)
+    {
+        switch (card.GetActionType())
+        {
+            case ActionType.Paradox:
+                return 3; // Highest priority (Disrupts enemy board)
+            case ActionType.Shield:
+                return 2; // Medium priority (Protects key pieces)
+            case ActionType.Revive:
+                return 1; // Lowest priority (Restores lost units)
+            default:
+                return 0;
+        }
+    }
+
 
 }

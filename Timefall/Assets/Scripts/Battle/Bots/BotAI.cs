@@ -147,6 +147,16 @@ public abstract class BotAI : MonoBehaviour
         Action Enumerators
     */
 
+    protected IEnumerator Channel(CardDisplay handDisplay, CardDisplay displayToChannel)
+    {
+        yield return MoveCursor(handDisplay.transform.position);
+
+        handDisplay.actionRequest.isBot = true;
+        handDisplay.actionRequest.handTarget = displayToChannel;
+        
+        hand.PlayCard(handDisplay, true); // Channel the card, force = true
+    }
+
     protected IEnumerator ConvertAgent(CardDisplay handDisplay, Card agentToConvert)
     {
         yield return MoveCursor(handDisplay.transform.position);
