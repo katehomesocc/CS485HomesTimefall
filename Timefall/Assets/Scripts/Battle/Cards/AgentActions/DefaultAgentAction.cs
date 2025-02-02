@@ -142,7 +142,7 @@ public class DefaultAgentAction : AgentAction
             targetedSpace.DeselectAsTarget();
         }
 
-        hand.RemoveCardAfterPlaying(true,true);
+        hand.RemoveCardAfterPlaying(false,true);
 
         if(actionRequest.isBot)
         {

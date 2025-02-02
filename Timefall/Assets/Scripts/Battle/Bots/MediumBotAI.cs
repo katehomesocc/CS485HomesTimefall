@@ -95,6 +95,8 @@ public class MediumBotAI : BotAI
                 return TryUseParadox();
             case ActionType.Revive:
                 return TryUseRevive();
+            case ActionType.Shield:
+                return TryUseShield();
             case ActionType.Swap:
                 if (currentTurnCycle == 1) break;
                 return TryUseSwap();
@@ -189,6 +191,33 @@ public class MediumBotAI : BotAI
         }
 
         // No revive card was played
+        return false;
+    }
+
+    private bool TryUseShield()
+    {
+        foreach (var cardDisplay in hand.displaysInHand)
+        {
+            if (cardDisplay.GetActionType() != ActionType.Shield) continue;
+            if (!cardDisplay.CanBePlayed(botPlayer)) return false;
+
+            var essenceCardDisplay = (EssenceCardDisplay)cardDisplay;
+            ActionRequest actionRequest = essenceCardDisplay.actionRequest;
+
+            var targetSpace = allSpaces
+                .Where(space => space.hasEvent && space.hasAgent && space.agentCard.GetFaction() == faction)
+                .OrderByDescending(space => space.eventCard.eventCardData.victoryPoints[playerNumber])
+                .FirstOrDefault();
+
+            if (targetSpace == null) return false;
+
+            StartCoroutine(Shield(cardDisplay, targetSpace));
+
+            Debug.Log($"Shield used on agent {targetSpace.agentCard.agentCardData.cardName}");
+
+            return true;
+        }
+
         return false;
     }
 

@@ -532,6 +532,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6299489342151695617}
   - component: {fileID: 7280606214834510077}
+  - component: {fileID: 2774806611532097450}
   m_Layer: 5
   m_Name: Hard Toggle
   m_TagString: Untagged
@@ -554,9 +555,9 @@ RectTransform:
   - {fileID: 7685936757826269914}
   m_Father: {fileID: 8862937661356085501}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 84.16667, y: -17.5}
   m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7280606214834510077
@@ -607,6 +608,20 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!114 &2774806611532097450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 728123018594233949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 0
 --- !u!1 &821290258993790059
 GameObject:
   m_ObjectHideFlags: 0
@@ -1775,6 +1790,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2994727726622041518}
   - component: {fileID: 5396106808603630348}
+  - component: {fileID: 4189452851623771514}
   m_Layer: 5
   m_Name: Easy Toggle
   m_TagString: Untagged
@@ -1797,9 +1813,9 @@ RectTransform:
   - {fileID: 5838437041252253721}
   m_Father: {fileID: 8862937661356085501}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 15.833333, y: -17.5}
   m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5396106808603630348
@@ -1850,6 +1866,20 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!114 &4189452851623771514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4308593864523995775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 0
 --- !u!1 &4409504714807577110
 GameObject:
   m_ObjectHideFlags: 0
@@ -1956,6 +1986,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4114307394438755314}
   - component: {fileID: 5016575773140184236}
+  - component: {fileID: 5959313218965734736}
   m_Layer: 5
   m_Name: Medium Toggle
   m_TagString: Untagged
@@ -1978,9 +2009,9 @@ RectTransform:
   - {fileID: 7773148771082238148}
   m_Father: {fileID: 8862937661356085501}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 50, y: -17.5}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5016575773140184236
@@ -2031,6 +2062,20 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+--- !u!114 &5959313218965734736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4650663656646631848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 0
 --- !u!1 &5056298132965496129
 GameObject:
   m_ObjectHideFlags: 0
@@ -2094,6 +2139,7 @@ MonoBehaviour:
   easyToggle: {fileID: 5396106808603630348}
   mediumToggle: {fileID: 5016575773140184236}
   hardToggle: {fileID: 7280606214834510077}
+  difficultyLevel: 2
   selectedFaction: 3
   factionsDropdown: {fileID: 3556355570667201117}
   buttonLeft: {fileID: 8029372292469068602}

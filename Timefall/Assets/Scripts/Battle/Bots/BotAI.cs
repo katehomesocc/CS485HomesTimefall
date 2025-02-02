@@ -156,6 +156,17 @@ public abstract class BotAI : MonoBehaviour
         hand.PlayCard(eventToPlay, true); // Play the paradox card, force = true
     }
 
+    protected IEnumerator Shield(CardDisplay handCardToPlay, BoardSpace targetSpace)
+    {
+        yield return MoveCursor(handCardToPlay.transform.position);
+
+        handCardToPlay.actionRequest.isBot = true;
+        handCardToPlay.actionRequest.activeBoardTargets.Add(targetSpace);
+        
+        hand.PlayCard(handCardToPlay, true); // Play the shield card, force = true
+    }
+
+
     protected IEnumerator SwapEvents(CardDisplay handCardToPlay, BoardSpace target1, BoardSpace target2)
     {
         yield return MoveCursor(handCardToPlay.transform.position);

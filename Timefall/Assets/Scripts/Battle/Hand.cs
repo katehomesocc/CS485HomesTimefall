@@ -470,13 +470,13 @@ public class Hand : MonoBehaviour
         cardsInHand.RemoveAt(cardPlayingIndex);
         displaysInHand.RemoveAt(cardPlayingIndex);
 
+        if(discard){
+            battleStateMachine.GetCurrentPlayer().deck.Discard(cardPlaying);
+        }
+
         if(destroy)
         {
             DestroyImmediate(this.transform.GetChild(cardPlayingIndex).gameObject);
-        }
-
-        if(discard){
-            battleStateMachine.GetCurrentPlayer().deck.Discard(cardPlaying);
         }
     
         cardPlaying = null;
