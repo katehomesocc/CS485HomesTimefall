@@ -77,8 +77,8 @@ public class MediumBotAI : BotAI
         if (TryUseEssenceOfType(ActionType.Revive)) return true;
         if (TryUseEssenceOfType(ActionType.Swap)) return true;
         if (TryUseEssenceOfType(ActionType.Shield)) return true;
-        if (TryUseEssenceOfType(ActionType.Paradox)) return true;
         if (TryUseEssenceOfType(ActionType.CosmicBlast)) return true;
+        if (TryUseEssenceOfType(ActionType.Paradox)) return true;
         if (TryUseEssenceOfType(ActionType.Convert)) return true;
         if (TryUseEssenceOfType(ActionType.Channel)) return true;
 
@@ -89,6 +89,8 @@ public class MediumBotAI : BotAI
     {
         switch (actionType)
         {
+            case ActionType.Convert:
+                return TryUseConvert();
             case ActionType.CosmicBlast:
                 return TryUseCosmicBlast();
             case ActionType.Paradox:
@@ -101,6 +103,34 @@ public class MediumBotAI : BotAI
                 if (currentTurnCycle == 1) break;
                 return TryUseSwap();
         }
+        return false;
+    }
+    private bool TryUseConvert()
+    {
+        foreach (CardDisplay cardDisplay in hand.displaysInHand)
+        {
+            if (cardDisplay.GetActionType() != ActionType.Convert) continue;
+            if (!cardDisplay.CanBePlayed(botPlayer)) return false;
+
+            List<Card> discardedAgents = cardDisplay.actionRequest.potentialDiscardedTargets;
+
+            Card agentToConvert = discardedAgents.FirstOrDefault(card => card.GetCardType() == CardType.AGENT);
+
+            if (agentToConvert == null) return false;
+
+            // Cast cardDisplay to EssenceCardDisplay to access action request
+            EssenceCardDisplay essenceCardDisplay = (EssenceCardDisplay) cardDisplay;
+            ActionRequest actionRequest = essenceCardDisplay.actionRequest;
+
+            // Set the revive target
+            actionRequest.discardedTarget = agentToConvert;
+
+            // Play the revive action
+            StartCoroutine(ConvertAgent(cardDisplay, agentToConvert));
+
+            return true;
+        }
+
         return false;
     }
 

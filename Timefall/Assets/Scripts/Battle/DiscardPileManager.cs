@@ -9,6 +9,8 @@ public class DiscardPileManager : MonoBehaviour
     public DiscardPileDisplay seekerDisplay;
     public DiscardPileDisplay sovereignDisplay;
     public DiscardPileDisplay weaverDisplay;
+
+    List<DiscardPileDisplay> discardDisplays;
     
     void Awake()
     {
@@ -20,7 +22,9 @@ public class DiscardPileManager : MonoBehaviour
         else 
         { 
             Instance = this; 
-        } 
+        }
+
+        discardDisplays = new List<DiscardPileDisplay>{stewardDisplay, seekerDisplay, sovereignDisplay, weaverDisplay};
     }
 
     // Start is called before the first frame update
@@ -74,7 +78,7 @@ public class DiscardPileManager : MonoBehaviour
         return null;
     }
 
-     public List<Card> GetPossibleTargets(Card card, ActionRequest request)
+    public List<Card> GetPossibleTargets(Card card, ActionRequest request)
     {
         switch(card.GetCardType()) 
         {
@@ -121,5 +125,16 @@ public class DiscardPileManager : MonoBehaviour
         seekerDisplay.ClearAndCloseInventory();
         sovereignDisplay.ClearAndCloseInventory();
         weaverDisplay.ClearAndCloseInventory();
+    }
+
+    public CardDisplay GetCardDisplayForDiscardedCard(Card targetCard)
+    {
+        foreach (DiscardPileDisplay discardDisplay in discardDisplays)
+        {
+            CardDisplay cardDisplay = discardDisplay.GetCardDisplayForDiscardedCard(targetCard);
+            if(discardDisplay != null) return cardDisplay;
+        }
+
+        return null; 
     }
 }

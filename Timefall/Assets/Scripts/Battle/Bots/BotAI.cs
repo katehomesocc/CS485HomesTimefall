@@ -146,6 +146,17 @@ public abstract class BotAI : MonoBehaviour
     /*
         Action Enumerators
     */
+
+    protected IEnumerator ConvertAgent(CardDisplay handDisplay, Card agentToConvert)
+    {
+        yield return MoveCursor(handDisplay.transform.position);
+
+        handDisplay.actionRequest.isBot = true;
+        handDisplay.actionRequest.discardedTarget = agentToConvert;
+        
+        hand.PlayCard(handDisplay, true); // Convert the agent card, force = true
+    }
+
     protected IEnumerator CosmicBlast(CardDisplay eventToPlay, BoardSpace targetSpace)
     {
         yield return MoveCursor(eventToPlay.transform.position);
