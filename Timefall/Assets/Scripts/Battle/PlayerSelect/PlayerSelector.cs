@@ -202,13 +202,13 @@ public class PlayerSelector : MonoBehaviour
         
     }
 
-    public void SaveAllPlayerPrefs()
+    public bool SaveAllPlayerPrefs()
     {
         foreach (PlayerOptions options in playerOptions)
         {
-            PlayerSelector.SavePlayerPrefs(options);
+            SavePlayerPrefs(options);
         }
-
+        return true;
     }
 
     void OnApplicationQuit()

@@ -6,14 +6,14 @@ public class HardBotAI : BotAI
 {
     protected override void AnalyzeBoard()
     {
-        Debug.Log("Bot is analyzing the board.");
+        Debug.Log("Hard Bot is analyzing the board.");
 
         currentState = BotState.ChooseAction;
     }
 
     protected override void ChooseAction()
     {
-        Debug.Log("Bot is choosing an action.");
+        Debug.Log("Hard Bot is choosing an action.");
 
         Debug.Log("No valid actions. Ending turn.");
         currentState = BotState.EndTurn;

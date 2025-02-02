@@ -341,8 +341,11 @@ public class BattleManager : MonoBehaviour
 
     public void ExitToTitle()
     {
-        PlayerSelector.Instance.SaveAllPlayerPrefs();
-        GameManager.Instance.LoadTitleScene();
+        bool finished = PlayerSelector.Instance.SaveAllPlayerPrefs();
+        if(finished)
+        {
+            GameManager.Instance.LoadTitleScene();
+        }
     }
 
     void PlaySliderEffect()

@@ -100,4 +100,39 @@ public abstract class BotAI : MonoBehaviour
         yield return new WaitForSeconds(PAUSE);
     }
 
+    /*
+        Action Enumerators
+    */
+
+    protected IEnumerator SwapEvents(CardDisplay handCardToPlay, BoardSpace target1, BoardSpace target2)
+    {
+        yield return MoveCursor(handCardToPlay.transform.position);
+
+        handCardToPlay.actionRequest.isBot = true;
+        handCardToPlay.actionRequest.activeBoardTargets.Add(target1);
+        handCardToPlay.actionRequest.activeBoardTargets.Add(target2);
+
+        hand.PlayCard(handCardToPlay, true); // Play the swap card, force = true
+    }
+
+    protected IEnumerator ReplaceTimelineEvent(CardDisplay eventToPlay, BoardSpace targetSpace)
+    {
+        yield return MoveCursor(eventToPlay.transform.position);
+
+        eventToPlay.actionRequest.isBot = true;
+        eventToPlay.actionRequest.activeBoardTargets.Add(targetSpace);
+        
+        hand.PlayCard(eventToPlay, true); // Play the event card, force = true
+    }
+
+    protected IEnumerator PlaceAgent(CardDisplay agentToPlay, BoardSpace targetSpace)
+    {
+        yield return MoveCursor(agentToPlay.transform.position);
+
+        agentToPlay.actionRequest.isBot = true;
+        agentToPlay.actionRequest.activeBoardTargets.Add(targetSpace);
+        
+        hand.PlayCard(agentToPlay, true);
+    }
+
 }

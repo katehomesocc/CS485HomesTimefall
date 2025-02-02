@@ -245,4 +245,9 @@ public class BoardManager : MonoBehaviour
         return nonHoleSpaces.Concat(holeSpaces).ToList();
     }
 
+    public List<BoardSpace> GetUnlockedBoardSpaces()
+    {
+        return spaces.Where(space => space.isUnlocked).ToList();
+    }
+
 }
