@@ -3146,6 +3146,10 @@ MonoBehaviour:
   UI_EXIT_MENU_CLIP: {fileID: 8300000, guid: 973103151b4200c488ea20222d0296fd, type: 3}
   UI_SLIDER_UPDATE_CLIP: {fileID: 8300000, guid: 0a9eccbb9e1710e48b579f7547d927e8,
     type: 3}
+  MUSIC_TITLE: {fileID: 8300000, guid: 592db21385f526b4d91b9c8afec4a1cf, type: 3}
+  MUSIC_BATTLE: {fileID: 8300000, guid: 3e8c36c95741b3e4696bc570e3f2519e, type: 3}
+  MUSIC_REASEARCH: {fileID: 8300000, guid: 578f1393fd167f84c8729399c1747713, type: 3}
+  MUSIC_TRANSITION: {fileID: 8300000, guid: f5139b8d98143bf4fa2518ec19381176, type: 3}
 --- !u!4 &294989045
 Transform:
   m_ObjectHideFlags: 0

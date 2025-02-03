@@ -25,6 +25,12 @@ public class AudioManager : MonoBehaviour
 	public AudioClip UI_EXIT_MENU_CLIP;
 	public AudioClip UI_SLIDER_UPDATE_CLIP;
 
+	[Header("Music Clips")]
+	public AudioClip MUSIC_TITLE;
+	public AudioClip MUSIC_BATTLE;
+	public AudioClip MUSIC_REASEARCH;
+	public AudioClip MUSIC_TRANSITION;
+
 	private void Awake()
 	{
 		LoadPlayerPrefs();
@@ -56,6 +62,7 @@ public class AudioManager : MonoBehaviour
 	public void PlayMusic(AudioClip clip)
 	{
 		MusicSource.clip = clip;
+		MusicSource.loop = true;
 		MusicSource.Play();
 	}
 
@@ -114,5 +121,24 @@ public class AudioManager : MonoBehaviour
 		masterVolume = PlayerPrefs.GetFloat($"masterVolume", 1.0f);
 		musicVolume = PlayerPrefs.GetFloat($"musicVolume", 0.75f);
 		effectVolume = PlayerPrefs.GetFloat($"effectVolume", 0.55f);
+	}
+
+	public void PlayTitleMusic()
+	{
+		PlayMusic(MUSIC_TITLE);
+	}
+
+	public void PlayBattleMusic()
+	{
+		PlayMusic(MUSIC_BATTLE);
+	}
+
+	public void PlayResearchMusic()
+	{
+		PlayMusic(MUSIC_REASEARCH);
+	}
+	public void PlayTransitionMusic()
+	{
+		PlayMusic(MUSIC_TRANSITION);
 	}
 }

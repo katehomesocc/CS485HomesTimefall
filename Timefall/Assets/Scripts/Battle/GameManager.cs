@@ -8,16 +8,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public static string TITLE_SCENE = "TitleScene";
-    public static string ACADEMY_SCENE = "AcademyScene";
-    public static string BATTLE_SCENE = "BattleScene";
-    public static string RESEARCH_SCENE = "ResearchScene";
+    public const string TITLE_SCENE = "TitleScene";
+    public const string ACADEMY_SCENE = "AcademyScene";
+    public const string BATTLE_SCENE = "BattleScene";
+    public const string RESEARCH_SCENE = "ResearchScene";
     public string currentScene = "Title";
 
     public GameObject settingsPanel;
 
     public bool isSettingsOpen = false;
-
     
     [Header("Scene Transitions")]
     public RawImage researchDoorLeft;
@@ -55,12 +54,33 @@ public class GameManager : MonoBehaviour
         // Debug.Log("OnSceneLoaded: " + scene.name);
         this.currentScene = scene.name;
 
+        switch (currentScene)
+        {
+            case TITLE_SCENE:
+                AudioManager.Instance.PlayTitleMusic();
+                break;
+            case BATTLE_SCENE:
+                AudioManager.Instance.PlayBattleMusic();
+                break;
+            case RESEARCH_SCENE:
+                AudioManager.Instance.PlayResearchMusic();
+                break;
+            default:
+                break;
+        }
+
         StartCoroutine(OpenDoors());
         
     }
 
+    public void LoadScene(string sceneName)
+    {
+        StartCoroutine(LoadNextScene(sceneName));
+    }
+
     IEnumerator LoadNextScene(string sceneName)
     {
+        AudioManager.Instance.PlayTransitionMusic();
         yield return StartCoroutine(CloseDoors());
 
         sceneLoadingBar.gameObject.SetActive(true);
@@ -96,25 +116,25 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void LoadTitleScene()
+    public static void LoadTitleScene()
     {
-        StartCoroutine(LoadNextScene(TITLE_SCENE));
+        Instance.LoadScene(TITLE_SCENE);
     }
 
-    public void LoadBattleScene()
+    public static void LoadBattleScene()
     {
-        StartCoroutine(LoadNextScene(BATTLE_SCENE));
+        Instance.LoadScene(BATTLE_SCENE);
     }
 
-    public void LoadAcademyScene()
+    public static void LoadAcademyScene()
     {
         
-        // StartCoroutine(LoadNextScene(ACADEMY_SCENE));
+        // StartCoroutine(Instance.LoadNextScene(ACADEMY_SCENE));
     }
 
-    public void LoadResearchScene()
+    public static void LoadResearchScene()
     {
-        StartCoroutine(LoadNextScene(RESEARCH_SCENE));
+        Instance.LoadScene(RESEARCH_SCENE);
     }
 
     public void ToggleSettingsMenu()

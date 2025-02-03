@@ -314,8 +314,8 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     {
         Debug.Log(string.Format("[{0}] |  AgentShieldExpired", this.name));
     
-        agentCard.ShieldExpired();
         agentIcon.ShieldExpired();
+        agentCard.ShieldExpired();
     }
 
     public void AgentShieldCountdown()
@@ -333,7 +333,10 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     public void EventShieldExpired()
     {
         shielded = false;
-        eventCard.ShieldExpired();
+        if(eventCard != null)
+        {
+            eventCard.ShieldExpired();
+        }
         eventShield.Expire();
     }
 
@@ -349,6 +352,8 @@ public class BoardSpace : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
         SetEventCard(cardDisplay);
         
         cardDisplay.SetCardPlayState(CardPlayState.ON_BOARD);
+
+        battleStateMachine.SetVictoryPointUI();
     }
 
     public void CosmicBlast()

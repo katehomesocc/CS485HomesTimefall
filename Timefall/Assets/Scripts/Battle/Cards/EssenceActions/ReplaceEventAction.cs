@@ -30,7 +30,7 @@ public class ReplaceEssenceAction : EssenceAction
     bool CanTargetSpace(BoardSpace boardSpace)
     {   
         //must have an event & not being shielded 
-        if(!boardSpace.hasEvent || boardSpace.shielded) { return false ;}
+        if(!boardSpace.hasEvent || boardSpace.hasAgent || boardSpace.shielded) { return false ;}
 
         return true;
     }

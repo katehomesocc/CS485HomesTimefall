@@ -126,13 +126,13 @@ public abstract class BotAI : MonoBehaviour
         return false;
     }
 
-    private bool TryPlayEventCard(CardDisplay card, bool turnCycleOnly)
+    protected bool TryPlayEventCard(CardDisplay card, bool turnCycleOnly)
     {
         List<BoardSpace> targetSpaces = turnCycleOnly ? turnCycleSpaces : allSpaces;
 
         foreach (BoardSpace space in targetSpaces)
         {
-            if (space.isUnlocked && (space.isHole || space.hasEvent) && (space.eventCard.data.faction != faction))
+            if (space.isUnlocked && (space.isHole || space.hasEvent) && !space.hasAgent && (space.eventCard.data.faction != faction))
             {
                 StartCoroutine(ReplaceTimelineEvent(card, space));
                 Debug.Log($"Played event card on the board (TurnCycleOnly: {turnCycleOnly}).");
@@ -141,6 +141,32 @@ public abstract class BotAI : MonoBehaviour
         }
 
         return false;
+    }
+
+    protected bool TryUseRevive(CardDisplay cardDisplay)
+    {
+        if (cardDisplay.GetActionType() != ActionType.Revive) return false;
+        if (!cardDisplay.CanBePlayed(botPlayer)) return false;
+
+        List<Card> discardPile = botPlayer.deck.discardPile; 
+
+        Card agentToRevive = discardPile.FirstOrDefault(card => card.GetCardType() == CardType.AGENT);
+
+        if (agentToRevive == null) return false;
+
+        // Cast cardDisplay to EssenceCardDisplay to access action request
+        EssenceCardDisplay essenceCardDisplay = (EssenceCardDisplay) cardDisplay;
+        ActionRequest actionRequest = essenceCardDisplay.actionRequest;
+
+        // Set the revive target
+        actionRequest.discardedTarget = agentToRevive;
+
+        // Play the revive action
+        StartCoroutine(ReviveAgent(cardDisplay, agentToRevive));
+
+        Debug.Log($"Revived agent: {agentToRevive.data.cardName} for faction {faction}");
+
+        return true;
     }
 
     /*

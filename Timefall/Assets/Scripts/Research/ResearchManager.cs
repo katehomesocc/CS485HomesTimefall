@@ -87,7 +87,7 @@ public class ResearchManager : MonoBehaviour
     public void LoadTitleScene()
     {
         PlayUIEffect();
-        GameManager.Instance.LoadTitleScene();
+        GameManager.LoadTitleScene();
     }
 
     public void ToggleSettingPanel()

@@ -344,7 +344,7 @@ public class BattleManager : MonoBehaviour
         bool finished = PlayerSelector.Instance.SaveAllPlayerPrefs();
         if(finished)
         {
-            GameManager.Instance.LoadTitleScene();
+            GameManager.LoadTitleScene();
         }
     }
 

@@ -19,7 +19,7 @@ public class EventShieldAgentAction : AgentAction
     bool CanTargetSpace(BoardSpace boardSpace)
     {   
 
-        if(!boardSpace.isUnlocked)
+        if(!boardSpace.hasEvent)
         {
             return false;
         }

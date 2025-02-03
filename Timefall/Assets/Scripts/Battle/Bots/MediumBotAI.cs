@@ -27,35 +27,35 @@ public class MediumBotAI : BotAI
     {
         Debug.Log("MediumBot is choosing an action.");
 
-        // foreach (CardDisplay cardDisplay in hand.displaysInHand)
-        // {
-        //     // if (eventEnoughEssence && cardDisplay.GetCardType() == CardType.EVENT && TryPlayEventCard(cardDisplay, true)) // Turn Cycle
-        //     // {
-        //     //     currentState = BotState.ExecuteAction;
-        //     //     return;
-        //     // }
+        foreach (CardDisplay cardDisplay in hand.displaysInHand)
+        {
+            if (eventEnoughEssence && cardDisplay.GetCardType() == CardType.EVENT && TryPlayEventCard(cardDisplay, true)) // Turn Cycle
+            {
+                currentState = BotState.ExecuteAction;
+                return;
+            }
 
-        //     if (agentEnoughEssence && cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, true)) // Turn Cycle
-        //     {
-        //         currentState = BotState.ExecuteAction;
-        //         return;
-        //     }
-        // }
+            if (agentEnoughEssence && cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, true)) // Turn Cycle
+            {
+                currentState = BotState.ExecuteAction;
+                return;
+            }
+        }
 
-        // foreach (CardDisplay cardDisplay in hand.displaysInHand)
-        // {
-        //     // if (eventEnoughEssence && cardDisplay.GetCardType() == CardType.EVENT && TryPlayEventCard(cardDisplay, false)) // Whole Board
-        //     // {
-        //     //     currentState = BotState.ExecuteAction;
-        //     //     return;
-        //     // }
+        foreach (CardDisplay cardDisplay in hand.displaysInHand)
+        {
+            if (eventEnoughEssence && cardDisplay.GetCardType() == CardType.EVENT && TryPlayEventCard(cardDisplay, false)) // Whole Board
+            {
+                currentState = BotState.ExecuteAction;
+                return;
+            }
 
-        //     if (agentEnoughEssence && cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, false)) // Whole Board
-        //     {
-        //         currentState = BotState.ExecuteAction;
-        //         return;
-        //     }
-        // }
+            if (agentEnoughEssence && cardDisplay.GetCardType() == CardType.AGENT && TryPlayAgentCard(cardDisplay, false)) // Whole Board
+            {
+                currentState = BotState.ExecuteAction;
+                return;
+            }
+        }
 
         if (essenceEnoughEssence && ChooseEssenceAction())
         {
@@ -74,12 +74,12 @@ public class MediumBotAI : BotAI
 
     private bool ChooseEssenceAction()
     {
-        // if (TryUseEssenceOfType(ActionType.Revive)) return true;
-        // if (TryUseEssenceOfType(ActionType.Swap)) return true;
-        // if (TryUseEssenceOfType(ActionType.Shield)) return true;
-        // if (TryUseEssenceOfType(ActionType.CosmicBlast)) return true;
-        // if (TryUseEssenceOfType(ActionType.Paradox)) return true;
-        // if (TryUseEssenceOfType(ActionType.Convert)) return true;
+        if (TryUseEssenceOfType(ActionType.Revive)) return true;
+        if (TryUseEssenceOfType(ActionType.Swap)) return true;
+        if (TryUseEssenceOfType(ActionType.Shield)) return true;
+        if (TryUseEssenceOfType(ActionType.CosmicBlast)) return true;
+        if (TryUseEssenceOfType(ActionType.Paradox)) return true;
+        if (TryUseEssenceOfType(ActionType.Convert)) return true;
         if (TryUseEssenceOfType(ActionType.Channel)) return true;
 
         return false;
@@ -230,29 +230,7 @@ public class MediumBotAI : BotAI
     {
         foreach (CardDisplay cardDisplay in hand.displaysInHand)
         {
-            if (cardDisplay.GetActionType() != ActionType.Revive) continue;
-            if (!cardDisplay.CanBePlayed(botPlayer)) return false;
-
-            
-            List<Card> discardPile = botPlayer.deck.discardPile; 
-
-            Card agentToRevive = discardPile.FirstOrDefault(card => card.GetCardType() == CardType.AGENT);
-
-            if (agentToRevive == null) return false;
-
-            // Cast cardDisplay to EssenceCardDisplay to access action request
-            EssenceCardDisplay essenceCardDisplay = (EssenceCardDisplay) cardDisplay;
-            ActionRequest actionRequest = essenceCardDisplay.actionRequest;
-
-            // Set the revive target
-            actionRequest.discardedTarget = agentToRevive;
-
-            // Play the revive action
-            StartCoroutine(ReviveAgent(cardDisplay, agentToRevive));
-
-            Debug.Log($"Revived agent: {agentToRevive.data.cardName} for faction {faction}");
-
-            return true;
+            if(TryUseRevive(cardDisplay)) return true;
         }
 
         // No revive card was played
