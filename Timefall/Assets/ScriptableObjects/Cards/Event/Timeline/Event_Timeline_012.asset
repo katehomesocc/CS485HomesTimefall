@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 12
   cardName: The Great Depression
   description: 012
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: d4ff9ebd91640ae41899eed85e8ec8cc, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000000000000000000000000000

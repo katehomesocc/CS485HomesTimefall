@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 48
   cardName: The First Intifada
   description: 048
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: c05eac23b63f4584e9af66492dd9b4c1, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 030000000a000000fbffffff00000000

@@ -17,6 +17,6 @@ MonoBehaviour:
   description: Swap the position of two event cards on the timeline
   image: {fileID: 2800000, guid: 3d679678099806e45918ee0e8228f978, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 1
+  actionType: 6
   essenceAction: {fileID: 11400000, guid: b9447ce3d1c2ec04db3dc45e9cc80011, type: 2}

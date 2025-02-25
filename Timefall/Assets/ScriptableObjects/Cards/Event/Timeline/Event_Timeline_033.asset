@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 33
   cardName: The Great Schism
   description: 033
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: d598fab24ca86bd47b5dced99eab2550, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000fbffffff1400000000000000

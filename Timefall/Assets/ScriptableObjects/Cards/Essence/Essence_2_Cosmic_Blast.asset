@@ -18,5 +18,6 @@ MonoBehaviour:
     discard pile.
   image: {fileID: 2800000, guid: 901976f625fb173468d029ff5100fe31, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 1
+  actionType: 2
+  essenceAction: {fileID: 11400000, guid: 9c0dd6e4950680140b0715dfd7fe3877, type: 2}

@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acbdeb1ae13731e4985d718c8ff349e2, type: 3}
+  m_Name: SeekersResearchDeck
+  m_EditorClassIdentifier: 
+  dbName: SeekersResearchDB
+  totalSize: 30
+  agents:
+  - card: {fileID: 11400000, guid: 9336c4f2f16278043a2c513c16d61824, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 094cb06ac45112c48879e512e96fee3e, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 3a51da935947423468433de436ba809b, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 2b16a801c80b0344d8bfa7763d3db542, type: 2}
+    amount: 1
+  essence:
+  - card: {fileID: 11400000, guid: 4125457a5e3a4fb488c6b122ae09897e, type: 2}
+    amount: 4
+  - card: {fileID: 11400000, guid: 414e284c3f46cac4394e20ba7e3d59d0, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 85dff3b0b528c1f47a81c2b0cee9b8b3, type: 2}
+    amount: 2
+  - card: {fileID: 11400000, guid: 52386636b8d50034b8296fa0cfdcfbb3, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 04866dec98b65884683e66e2e2fae5a7, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: abe618856698fd340a6f31ee736e926e, type: 2}
+    amount: 3
+  - card: {fileID: 11400000, guid: b7201c8eb13f5304fa82814d9832fd1c, type: 2}
+    amount: 3
+  - card: {fileID: 11400000, guid: cae35f76dd37d2a409580a80897bd704, type: 2}
+    amount: 5
+  - card: {fileID: 11400000, guid: 0424b6091d8dcf34399ddeae814a1a01, type: 2}
+    amount: 2
+  events:
+  - card: {fileID: 11400000, guid: 5650cd4440e79ad4980fb89c00b66f77, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 6cadcbd52ac695b43872e64b207535c9, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 71cde57677714a94f94961b3b3968f27, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 6b8b2978346e24a46b685e8ecfc4c82f, type: 2}
+    amount: 1

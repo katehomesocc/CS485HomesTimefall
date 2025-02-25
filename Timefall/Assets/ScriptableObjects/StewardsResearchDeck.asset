@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acbdeb1ae13731e4985d718c8ff349e2, type: 3}
+  m_Name: StewardsResearchDeck
+  m_EditorClassIdentifier: 
+  dbName: StewardsResearchDB
+  totalSize: 26
+  agents:
+  - card: {fileID: 11400000, guid: 8669e6a92841b53418b68a93ea660f60, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: e25fb065c7c88ad4daa65b73d8cd2f20, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 77e1d1206c5fc2d4cbb322650a111101, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: dd2c900a9e3cf694485d942bac979248, type: 2}
+    amount: 1
+  essence:
+  - card: {fileID: 11400000, guid: 4125457a5e3a4fb488c6b122ae09897e, type: 2}
+    amount: 3
+  - card: {fileID: 11400000, guid: 414e284c3f46cac4394e20ba7e3d59d0, type: 2}
+    amount: 3
+  - card: {fileID: 11400000, guid: 85dff3b0b528c1f47a81c2b0cee9b8b3, type: 2}
+    amount: 3
+  - card: {fileID: 11400000, guid: 52386636b8d50034b8296fa0cfdcfbb3, type: 2}
+    amount: 3
+  - card: {fileID: 11400000, guid: 04866dec98b65884683e66e2e2fae5a7, type: 2}
+    amount: 2
+  - card: {fileID: 11400000, guid: abe618856698fd340a6f31ee736e926e, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: cae35f76dd37d2a409580a80897bd704, type: 2}
+    amount: 4
+  - card: {fileID: 11400000, guid: 0424b6091d8dcf34399ddeae814a1a01, type: 2}
+    amount: 3
+  events:
+  - card: {fileID: 11400000, guid: aaa7f095bedf92441bb6deaff55114d3, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 0bcb389782f328f47890d875d3c2dfd1, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: 224a858abab796b4090f3c3831e09f03, type: 2}
+    amount: 1
+  - card: {fileID: 11400000, guid: ba51c4083d2bbec42ba233478198c5b9, type: 2}
+    amount: 1

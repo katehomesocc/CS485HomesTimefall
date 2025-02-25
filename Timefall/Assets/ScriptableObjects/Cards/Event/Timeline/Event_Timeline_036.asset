@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 36
   cardName: The Spanish Civil War
   description: 036
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: 7da4627d81ef78c42be243fb8cf19235, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000f6ffffff1400000000000000

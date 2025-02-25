@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 7
   cardName: Invention of the Internet
-  description: 007
-  image: {fileID: 0}
+  description: In 1983, the Internet protocol suite was standardized, paving the
+    way for the global Internet.
+  image: {fileID: 2800000, guid: 51f414c5273030849916b9821e10d47a, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000000000000000000000000000

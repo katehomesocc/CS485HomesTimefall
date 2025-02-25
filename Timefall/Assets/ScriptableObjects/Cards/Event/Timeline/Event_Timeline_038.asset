@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 38
   cardName: The Birth of Gandhi
   description: 038
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: 4b5af62fbeddf7441a00f755f3295a7e, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 0300000014000000f6ffffff00000000

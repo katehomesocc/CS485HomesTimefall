@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890cef0f1b0aa4a4290ed37aa2cb0abe, type: 3}
+  m_Name: AA_Revive
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: c7a0ff2e410a3e54ba5f8cfe64201f2c, type: 3}
+  REVIVE_TEX: {fileID: 2800000, guid: 2c4ddedd360894f499fcf1e0ef00c506, type: 3}
+  CURSOR_REVIVE_TEX: {fileID: 2800000, guid: 1177990056eb3e9489cdd6fe7ef842cd, type: 3}

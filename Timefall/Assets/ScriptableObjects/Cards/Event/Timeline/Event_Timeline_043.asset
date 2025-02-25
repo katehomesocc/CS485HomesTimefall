@@ -15,8 +15,7 @@ MonoBehaviour:
   id: 43
   cardName: The Development of the Steam Engine
   description: 043
-  image: {fileID: 0}
+  image: {fileID: 2800000, guid: 8bb2129c01f5e40448392f36f5e65ae8, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 03000000000000000000000000000000

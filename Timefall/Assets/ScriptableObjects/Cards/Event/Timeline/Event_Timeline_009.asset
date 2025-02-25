@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 9
   cardName: Fall of Constantinople
-  description: 009
-  image: {fileID: 0}
+  description: On May 29, 1453, Constantinople fell to the Ottoman Empire, marking
+    the end of the Byzantine Empire.
+  image: {fileID: 2800000, guid: 36f4563385fc6664c853dbe65d456691, type: 3}
   faction: 4
-  isPlaced: 0
   cardType: 2
   victoryPoints: 0300000000000000fbffffff00000000
