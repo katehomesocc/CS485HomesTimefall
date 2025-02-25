@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraRotater : MonoBehaviour
 {
@@ -21,10 +22,25 @@ public class CameraRotater : MonoBehaviour
     public float x = 0.0f;
     public  float y = 0.0f;
 
+    [Header("Toggles")]
+    public Toggle xToggle;
+    public Toggle yToggle;
+    public Toggle zToggle;
+
     // Start is called before the first frame update
     void Start()
     {
+        xToggle.onValueChanged.AddListener(delegate {
+            xActive = xToggle.isOn;
+        });
         
+        yToggle.onValueChanged.AddListener(delegate {
+            yActive = yToggle.isOn;
+        });
+        
+        zToggle.onValueChanged.AddListener(delegate {
+            zActive = zToggle.isOn;
+        });
     }
 
     // Update is called once per frame
@@ -54,4 +70,6 @@ public class CameraRotater : MonoBehaviour
 
         transform.Rotate(pitch * Time.deltaTime, yaw * Time.deltaTime, zRot * Time.deltaTime);
     }
+
+
 }
